@@ -10,7 +10,9 @@ import javafx.scene.layout.StackPane;
 import spawnscreen.Item.Base.Item;
 import spawnscreen.Item.Potion.HealPotion;
 import spawnscreen.LivingThing.Player;
-
+import javafx.application.Platform;
+import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.*;
 
 public class CretaceousExplorationScene {
@@ -39,7 +41,11 @@ public class CretaceousExplorationScene {
     private Runnable onEnterBattle;
     private Runnable onExitWorld;
 
-    private Map<Point, Chunk> loadedChunks = new HashMap<>();
+    private Map<Point, Chunk> loadedChunks = new ConcurrentHashMap<>();
+    private Set<Point> loadingChunks = ConcurrentHashMap.newKeySet();
+    // Background thread for chunk generation
+    private ExecutorService chunkExecutor =
+            Executors.newFixedThreadPool(2);
 
     public CretaceousExplorationScene(
             Runnable onEnterBattle,
@@ -101,6 +107,7 @@ public class CretaceousExplorationScene {
     private void update() {
 
         if (keys.contains(KeyCode.ESCAPE)) {
+            shutdown();
             onExitWorld.run();
             return;
         }
@@ -156,10 +163,10 @@ public class CretaceousExplorationScene {
 
     private void updateChunks() {
 
-        int playerChunkX = (int)Math.floor(player.getX() / CHUNK_SIZE);
-        int playerChunkY = (int)Math.floor(player.getY() / CHUNK_SIZE);
+        int playerChunkX = (int) Math.floor(player.getX() / CHUNK_SIZE);
+        int playerChunkY = (int) Math.floor(player.getY() / CHUNK_SIZE);
 
-        Set<Point> needed = new HashSet<>();
+        Set<Point> neededChunks = new HashSet<>();
 
         for (int x = -RENDER_DISTANCE; x <= RENDER_DISTANCE; x++) {
             for (int y = -RENDER_DISTANCE; y <= RENDER_DISTANCE; y++) {
@@ -168,43 +175,74 @@ public class CretaceousExplorationScene {
                 int cy = playerChunkY + y;
 
                 Point p = new Point(cx, cy);
-                needed.add(p);
+                neededChunks.add(p);
 
-                if (!loadedChunks.containsKey(p)) {
-                    loadedChunks.put(p, new Chunk(cx, cy));
+                if (!loadedChunks.containsKey(p) && !loadingChunks.contains(p)) {
+
+                    loadingChunks.add(p);
+
+                    final int finalCx = cx;
+                    final int finalCy = cy;
+                    final Point finalPoint = p;
+
+                    chunkExecutor.submit(() -> {
+
+                        Chunk newChunk = new Chunk(finalCx, finalCy);
+
+                        Platform.runLater(() -> {
+                            loadedChunks.put(finalPoint, newChunk);
+                            loadingChunks.remove(finalPoint);
+                        });
+                    });
                 }
             }
         }
 
-        // ✅ REMOVE FAR CHUNKS
-        if (loadedChunks.size() > 200) {
-            loadedChunks.clear(); // safety limit
-        }
+        // ✅ Remove chunks too far away
+        loadedChunks.keySet().removeIf(p ->
+                Math.abs(p.x - playerChunkX) > RENDER_DISTANCE ||
+                        Math.abs(p.y - playerChunkY) > RENDER_DISTANCE
+        );
     }
 
     private void render() {
 
         gc.clearRect(0, 0, WIDTH, HEIGHT);
+
         gc.save();
         gc.translate(-cameraX, -cameraY);
 
+        // =========================
+        // 1️⃣ DRAW ALL BACKGROUNDS
+        // =========================
         for (Chunk chunk : loadedChunks.values()) {
-
             double baseX = chunk.chunkX * CHUNK_SIZE;
             double baseY = chunk.chunkY * CHUNK_SIZE;
 
-            // Draw background per chunk
             gc.drawImage(background, baseX, baseY, CHUNK_SIZE, CHUNK_SIZE);
+        }
 
+        // =========================
+        // 2️⃣ DRAW ALL ITEMS
+        // =========================
+        for (Chunk chunk : loadedChunks.values()) {
             for (WorldItem wi : chunk.items) {
                 gc.drawImage(ITEM_IMAGE, wi.x, wi.y, 40, 40);
             }
+        }
 
+        // =========================
+        // 3️⃣ DRAW ALL DINOSAURS
+        // =========================
+        for (Chunk chunk : loadedChunks.values()) {
             for (Dinosaur d : chunk.dinosaurs) {
                 gc.drawImage(DINOSAUR_IMAGE, d.x, d.y, 80, 60);
             }
         }
 
+        // =========================
+        // 4️⃣ DRAW PLAYER
+        // =========================
         player.render(gc);
 
         gc.restore();
@@ -301,5 +339,8 @@ public class CretaceousExplorationScene {
                 y += dy * inv * SPEED;
             }
         }
+    }
+    public void shutdown() {
+        chunkExecutor.shutdownNow();
     }
 }
