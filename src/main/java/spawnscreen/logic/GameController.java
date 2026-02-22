@@ -5,9 +5,8 @@ import gym_minigame.MainMenu;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import scene.CretaceousExplorationScene;
+import CretaceousExploration.CretaceousExplorationScene;
 import spawnscreen.LivingThing.Player;
-import spawnscreen.Scene.SellScene;
 import spawnscreen.Scene.SpawnScreen;
 
 public class GameController {
