@@ -1,0 +1,166 @@
+package gamemode.CretaceousExploration.render;
+
+import gamemode.CretaceousExploration.Chunk;
+import gamemode.CretaceousExploration.WorldManager;
+import gamemode.CretaceousExploration.entity.Dinosaur;
+import gamemode.CretaceousExploration.entity.WorldItem;
+import gamemode.CretaceousExploration.util.AssetLoader;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import gamemode.spawnscreen.LivingThing.Player;
+
+public class WorldRenderer {
+
+    private GraphicsContext gc;
+    private Player player;
+    private WorldManager worldManager;
+
+    private Image background;
+    private Image dinosaurImage;
+
+    public WorldRenderer(GraphicsContext gc,
+                         Player player,
+                         WorldManager worldManager) {
+
+        this.gc = gc;
+        this.player = player;
+        this.worldManager = worldManager;
+
+        background = AssetLoader.load("/CretaceousExploration/background.jpg");
+        dinosaurImage = AssetLoader.load("/CretaceousExploration/dinosaur.png");
+    }
+
+    public void render(double cameraX, double cameraY) {
+
+        double canvasWidth = gc.getCanvas().getWidth();
+        double canvasHeight = gc.getCanvas().getHeight();
+
+        gc.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        gc.save();
+        gc.translate(-cameraX, -cameraY);
+
+        double viewLeft   = cameraX;
+        double viewRight  = cameraX + canvasWidth;
+        double viewTop    = cameraY;
+        double viewBottom = cameraY + canvasHeight;
+
+        // =========================
+        // 1️⃣ DRAW BACKGROUNDS (VISIBLE CHUNKS ONLY)
+        // =========================
+        for (Chunk chunk : worldManager.getChunks()) {
+
+            double baseX = chunk.getChunkX() * WorldManager.CHUNK_SIZE;
+            double baseY = chunk.getChunkY() * WorldManager.CHUNK_SIZE;
+
+            if (baseX + WorldManager.CHUNK_SIZE < viewLeft ||
+                    baseX > viewRight ||
+                    baseY + WorldManager.CHUNK_SIZE < viewTop ||
+                    baseY > viewBottom) {
+                continue;
+            }
+
+            gc.drawImage(background,
+                    baseX,
+                    baseY,
+                    WorldManager.CHUNK_SIZE,
+                    WorldManager.CHUNK_SIZE);
+        }
+
+        // =========================
+        // 2️⃣ DEPTH SORT ALL VISIBLE ENTITIES
+        // =========================
+        class RenderObject {
+            double y;
+            Runnable draw;
+
+            RenderObject(double y, Runnable draw) {
+                this.y = y;
+                this.draw = draw;
+            }
+        }
+
+        java.util.List<RenderObject> renderList = new java.util.ArrayList<>();
+
+        // =========================
+        // 2.1️⃣ WORLD ITEMS (FROM CHUNKS)
+        // =========================
+        for (Chunk chunk : worldManager.getChunks()) {
+
+            double baseX = chunk.getChunkX() * WorldManager.CHUNK_SIZE;
+            double baseY = chunk.getChunkY() * WorldManager.CHUNK_SIZE;
+
+            if (baseX + WorldManager.CHUNK_SIZE < viewLeft ||
+                    baseX > viewRight ||
+                    baseY + WorldManager.CHUNK_SIZE < viewTop ||
+                    baseY > viewBottom) {
+                continue;
+            }
+
+            for (WorldItem item : chunk.getItems()) {
+
+                if (item.getX() + 40 < viewLeft ||
+                        item.getX() > viewRight ||
+                        item.getY() + 40 < viewTop ||
+                        item.getY() > viewBottom) {
+                    continue;
+                }
+
+                renderList.add(new RenderObject(
+                        item.getY(),
+                        () -> gc.drawImage(item.getImage(),
+                                item.getX(),
+                                item.getY(),
+                                40, 40)
+                ));
+            }
+        }
+
+        // =========================
+        // 2.2️⃣ GLOBAL DINOSAURS
+        // =========================
+        double margin = 100;
+
+        for (Dinosaur d : worldManager.getDinosaurs()) {
+
+            double dx = d.getX();
+            double dy = d.getY();
+
+            if (dx + 80 < viewLeft - margin ||
+                    dx > viewRight + margin ||
+                    dy + 60 < viewTop - margin ||
+                    dy > viewBottom + margin) {
+                continue;
+            }
+
+            double finalX = dx;
+            double finalY = dy;
+
+            renderList.add(new RenderObject(
+                    finalY + 60,
+                    () -> gc.drawImage(dinosaurImage,
+                            finalX,
+                            finalY,
+                            80, 60)
+            ));
+        }
+
+        // =========================
+        // 2.3️⃣ PLAYER (DEPTH SORTED)
+        // =========================
+        renderList.add(new RenderObject(
+                player.getY() + player.getHeight(),
+                () -> player.render(gc)
+        ));
+
+        // Sort by Y (top to bottom)
+        renderList.sort((a, b) -> Double.compare(a.y, b.y));
+
+        // Draw in correct order
+        for (RenderObject ro : renderList) {
+            ro.draw.run();
+        }
+
+        gc.restore();
+    }
+}
