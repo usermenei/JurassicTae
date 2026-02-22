@@ -50,7 +50,9 @@ public class SpawnCanvas extends Canvas {
             items.add(new SpeedPotion());
             items.add(new Noose());
         }
-        player.setInventory(items);
+        for (Item item : items) {
+            player.addItem(item);
+        }
         //***********************************************
 
         startGameLoop();   // ✅ ต้องเรียก

@@ -7,6 +7,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import spawnscreen.Item.Base.Item;
+import spawnscreen.Item.Potion.HealPotion;
 import spawnscreen.LivingThing.Player;
 
 import java.util.*;
@@ -119,6 +121,37 @@ public class CretaceousExplorationScene {
                 d.update(player);
             }
         }
+        checkItemPickup();
+    }
+
+    private void checkItemPickup() {
+
+        if (!keys.contains(KeyCode.E)) return;
+
+        double px = player.getX();
+        double py = player.getY();
+
+        for (Chunk chunk : loadedChunks.values()) {
+
+            Iterator<WorldItem> iterator = chunk.items.iterator();
+
+            while (iterator.hasNext()) {
+
+                WorldItem wi = iterator.next();
+
+                double dx = px - wi.x;
+                double dy = py - wi.y;
+
+                double distSq = dx * dx + dy * dy;
+
+                if (distSq < 60*60) { // pickup range
+
+                    player.addItem(wi.item);
+                    iterator.remove(); // remove from world
+                    return; // pick only one per press
+                }
+            }
+        }
     }
 
     private void updateChunks() {
@@ -144,19 +177,24 @@ public class CretaceousExplorationScene {
         }
 
         // ✅ REMOVE FAR CHUNKS
-        loadedChunks.keySet().removeIf(p -> !needed.contains(p));
+        if (loadedChunks.size() > 200) {
+            loadedChunks.clear(); // safety limit
+        }
     }
 
     private void render() {
 
         gc.clearRect(0, 0, WIDTH, HEIGHT);
-
         gc.save();
         gc.translate(-cameraX, -cameraY);
 
-        drawInfiniteBackground();
-
         for (Chunk chunk : loadedChunks.values()) {
+
+            double baseX = chunk.chunkX * CHUNK_SIZE;
+            double baseY = chunk.chunkY * CHUNK_SIZE;
+
+            // Draw background per chunk
+            gc.drawImage(background, baseX, baseY, CHUNK_SIZE, CHUNK_SIZE);
 
             for (WorldItem wi : chunk.items) {
                 gc.drawImage(ITEM_IMAGE, wi.x, wi.y, 40, 40);
@@ -172,20 +210,6 @@ public class CretaceousExplorationScene {
         gc.restore();
     }
 
-    private void drawInfiniteBackground() {
-
-        double bgW = background.getWidth();
-        double bgH = background.getHeight();
-
-        int startX = (int)Math.floor(cameraX / bgW);
-        int startY = (int)Math.floor(cameraY / bgH);
-
-        for (int x = startX - 1; x <= startX + (WIDTH / bgW) + 2; x++) {
-            for (int y = startY - 1; y <= startY + (HEIGHT / bgH) + 2; y++) {
-                gc.drawImage(background, x * bgW, y * bgH);
-            }
-        }
-    }
 
     /* ========================= */
 
@@ -208,35 +232,50 @@ public class CretaceousExplorationScene {
 
     private class Chunk {
 
+        int chunkX, chunkY;
+
         List<WorldItem> items = new ArrayList<>();
         List<Dinosaur> dinosaurs = new ArrayList<>();
 
         Chunk(int chunkX, int chunkY) {
 
+            this.chunkX = chunkX;
+            this.chunkY = chunkY;
+
             double baseX = chunkX * CHUNK_SIZE;
             double baseY = chunkY * CHUNK_SIZE;
 
-            for(int i=0;i<3;i++){
+            // Spawn items
+            for (int i = 0; i < 3; i++) {
                 items.add(new WorldItem(
-                        baseX + Math.random()*CHUNK_SIZE,
-                        baseY + Math.random()*CHUNK_SIZE
+                        baseX + Math.random() * CHUNK_SIZE,
+                        baseY + Math.random() * CHUNK_SIZE
                 ));
             }
 
-            if(Math.random()<0.4){
+            // Spawn dinosaur (40% chance)
+            if (Math.random() < 0.4) {
                 dinosaurs.add(new Dinosaur(
-                        baseX + Math.random()*CHUNK_SIZE,
-                        baseY + Math.random()*CHUNK_SIZE
+                        baseX + Math.random() * CHUNK_SIZE,
+                        baseY + Math.random() * CHUNK_SIZE
                 ));
             }
         }
     }
 
     private static class WorldItem {
-        double x,y;
-        WorldItem(double x,double y){
-            this.x=x;
-            this.y=y;
+        double x, y;
+        Item item;
+        Image image;
+
+        WorldItem(double x, double y) {
+
+            this.x = x;
+            this.y = y;
+
+            // randomly spawn potion
+            this.item = new HealPotion();  // you can random later
+            this.image = ((HealPotion) item).getImage();
         }
     }
 
@@ -255,11 +294,11 @@ public class CretaceousExplorationScene {
             double dx = player.getX() - x;
             double dy = player.getY() - y;
 
-            double distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance > 1) {
-                x += (dx / distance) * SPEED;
-                y += (dy / distance) * SPEED;
+            double distSq = dx * dx + dy * dy;
+            if (distSq > 1) {
+                double inv = 1 / Math.sqrt(distSq);
+                x += dx * inv * SPEED;
+                y += dy * inv * SPEED;
             }
         }
     }

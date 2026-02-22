@@ -136,7 +136,6 @@ public class SpawnScreen extends StackPane {
         hideInventory();
     }
 
-
     public SpawnCanvas getSpawnCanvas(){
         return spawnCanvas;
     }
