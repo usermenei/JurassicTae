@@ -4,7 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
-import gamemode.spawnscreen.logic.GameController;
+import gamemode.lobby.logic.GameController;
 
 public class DialogueScene {
 

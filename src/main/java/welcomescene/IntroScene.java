@@ -10,7 +10,7 @@ import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import gamemode.spawnscreen.logic.GameController;
+import gamemode.lobby.logic.GameController;
 
 public class IntroScene {
 
@@ -32,7 +32,7 @@ public class IntroScene {
 
         // ---------------- INTRO VIDEO ----------------
         Media introMedia = new Media(
-                getClass().getResource("/intro.mp4").toExternalForm()
+                getClass().getResource("/welcomescene/intro.mp4").toExternalForm()
         );
 
         introPlayer = new MediaPlayer(introMedia);
@@ -68,7 +68,7 @@ public class IntroScene {
 
         // ---------------- LOOP VIDEO ----------------
         Media loopMedia = new Media(
-                getClass().getResource("/loopstart.mp4").toExternalForm()
+                getClass().getResource("/welcomescene/loopstart.mp4").toExternalForm()
         );
 
         loopPlayer = new MediaPlayer(loopMedia);

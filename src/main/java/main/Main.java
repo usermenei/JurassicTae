@@ -1,12 +1,12 @@
 package main;
 
 import welcomescene.IntroScene;
-import gamemode.spawnscreen.Scene.SpawnScreen;
+import gamemode.lobby.Scene.SpawnScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import gamemode.spawnscreen.logic.GameController;
-import gamemode.spawnscreen.logic.GameLogic;
+import gamemode.lobby.logic.GameController;
+import gamemode.lobby.logic.GameLogic;
 
 public class Main extends Application {
 
