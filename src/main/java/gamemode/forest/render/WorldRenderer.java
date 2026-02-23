@@ -162,5 +162,11 @@ public class WorldRenderer {
         }
 
         gc.restore();
+
+        gamemode.DialogueManager
+                .getInstance()
+                .render(gc,
+                        gc.getCanvas().getWidth(),
+                        gc.getCanvas().getHeight());
     }
 }

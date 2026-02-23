@@ -136,6 +136,8 @@ public class WorldManager {
     // =========================
     public void handlePickup() {
 
+        Player player = GameLogic.getInstance().getPlayer();
+
         for (Chunk chunk : loadedChunks.values()) {
 
             Iterator<WorldItem> iterator = chunk.getItems().iterator();
@@ -146,20 +148,31 @@ public class WorldManager {
 
                 if (isNearPlayer(worldItem)) {
 
-                    Player player = GameLogic.getInstance().getPlayer();
-
+                    // 🔒 Inventory full check
                     if (player.getInventory().size() >= 8) {
 
-                        System.out.println("Inventory Full! Cannot pick item.");
-                        return;
 
-                    } else {
+                        gamemode.DialogueManager.getInstance().showDialogue(
+                                "System",
+                                "Your inventory is full!"
+                                ,"/character/ptae.png"
+                        );
 
-                        player.addItem(worldItem.getItem());
-                        iterator.remove();
-                        System.out.println("Picked up: " + worldItem.getItem().getName());
-                        return;
+                        return; // stop after first nearby item
                     }
+
+                    // ✅ Add item
+                    player.addItem(worldItem.getItem());
+                    iterator.remove();
+
+                    gamemode.DialogueManager
+                            .getInstance()
+                            .showDialogue("System",
+                                    "Picked up " + worldItem.getItem().getName() + "!",
+                                    "/character/ptae.png"
+                            );
+
+                    return; // pick only one item per press
                 }
             }
         }
