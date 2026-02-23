@@ -8,4 +8,7 @@ public class RifleGun extends Weapon {
     public RifleGun(){
         super("Rifle Gun", "/gamemode/lobby/trap.png",20,100);
     }
+    public Image getImage() {
+        return image;
+    }
 }

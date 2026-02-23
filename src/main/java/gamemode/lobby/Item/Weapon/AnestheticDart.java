@@ -9,4 +9,7 @@ public class AnestheticDart extends Weapon {
         super("AnestheticDart", "/gamemode/lobby/trap.png",20,10);
     }
 
+    public Image getImage() {
+        return image;
+    }
 }

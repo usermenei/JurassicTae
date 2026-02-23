@@ -8,4 +8,7 @@ public class Noose extends Weapon {
     public Noose(){
         super("Noose", "/gamemode/lobby/trap.png",20,10);
     }
+    public Image getImage() {
+        return image;
+    }
 }
