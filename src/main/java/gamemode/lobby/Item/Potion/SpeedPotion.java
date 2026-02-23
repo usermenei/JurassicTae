@@ -7,7 +7,7 @@ public class SpeedPotion extends Potion {
     private Image image;
 
     public SpeedPotion(){
-        super("Speed Potion", "/item/speedpotion.png",20);
+        super("Speed Potion", "/item/speedpotion.png",20,10);
         image = new Image(getClass().getResource(getImgUrl()).toExternalForm());
     }
 

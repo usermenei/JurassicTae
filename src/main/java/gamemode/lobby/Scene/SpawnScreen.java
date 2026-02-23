@@ -108,6 +108,8 @@ public class SpawnScreen extends StackPane {
     }
 
     public void showShopScene(){
+        shopScene.loadShop();
+        shopScene.getSwitchBtt().setText("Sell");
         shopScene.setVisible(true);
         shopScene.toFront();
     }
@@ -142,4 +144,5 @@ public class SpawnScreen extends StackPane {
     public SellScene getSellScene(){return sellScene;}
     public InventoryPane getInventoryPane(){return inventoryPane;}
     public Label getMoneyLabel(){return moneyLabel;}
+    public ShopScene getShopScene(){return shopScene;}
 }

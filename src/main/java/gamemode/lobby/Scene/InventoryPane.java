@@ -19,63 +19,74 @@ public class InventoryPane extends StackPane {
     private GridPane grid;
     public InventoryPane() {
 
-        this.setPrefSize(600, 400);
-        this.setMaxSize(600, 400);
+        this.setPrefSize(700, 530);
+        this.setMaxSize(700, 530);
         this.setStyle("""
-            -fx-padding: 30;
-            -fx-background-radius: 20;""");
+        -fx-padding: 30;
+        -fx-background-radius: 20;
+    """);
 
-        VBox box = new VBox(20);
-        box.setAlignment(Pos.CENTER);
+        // 🔲 กล่องหลักเหมือน SellScene
+        VBox mainBox = new VBox(20);
+        mainBox.setAlignment(Pos.TOP_CENTER);
+        mainBox.setPrefSize(500, 350);
 
-        box.setPrefSize(500, 400);
-        box.setStyle("""
-            -fx-background-color: #2b2b2b;
-            -fx-background-radius: 20;
-            -fx-padding: 20;
-        """);
+        mainBox.setStyle("""
+        -fx-background-color: #2b2b2b;
+        -fx-padding: 30;
+        -fx-background-radius: 20;
+    """);
 
+        // 🏷 Title เหมือน SellScene
         Label title = new Label("INVENTORY");
         title.setStyle("""
-            -fx-text-fill: white;
-            -fx-font-size: 22px;
-            -fx-font-weight: bold;
-        """);
+        -fx-background-color: #ffcc00;
+        -fx-text-fill: black;
+        -fx-font-size: 24px;
+        -fx-font-weight: bold;
+        -fx-padding: 10 30 10 30;
+        -fx-background-radius: 10;
+    """);
 
-        // Grid สำหรับไอเท็ม
+        // 📦 Grid
         grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setHgap(15);
+        grid.setVgap(15);
         grid.setAlignment(Pos.TOP_CENTER);
 
         loadItems();
 
-        // ScrollPane ครอบ grid
-        ScrollPane scrollPane = new ScrollPane(grid);
+        // 🧾 ScrollPane แบบเดียวกับ SellScene
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(grid);
         scrollPane.setFitToWidth(true);
-        scrollPane.setPrefHeight(250);
+        scrollPane.setPrefViewportHeight(300);
+
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         scrollPane.setStyle("""
-            -fx-background: transparent;
-            -fx-background-color: transparent;
-        """);
+        -fx-background: transparent;
+        -fx-background-color: transparent;
+        -fx-padding: 0;
+    """);
 
-        box.getChildren().addAll(title, scrollPane);
+        mainBox.getChildren().addAll(title, scrollPane);
 
-        // 🔴 Exit Button
+        // ❌ Exit Button
         Button exitBtn = new Button("X");
         exitBtn.setStyle("""
-            -fx-background-color: red;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-        """);
+        -fx-background-color: red;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+    """);
 
         exitBtn.setOnAction(e -> this.setVisible(false));
+
         StackPane.setAlignment(exitBtn, Pos.TOP_RIGHT);
         StackPane.setMargin(exitBtn, new Insets(10));
 
-
-        this.getChildren().addAll(box,exitBtn);
+        this.getChildren().addAll(mainBox, exitBtn);
     }
 
     public void loadItems() {
@@ -92,11 +103,12 @@ public class InventoryPane extends StackPane {
 
             // 🎨 พื้นหลังเทาอ่อน
             cell.setStyle("""
-                    -fx-background-color: #3a3a3a;
-                    -fx-background-radius: 12;
-                    -fx-border-color: #555;
-                    -fx-border-radius: 12;
-                    """);
+            -fx-background-color: #3a3a3a;
+            -fx-background-radius: 12;
+            -fx-border-color: #555;
+            -fx-border-radius: 12;
+            -fx-padding: 10;
+            """);
 
             // 🖼 รูปภาพ
             Image img = item.getImg();
@@ -114,41 +126,41 @@ public class InventoryPane extends StackPane {
                     -fx-font-weight: bold;
                     """);
 
-            if (item instanceof Weapon) {
-                nameLabel.setBackground(new Background(
-                        new BackgroundFill(
-                                Color.RED,
-                                new CornerRadii(5),
-                                Insets.EMPTY
-                        )
-                ));
-            } else if (item instanceof Potion) {
-                nameLabel.setBackground(new Background(
-                        new BackgroundFill(
-                                Color.YELLOW,
-                                new CornerRadii(5),
-                                Insets.EMPTY
-                        )
-                ));
-                nameLabel.setStyle("""
-                        -fx-text-fill: black;
-                        -fx-font-size: 12px;
-                        -fx-font-weight: bold;
-                        """);
-            } else if (item instanceof TamedDinosaur) {
-                nameLabel.setBackground(new Background(
-                        new BackgroundFill(
-                                Color.GREEN,
-                                new CornerRadii(5),
-                                Insets.EMPTY
-                        )
-                ));
-                nameLabel.setStyle("""
-                        -fx-text-fill: black;
-                        -fx-font-size: 12px;
-                        -fx-font-weight: bold;
-                        """);
-            }
+//            if (item instanceof Weapon) {
+//                nameLabel.setBackground(new Background(
+//                        new BackgroundFill(
+//                                Color.RED,
+//                                new CornerRadii(5),
+//                                Insets.EMPTY
+//                        )
+//                ));
+//            } else if (item instanceof Potion) {
+//                nameLabel.setBackground(new Background(
+//                        new BackgroundFill(
+//                                Color.YELLOW,
+//                                new CornerRadii(5),
+//                                Insets.EMPTY
+//                        )
+//                ));
+//                nameLabel.setStyle("""
+//                        -fx-text-fill: black;
+//                        -fx-font-size: 12px;
+//                        -fx-font-weight: bold;
+//                        """);
+//            } else if (item instanceof TamedDinosaur) {
+//                nameLabel.setBackground(new Background(
+//                        new BackgroundFill(
+//                                Color.GREEN,
+//                                new CornerRadii(5),
+//                                Insets.EMPTY
+//                        )
+//                ));
+//                nameLabel.setStyle("""
+//                        -fx-text-fill: black;
+//                        -fx-font-size: 12px;
+//                        -fx-font-weight: bold;
+//                        """);
+//            }
 
             cell.getChildren().addAll(imageView, nameLabel);
 
@@ -159,6 +171,26 @@ public class InventoryPane extends StackPane {
                 col = 0;
                 row++;
             }
+
+            cell.setOnMouseEntered(e ->
+                    cell.setStyle("""
+            -fx-background-color: #444;
+            -fx-background-radius: 12;
+            -fx-border-color: gold;
+            -fx-border-radius: 12;
+            -fx-padding: 10;
+            """)
+            );
+
+            cell.setOnMouseExited(e ->
+                    cell.setStyle("""
+        -fx-background-color: #3a3a3a;
+        -fx-background-radius: 12;
+        -fx-border-color: #777;
+        -fx-border-radius: 12;
+        -fx-padding: 10;
+    """)
+            );
         }
     }
 }

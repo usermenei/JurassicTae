@@ -87,6 +87,7 @@ public class ButtonSell extends Button {
             GameLogic.getInstance().getPlayer().sellItem(item);
             GameController.getInstance().reloadSellScene();
             GameController.getInstance().reloadMoney();
+            GameController.getInstance().getRoot().getShopScene().loadSell();
             System.out.println("Sell" + item.getName());
         });
     }
