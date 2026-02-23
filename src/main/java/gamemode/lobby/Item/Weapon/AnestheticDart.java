@@ -6,11 +6,7 @@ import gamemode.lobby.Item.Base.Weapon;
 public class AnestheticDart extends Weapon {
     Image image;
     public AnestheticDart(){
-        super("AnestheticDart", "/gamemode/lobby/trap.png",20);
-        image = new Image(getClass().getResource(getImgUrl()).toExternalForm());
+        super("AnestheticDart", "/gamemode/lobby/trap.png",20,10);
     }
 
-    public Image getImage(){
-        return image;
-    }
 }

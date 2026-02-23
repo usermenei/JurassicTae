@@ -7,4 +7,6 @@ public class Dinosaur {
     private int expDrop;
     private int requiredLevel;
 
+
+
 }

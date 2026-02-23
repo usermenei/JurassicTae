@@ -1,5 +1,6 @@
 package gamemode.lobby.LivingThing;
 
+import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Interfaces.Sellable;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.Potion;
@@ -109,7 +110,6 @@ public class Player {
     //method
 
     public void addItem(Item item){
-        if(inventory.size() >= 8 )return;
         inventory.add(item);
     }
 
@@ -184,6 +184,14 @@ public class Player {
         //(if!(item instanceof Sellable))return;
         if (item instanceof Sellable)money += ((Sellable) item).getSellPrice();
         inventory.remove(item);
+    }
+
+    public void buyItem(Item item){
+        if(money < ((Buyable) item).getBuyPrice())return;
+        if(item instanceof Weapon
+                && inventory.stream().anyMatch(i -> i.getName().equals(item.getName())))return;
+        money -= ((Buyable) item).getBuyPrice();
+        inventory.add(item);
     }
 
 }
