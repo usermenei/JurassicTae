@@ -99,7 +99,7 @@ public class InventoryPane extends StackPane {
                     """);
 
             // 🖼 รูปภาพ
-            Image img = item.getImage();
+            Image img = item.getImg();
 
             ImageView imageView = new ImageView(img);
             imageView.setFitWidth(70);

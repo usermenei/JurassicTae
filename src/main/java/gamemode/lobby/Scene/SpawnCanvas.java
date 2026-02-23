@@ -1,7 +1,9 @@
 package gamemode.lobby.Scene;
 
 import gamemode.lobby.Item.Base.Item;
+import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Item.Potion.SpeedPotion;
+import gamemode.lobby.Item.TamedDino.TamedDino;
 import gamemode.lobby.Item.Weapon.AnestheticDart;
 import gamemode.lobby.Item.Weapon.Noose;
 import gamemode.lobby.LivingThing.Player;
@@ -44,13 +46,8 @@ public class SpawnCanvas extends Canvas {
 
         //*********************************************fake Inventory
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0;i<5;i++){
-            items.add(new AnestheticDart());
-            items.add(new SpeedPotion());
-            items.add(new Noose());
-        }
-        for (Item item : items) {
-            player.addItem(item);
+        for(int i = 0;i<11;i++){
+            player.addItem(new TamedDino());
         }
         //***********************************************
 

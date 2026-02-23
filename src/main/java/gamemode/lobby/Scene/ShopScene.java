@@ -1,6 +1,13 @@
 package gamemode.lobby.Scene;
 import gamemode.lobby.Item.Base.Item;
 
+import gamemode.lobby.Item.Potion.ExpPotion;
+import gamemode.lobby.Item.Potion.HealPotion;
+import gamemode.lobby.Item.Potion.SpeedPotion;
+import gamemode.lobby.Item.Potion.StrengthPotion;
+import gamemode.lobby.Item.Weapon.ElectricGun;
+import gamemode.lobby.Item.Weapon.Noose;
+import gamemode.lobby.Item.Weapon.RifleGun;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -18,16 +25,16 @@ public class ShopScene extends StackPane {
         ArrayList<Item> items = new ArrayList<>();
 
         items.add(new AnestheticDart());
-        items.add(new AnestheticDart());
-        items.add(new AnestheticDart());
-        items.add(new AnestheticDart());
-        items.add(new AnestheticDart());
-        items.add(new AnestheticDart());
-        items.add(new AnestheticDart());
-        items.add(new AnestheticDart());
+        items.add(new ElectricGun());
+        items.add(new Noose());
+        items.add(new RifleGun());
+        items.add(new ExpPotion());
+        items.add(new HealPotion());
+        items.add(new SpeedPotion());
+        items.add(new StrengthPotion());
 
-        this.setPrefSize(600, 400);
-        this.setMaxSize(600, 400);
+        this.setPrefSize(700, 530);
+        this.setMaxSize(700,530);
         this.setStyle("""
             -fx-padding: 30;
             -fx-background-radius: 20;""");

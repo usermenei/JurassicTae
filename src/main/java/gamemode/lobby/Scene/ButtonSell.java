@@ -1,5 +1,7 @@
 package gamemode.lobby.Scene;
 
+import gamemode.lobby.Interfaces.Buyable;
+import gamemode.lobby.Interfaces.Sellable;
 import gamemode.lobby.Item.Base.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -52,7 +54,12 @@ public class ButtonSell extends Button {
                 )
         ));
 
-        box.getChildren().addAll(imageView, nameLabel);
+        // 💰 ราคา
+        Label priceLabel = new Label("Price: " +((Sellable)item).getSellPrice() +"$");
+        priceLabel.setTextFill(Color.GOLD);
+        priceLabel.setStyle("-fx-font-size: 11px; -fx-font-weight: bold;");
+
+        box.getChildren().addAll(imageView, nameLabel,priceLabel);
 
         this.setGraphic(box);
 

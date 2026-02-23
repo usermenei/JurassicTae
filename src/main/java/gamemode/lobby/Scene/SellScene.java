@@ -1,6 +1,7 @@
 package gamemode.lobby.Scene;
 
 import gamemode.lobby.Item.Base.Item;
+import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.logic.GameLogic;
 
 import javafx.geometry.Insets;
@@ -107,6 +108,8 @@ public class SellScene extends StackPane {
         int row = 0;
 
         for (Item item : GameLogic.getInstance().getPlayer().getInventory()) {
+
+            if(!(item instanceof TamedDinosaur))continue;
 
             ButtonSell btn = new ButtonSell(item);
             gridPane.add(btn, col, row);
