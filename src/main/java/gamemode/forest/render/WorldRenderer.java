@@ -111,7 +111,7 @@ public class WorldRenderer {
                         () -> gc.drawImage(item.getImage(),
                                 item.getX(),
                                 item.getY(),
-                                40, 40)
+                                80, 80)
                 ));
             }
         }

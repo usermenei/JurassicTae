@@ -1,7 +1,9 @@
 package gamemode.forest;
 
 import gamemode.forest.entity.Dinosaur;
+import gamemode.forest.entity.WorldItem;
 import gamemode.lobby.LivingThing.Player;
+import gamemode.lobby.logic.GameLogic;
 import javafx.application.Platform;
 
 import java.util.*;
@@ -76,7 +78,7 @@ public class WorldManager {
         }
 
         // =========================
-        // UNLOAD FAR CHUNKS (DELETE ITEMS)
+        // UNLOAD FAR CHUNKS
         // =========================
         loadedChunks.keySet().removeIf(point -> {
 
@@ -84,7 +86,7 @@ public class WorldManager {
 
                 Chunk chunk = loadedChunks.get(point);
                 if (chunk != null) {
-                    chunk.getItems().clear(); // delete items
+                    chunk.getItems().clear();
                 }
 
                 spawnedDinoChunks.remove(point);
@@ -109,6 +111,9 @@ public class WorldManager {
         }
     }
 
+    // =========================
+    // SPAWN DINOSAUR
+    // =========================
     private void spawnDinosaur(int chunkX, int chunkY) {
 
         double baseX = chunkX * CHUNK_SIZE;
@@ -122,9 +127,52 @@ public class WorldManager {
             );
 
             dino.setChunk(chunkX, chunkY);
-
             dinosaurs.add(dino);
         }
+    }
+
+    // =========================
+    // ITEM PICKUP SYSTEM
+    // =========================
+    public void handlePickup() {
+
+        for (Chunk chunk : loadedChunks.values()) {
+
+            Iterator<WorldItem> iterator = chunk.getItems().iterator();
+
+            while (iterator.hasNext()) {
+
+                WorldItem worldItem = iterator.next();
+
+                if (isNearPlayer(worldItem)) {
+
+                    Player player = GameLogic.getInstance().getPlayer();
+
+                    if (player.getInventory().size() >= 8) {
+
+                        System.out.println("Inventory Full! Cannot pick item.");
+                        return;
+
+                    } else {
+
+                        player.addItem(worldItem.getItem());
+                        iterator.remove();
+                        System.out.println("Picked up: " + worldItem.getItem().getName());
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isNearPlayer(WorldItem item) {
+
+        double dx = player.getX() - item.getX();
+        double dy = player.getY() - item.getY();
+
+        double pickupRadius = 80;
+
+        return dx * dx + dy * dy <= pickupRadius * pickupRadius;
     }
 
     public void shutdown() {

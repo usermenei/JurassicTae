@@ -6,7 +6,7 @@ import gamemode.lobby.Item.Base.Potion;
 public  class HealPotion extends Potion {
     private Image image;
     public HealPotion(){
-        super("Heal Potion", "/gamemode/lobby/trap.png",20);
+        super("Heal Potion", "/item/healpotion.png",20);
         image = new Image(getClass().getResource(getImgUrl()).toExternalForm());
     }
 

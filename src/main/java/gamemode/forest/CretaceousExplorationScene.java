@@ -62,7 +62,16 @@ public class CretaceousExplorationScene {
     }
 
     private void setupInput() {
-        scene.setOnKeyPressed(e -> keys.add(e.getCode()));
+
+        scene.setOnKeyPressed(e -> {
+
+            keys.add(e.getCode());
+
+            if (e.getCode() == KeyCode.E) {
+                worldManager.handlePickup();
+            }
+        });
+
         scene.setOnKeyReleased(e -> keys.remove(e.getCode()));
     }
 
@@ -100,4 +109,5 @@ public class CretaceousExplorationScene {
 
         worldManager.update();
     }
+
 }
