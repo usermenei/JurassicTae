@@ -186,9 +186,39 @@ public class WorldManager {
 
     public void endBattle() {
         inBattle = false;
+        pushPlayerOut();
     }
 
     public void shutdown() {
         executor.shutdownNow();
+    }
+
+    private void pushPlayerOut() {
+
+        for (Dinosaur d : dinosaurs) {
+
+            if (isColliding(player, d)) {
+
+                double dx = player.getX() - d.getX();
+                double dy = player.getY() - d.getY();
+
+                double length = Math.sqrt(dx * dx + dy * dy);
+                if (length == 0) {
+                    dx = 1;
+                    dy = 0;
+                    length = 1;
+                }
+
+                dx /= length;
+                dy /= length;
+
+                double pushDistance = 80;
+
+                player.setX(player.getX() + dx * pushDistance);
+                player.setY(player.getY() + dy * pushDistance);
+
+                break;
+            }
+        }
     }
 }

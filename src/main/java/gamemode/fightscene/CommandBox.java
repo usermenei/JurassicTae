@@ -1,4 +1,4 @@
-package gamemode.forest.fightscene;
+package gamemode.fightscene;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

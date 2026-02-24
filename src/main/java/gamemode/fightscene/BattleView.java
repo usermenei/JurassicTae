@@ -1,4 +1,4 @@
-package gamemode.forest.fightscene;
+package gamemode.fightscene;
 
 import gamemode.forest.entity.Dinosaur;
 import gamemode.lobby.logic.GameController;
@@ -76,4 +76,6 @@ public class BattleView extends BorderPane {
     public void onEnemyDefeated() {
         controller.onEnemyDefeated(enemy);
     }
+
+    public void onEscape() {controller.returnToWorld();}
 }

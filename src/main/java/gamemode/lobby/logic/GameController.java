@@ -2,7 +2,7 @@ package gamemode.lobby.logic;
 
 import gamemode.forest.CretaceousExplorationScene;
 import gamemode.forest.entity.Dinosaur;
-import gamemode.forest.fightscene.BattleView;
+import gamemode.fightscene.BattleView;
 import gamemode.gym.scene.GameScene;
 import gamemode.gym.scene.MainMenu;
 import gamemode.lobby.Player.Player;
@@ -86,10 +86,12 @@ public class GameController {
                 .getWorldManager()
                 .endBattle();
 
-        stage.setScene(forestScene);
-
         explorationScene.clearInput();
         explorationScene.resumeWorld();
+
+        stage.setScene(forestScene);
+
+        forestScene.getRoot().requestFocus();
     }
 
 
@@ -98,7 +100,13 @@ public class GameController {
        ========================= */
     public void returnToWorld() {
         explorationScene.getWorldManager().endBattle();
+
+        explorationScene.clearInput();
+        explorationScene.resumeWorld();
+
         stage.setScene(forestScene);
+
+        forestScene.getRoot().requestFocus();
     }
 
     /* =========================
