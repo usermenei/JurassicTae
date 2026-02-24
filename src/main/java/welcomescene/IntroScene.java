@@ -2,7 +2,6 @@ package welcomescene;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -11,6 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import gamemode.lobby.logic.GameController;
+import javafx.scene.input.KeyCode;
+import javafx.scene.control.Label;
+import javafx.geometry.Pos;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.scene.text.Font;
 
 public class IntroScene {
 
@@ -20,10 +25,8 @@ public class IntroScene {
 
     public IntroScene() {
 
-        // ---------------- ROOT ----------------
         StackPane root = new StackPane();
 
-        // กันหน้าขาว
         Rectangle background = new Rectangle(1422, 800);
         background.setFill(Color.BLACK);
         root.getChildren().add(background);
@@ -40,65 +43,82 @@ public class IntroScene {
 
         mediaView.setFitWidth(1422);
         mediaView.setFitHeight(800);
-
-        // ซ่อนไว้ก่อนจนกว่าจะ READY
         mediaView.setVisible(false);
 
         root.getChildren().add(mediaView);
 
-        // รอ video โหลดเสร็จ
+        // ---------------- TEXT ----------------
+        Label infoText = new Label("Press F to Start");
+
+        // Load pixel font
+        Font pixelFont = Font.loadFont(
+                getClass().getResourceAsStream("/fonts/pixel.ttf"),
+                32
+        );
+        infoText.setFont(pixelFont);
+
+        infoText.setStyle("""
+        -fx-text-fill: white;
+        """); // removed background box
+
+        StackPane.setAlignment(infoText, Pos.BOTTOM_CENTER);
+        infoText.setTranslateY(-40);
+
+        root.getChildren().add(infoText);
+
+        // ---------------- BLINK EFFECT ----------------
+        FadeTransition blink = new FadeTransition(Duration.seconds(0.8), infoText);
+        blink.setFromValue(1.0);
+        blink.setToValue(0.2);
+        blink.setCycleCount(Animation.INDEFINITE);
+        blink.setAutoReverse(true);
+        blink.play();
+
+        // ---------------- KEY LISTENER ----------------
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.F) {
+                stopAll();
+                GameController.getInstance().switchScene(
+                        new ChongsamVideoScene().getScene()
+                );
+            }
+        });
+
+        // ---------------- INTRO READY ----------------
         introPlayer.setOnReady(() -> {
 
             mediaView.setOpacity(0);
             mediaView.setVisible(true);
             introPlayer.play();
 
-            // Fade in แบบเนียน ๆ
             FadeTransition fade = new FadeTransition(Duration.seconds(1), mediaView);
             fade.setFromValue(0);
             fade.setToValue(1);
             fade.play();
         });
 
-        // เมื่อ intro จบ → ไป loop
-        introPlayer.setOnEndOfMedia(() -> playLoop(root, mediaView));
+        // ---------------- INTRO END → LOOP VIDEO ----------------
+        introPlayer.setOnEndOfMedia(() -> {
+            playLoop(mediaView);
+        });
     }
 
-    private void playLoop(StackPane root, MediaView mediaView) {
+    private void playLoop(MediaView mediaView) {
 
-        // ---------------- LOOP VIDEO ----------------
         Media loopMedia = new Media(
                 getClass().getResource("/welcomescene/loopstart.mp4").toExternalForm()
         );
 
         loopPlayer = new MediaPlayer(loopMedia);
-        loopPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        loopPlayer.setCycleCount(MediaPlayer.INDEFINITE); // 🔥 loop forever
 
         mediaView.setMediaPlayer(loopPlayer);
+        loopPlayer.play();
+    }
 
-        loopPlayer.setOnReady(() -> loopPlayer.play());
-
-        // ---------------- START BUTTON ----------------
-        Button startBtn = new Button("START");
-        startBtn.setStyle("""
-                -fx-font-size: 28px;
-                -fx-padding: 15 50;
-                -fx-background-color: rgba(0,0,0,0.6);
-                -fx-text-fill: white;
-                -fx-background-radius: 10;
-                """);
-
-        root.getChildren().add(startBtn);
-
-        startBtn.setOnAction(e -> {
-
-            loopPlayer.stop();
-
-            // เปลี่ยนไป Dialogue Scene
-            GameController.getInstance().switchScene(
-                    new DialogueScene().getScene()
-            );
-        });
+    private void stopAll() {
+        if (introPlayer != null) introPlayer.stop();
+        if (loopPlayer != null) loopPlayer.stop();
     }
 
     public Scene getScene() {
