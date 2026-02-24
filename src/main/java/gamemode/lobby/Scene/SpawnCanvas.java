@@ -1,12 +1,8 @@
 package gamemode.lobby.Scene;
 
 import gamemode.lobby.Item.Base.Item;
-import gamemode.lobby.Item.Base.TamedDinosaur;
-import gamemode.lobby.Item.Potion.SpeedPotion;
 import gamemode.lobby.Item.TamedDino.TamedDino;
-import gamemode.lobby.Item.Weapon.AnestheticDart;
-import gamemode.lobby.Item.Weapon.Noose;
-import gamemode.lobby.LivingThing.Player;
+import gamemode.lobby.Player.Player;
 import gamemode.lobby.Location.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;

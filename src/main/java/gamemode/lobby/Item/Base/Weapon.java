@@ -1,9 +1,8 @@
 package gamemode.lobby.Item.Base;
 
-import javafx.scene.image.Image;
 import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Interfaces.Useable;
-import gamemode.lobby.LivingThing.Player;
+import gamemode.lobby.Player.Player;
 
 public abstract class Weapon extends Item implements Useable, Buyable {
     private int dmg;

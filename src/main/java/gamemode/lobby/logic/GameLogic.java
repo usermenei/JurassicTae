@@ -1,6 +1,6 @@
 package gamemode.lobby.logic;
 
-import gamemode.lobby.LivingThing.Player;
+import gamemode.lobby.Player.Player;
 
 public class GameLogic {
     private static GameLogic instance;

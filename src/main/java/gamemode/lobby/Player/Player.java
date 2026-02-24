@@ -1,4 +1,4 @@
-package gamemode.lobby.LivingThing;
+package gamemode.lobby.Player;
 
 import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Interfaces.Sellable;

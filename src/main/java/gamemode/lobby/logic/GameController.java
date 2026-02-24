@@ -1,13 +1,15 @@
 package gamemode.lobby.logic;
 
+import gamemode.forest.CretaceousExplorationScene;
+import gamemode.forest.entity.Dinosaur;
+import gamemode.forest.fightscene.BattleView;
 import gamemode.gym.scene.GameScene;
 import gamemode.gym.scene.MainMenu;
+import gamemode.lobby.Player.Player;
+import gamemode.lobby.Scene.SpawnScreen;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import gamemode.forest.CretaceousExplorationScene;
-import gamemode.lobby.LivingThing.Player;
-import gamemode.lobby.Scene.SpawnScreen;
 
 public class GameController {
 
@@ -21,60 +23,100 @@ public class GameController {
     private KeyboardController keyboard;
     private boolean gameEnded;
 
-    private GameController(){}
+    private int lastGymScore = 0;
+
+    /* =========================
+       ⭐ FOREST STATE
+       ========================= */
+    private Scene forestScene;
+    private CretaceousExplorationScene explorationScene;
+
+    private GameController() {}
 
     public static GameController getInstance() {
         return instance;
     }
-    private int lastGymScore = 0;
 
-
-    public void init(Stage stage, Scene scene){
+    public void init(Stage stage, Scene scene) {
         this.stage = stage;
         this.mainScene = scene;
         keyboard = new KeyboardController(scene);
     }
 
-    public void switchScene(Scene scene){
+    public void switchScene(Scene scene) {
         stage.setScene(scene);
     }
 
+    /* =========================
+       🌲 FOREST MODE
+       ========================= */
     public void startCretaceousExploration() {
 
-        CretaceousExplorationScene exploration =
+        explorationScene =
                 new CretaceousExplorationScene(
-                        () -> startBattleMode(),
-                        () -> returnToMain()
+                        this::startBattleMode,   // ✅ ส่ง method reference ตรง
+                        this::returnToMain
                 );
 
-        GameController.getInstance().switchScene(
-                exploration.getScene()
-        );
+        forestScene = explorationScene.getScene();
+        switchScene(forestScene);
     }
 
-    private void startBattleMode() {
-        System.out.println("BATTLE");
+    /* =========================
+       ⚔️ BATTLE MODE (ตัวจริง)
+       ========================= */
+    private void startBattleMode(Dinosaur enemy) {
+
+        BattleView battleView = new BattleView(enemy, this);
+        Scene battleScene = new Scene(battleView, 1422, 800);
+
+        stage.setScene(battleScene);
+    }
+    /* =========================
+       🦖 ENEMY DEFEATED (⭐ จุดสำคัญ)
+       ========================= */
+    public void onEnemyDefeated(Dinosaur enemy) {
+
+        // ⭐ ลบไดโนออกจาก world จริง
+        explorationScene
+                .getWorldManager()
+                .removeDinosaur(enemy);
+
+        explorationScene
+                .getWorldManager()
+                .endBattle();
+
+        stage.setScene(forestScene);
+
+        explorationScene.clearInput();
+        explorationScene.resumeWorld();
     }
 
 
+    /* =========================
+       🔙 RETURN FROM BATTLE
+       ========================= */
+    public void returnToWorld() {
+        explorationScene.getWorldManager().endBattle();
+        stage.setScene(forestScene);
+    }
+
+    /* =========================
+       🏋️ GYM MODE (ของเดิม)
+       ========================= */
     public void startGymMiniGame() {
-
-        Stage stage = this.stage;
 
         MainMenu menu = new MainMenu(
                 1422,
                 800,
-                lastGymScore,   // previous score (you can store this later)
-                () -> {
-                    startActualGymGame();
-                },
-                () -> {
-                    returnToMain();   // back to spawn
-                }
+                lastGymScore,
+                () -> startActualGymGame(),
+                () -> returnToMain()
         );
 
         stage.setScene(menu.getScene());
     }
+
     private void startActualGymGame() {
 
         Image red = new Image(
@@ -98,8 +140,8 @@ public class GameController {
                 blue,
                 bg,
                 score -> {
-                    lastGymScore = score;     // ✅ SAVE SCORE
-                    startGymMiniGame();       // go back to menu
+                    lastGymScore = score;
+                    startGymMiniGame();
                 }
         );
 
@@ -107,40 +149,47 @@ public class GameController {
         game.start();
     }
 
-    public void returnToMain(){
+    /* =========================
+       🔁 MAIN / SPAWN (ของเดิม)
+       ========================= */
+    public void returnToMain() {
         stage.setScene(mainScene);
 
         if (root != null) {
-            root.requestFocus();   // ✅ correct
+            root.requestFocus();
         }
     }
 
-    public void setRoot(SpawnScreen spawnScreen){
+    public void setRoot(SpawnScreen spawnScreen) {
         this.root = spawnScreen;
         player = root.getSpawnCanvas().getPlayer();
     }
 
-    public SpawnScreen getRoot(){
+    public SpawnScreen getRoot() {
         return root;
     }
 
-    public KeyboardController getKeyboard(){
+    public KeyboardController getKeyboard() {
         return keyboard;
     }
 
-    public boolean isGameEnded(){
+    public boolean isGameEnded() {
         return gameEnded;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public void reloadSellScene(){
+    public void reloadSellScene() {
         root.getSellScene().refresh();
     }
 
-    public void reloadMoney(){
-        root.getMoneyLabel().setText("Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $");
+    public void reloadMoney() {
+        root.getMoneyLabel().setText(
+                "Money : " +
+                        GameLogic.getInstance().getPlayer().getMoney() +
+                        " $"
+        );
     }
 }

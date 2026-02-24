@@ -7,7 +7,7 @@ import gamemode.forest.entity.WorldItem;
 import gamemode.forest.util.AssetLoader;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import gamemode.lobby.LivingThing.Player;
+import gamemode.lobby.Player.Player;
 
 public class WorldRenderer {
 

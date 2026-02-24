@@ -7,5 +7,4 @@ public class TamedDino extends TamedDinosaur {
         super("Just Dino","/gamemode/lobby/trap.png",25);
     }
 
-
 }

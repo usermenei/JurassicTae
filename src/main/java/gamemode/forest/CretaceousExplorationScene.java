@@ -1,8 +1,9 @@
 package gamemode.forest;
 
+import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.render.WorldRenderer;
 import gamemode.DialogueManager;
-import gamemode.lobby.LivingThing.Player;
+import gamemode.lobby.Player.Player;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -12,33 +13,39 @@ import javafx.scene.layout.StackPane;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class CretaceousExplorationScene {
 
     private static final int WIDTH = 1422;
     private static final int HEIGHT = 800;
 
-    private Scene scene;
-    private Player player;
+    private final Scene scene;
+    private final Player player;
 
-    private Set<KeyCode> keys = new HashSet<>();
+    private final Set<KeyCode> keys = new HashSet<>();
 
-    private WorldManager worldManager;
-    private WorldRenderer renderer;
+    private final WorldManager worldManager;
+    private final WorldRenderer renderer;
 
     private double cameraX;
     private double cameraY;
 
-    private Runnable onEnterBattle;
-    private Runnable onExitWorld;
+    /* =========================
+       ⭐ CALLBACKS (UPDATED)
+       ========================= */
+    private final Consumer<Dinosaur> onEnterBattle;
+    private final Runnable onExitWorld;
 
     private AnimationTimer gameLoop;
 
+    /* =========================
+       CONSTRUCTOR
+       ========================= */
     public CretaceousExplorationScene(
-            Runnable onEnterBattle,
+            Consumer<Dinosaur> onEnterBattle,
             Runnable onExitWorld
     ) {
-
         this.onEnterBattle = onEnterBattle;
         this.onExitWorld = onExitWorld;
 
@@ -54,29 +61,49 @@ public class CretaceousExplorationScene {
         worldManager = new WorldManager(player);
         renderer = new WorldRenderer(gc, player, worldManager);
 
+        /* =========================
+           ⭐ REGISTER BATTLE CALLBACK
+           ========================= */
+        worldManager.setOnBattleTriggered(enemy -> {
+            if (gameLoop != null) {
+                gameLoop.stop();           // ⏸ freeze world
+            }
+            onEnterBattle.accept(enemy);   // 🔥 send dinosaur to lobby GC
+        });
+
         setupInput();
         startGameLoop(gc);
     }
 
+    /* =========================
+       GETTERS
+       ========================= */
     public Scene getScene() {
         return scene;
     }
 
-    // =========================
-    // INPUT
-    // =========================
+    public WorldManager getWorldManager() {
+        return worldManager;
+    }
+
+    /* =========================
+       INPUT
+       ========================= */
     private void setupInput() {
 
         scene.setOnKeyPressed(e -> {
 
             keys.add(e.getCode());
 
+            // Pick up item
             if (e.getCode() == KeyCode.E) {
                 worldManager.handlePickup();
             }
         });
 
-        scene.setOnKeyReleased(e -> keys.remove(e.getCode()));
+        scene.setOnKeyReleased(e ->
+                keys.remove(e.getCode())
+        );
 
         // Mouse click closes dialogue
         scene.setOnMousePressed(e ->
@@ -84,9 +111,9 @@ public class CretaceousExplorationScene {
         );
     }
 
-    // =========================
-    // GAME LOOP
-    // =========================
+    /* =========================
+       GAME LOOP
+       ========================= */
     private void startGameLoop(GraphicsContext gc) {
 
         gameLoop = new AnimationTimer() {
@@ -98,7 +125,7 @@ public class CretaceousExplorationScene {
                 // 1️⃣ Render world (camera space)
                 renderer.render(cameraX, cameraY);
 
-                // 2️⃣ Render dialogue (UI space, no camera)
+                // 2️⃣ Render dialogue (UI space)
                 DialogueManager.getInstance().render(
                         gc,
                         WIDTH,
@@ -110,9 +137,9 @@ public class CretaceousExplorationScene {
         gameLoop.start();
     }
 
-    // =========================
-    // UPDATE
-    // =========================
+    /* =========================
+       UPDATE
+       ========================= */
     private void update() {
 
         // Exit world
@@ -123,7 +150,7 @@ public class CretaceousExplorationScene {
             return;
         }
 
-        // If dialogue is active → freeze movement
+        // Dialogue active → freeze movement
         if (DialogueManager.getInstance().isActive()) {
             DialogueManager.getInstance().update();
             return;
@@ -141,6 +168,15 @@ public class CretaceousExplorationScene {
         cameraY = player.getY() - HEIGHT / 2.0;
 
         worldManager.update();
-        DialogueManager.getInstance().update();
+    }
+
+    public void resumeWorld() {
+        if (gameLoop != null) {
+            gameLoop.start();
+        }
+    }
+
+    public void clearInput() {
+        keys.clear();
     }
 }
