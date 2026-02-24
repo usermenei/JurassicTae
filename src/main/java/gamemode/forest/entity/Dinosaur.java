@@ -1,55 +1,93 @@
 package gamemode.forest.entity;
 
 import gamemode.lobby.Player.Player;
+import javafx.scene.image.Image;
 
-public class Dinosaur {
-    private String name;
-    private int hp;
-    private int strength;
-    private int expDrop;
-    private int requiredLevel;
+public abstract class Dinosaur {
 
-    private double x, y;
-    private static final double SPEED = 2;
+    protected String name;
+    protected int hp;
+    protected int strength;
+    protected int expDrop;
+    protected int requiredLevel;
 
-    // ✅ Lifetime system
-    private final long spawnTime;
-    private static final long LIFETIME = 60_000; // 1 minute in milliseconds
+    protected double x, y;
+    protected double speed;
 
-    // ✅ Chunk tracking (for unloading)
-    private int chunkX;
-    private int chunkY;
+    protected final long spawnTime;
+    protected static final long LIFETIME = 60_000;
+
+    protected int chunkX;
+    protected int chunkY;
+    protected double width;
+    protected double height;
+
+    public Image getSprite() {
+        return sprite;
+    }
+
+    protected Image sprite;   // ✅ Image
+
+    // Rarity system
+    public enum Rarity {
+        COMMON,     // Generate often
+        UNCOMMON,   // Not very often
+        RARE        // Very rare
+    }
+
+    protected Rarity rarity;
 
     public Dinosaur(String name, int hp, int strength,
                     int expDrop, int requiredLevel,
-                    double x, double y) {
-        setName(name);
-        setHp(hp);
-        setStrength(strength);
-        setExpDrop(expDrop);
-        setRequiredLevel(requiredLevel);
+                    double x, double y,
+                    Rarity rarity,
+                    String imagePath,
+                    double width,
+                    double height,
+                    double speed) {
+
+        this.name = name;
+        this.hp = Math.max(0, hp);
+        this.strength = Math.max(0, strength);
+        this.expDrop = Math.max(0, expDrop);
+        this.requiredLevel = Math.max(1, requiredLevel);
         this.x = x;
         this.y = y;
+        this.rarity = rarity;
+
+        this.width = width;
+        this.height = height;
+        this.speed = speed;  // ✅ store speed
+
         this.spawnTime = System.currentTimeMillis();
+
+        loadImage(imagePath);
     }
 
-    public void update(Player player) {
+    // Each type will implement its own AI
+    public abstract void update(Player player);
 
-        double dx = player.getX() - x;
-        double dy = player.getY() - y;
+    public boolean isExpired() {
+        return System.currentTimeMillis() - spawnTime > LIFETIME;
+    }
 
+    protected void moveToward(double targetX, double targetY) {
+        double dx = targetX - x;
+        double dy = targetY - y;
         double distSq = dx * dx + dy * dy;
 
         if (distSq > 1) {
             double inv = 1 / Math.sqrt(distSq);
-            x += dx * inv * SPEED;
-            y += dy * inv * SPEED;
+            x += dx * inv * speed;
+            y += dy * inv * speed;
         }
     }
-
-    // ✅ Expiration check (1 minute)
-    public boolean isExpired() {
-        return System.currentTimeMillis() - spawnTime > LIFETIME;
+    private void loadImage(String path) {
+        try {
+            sprite = new Image(getClass().getResourceAsStream(path));
+        } catch (Exception e) {
+            System.out.println("Failed to load image: " + path);
+        }
     }
 
     // ✅ Chunk setters/getters
@@ -113,4 +151,7 @@ public class Dinosaur {
     public void takeDamage(int damage) {
         setHp(getHp()-damage);
     }
+
+    public double getWidth() { return width; }
+    public double getHeight() { return height; }
 }

@@ -27,6 +27,11 @@ public class Player {
     private ArrayList<Item> inventory;
     private double speed = 2;
 
+    public int getInventorylimit() {
+        return inventorylimit;
+    }
+
+    private int inventorylimit = 12;
     private double x, y;
     private final double WIDTH = 60;
     private final double HEIGHT = 60;

@@ -117,8 +117,8 @@ public class WorldRenderer {
         }
 
         // =========================
-        // 2.2️⃣ GLOBAL DINOSAURS
-        // =========================
+// 2.2️⃣ GLOBAL DINOSAURS
+// =========================
         double margin = 100;
 
         for (Dinosaur d : worldManager.getDinosaurs()) {
@@ -126,9 +126,13 @@ public class WorldRenderer {
             double dx = d.getX();
             double dy = d.getY();
 
-            if (dx + 80 < viewLeft - margin ||
+            double width  = d.getWidth();
+            double height = d.getHeight();
+
+            // Proper visibility check
+            if (dx + width < viewLeft - margin ||
                     dx > viewRight + margin ||
-                    dy + 60 < viewTop - margin ||
+                    dy + height < viewTop - margin ||
                     dy > viewBottom + margin) {
                 continue;
             }
@@ -137,11 +141,23 @@ public class WorldRenderer {
             double finalY = dy;
 
             renderList.add(new RenderObject(
-                    finalY + 60,
-                    () -> gc.drawImage(dinosaurImage,
-                            finalX,
-                            finalY,
-                            80, 60)
+                    finalY + height,  // ✅ correct depth
+                    () -> {
+
+                        if (d.getSprite() != null) {
+
+                            gc.drawImage(
+                                    d.getSprite(),
+                                    finalX,
+                                    finalY,
+                                    width,
+                                    height
+                            );
+
+                        } else {
+                            gc.fillRect(finalX, finalY, width, height);
+                        }
+                    }
             ));
         }
 

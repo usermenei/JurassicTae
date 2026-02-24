@@ -1,5 +1,7 @@
 package welcomescene;
 
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -11,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import gamemode.lobby.logic.GameController;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 public class NewsReportScene {
 
@@ -19,18 +23,19 @@ public class NewsReportScene {
     private boolean reporter1Turn = true;
 
     private MediaPlayer bgmPlayer;
+    private MediaPlayer sfxPlayer;
 
     private final String[] dialogue = {
 
             "SOUND1",
             "สวัสดีครับ นี่คือเรื่องเล่าเช้านี้",
-            "ผม สรยุทธ์ สุทัศนะจินดา",
+            "ผม สรยุทธ สุทัศนะจินดา",
             "และดิฉัน ไบรท์ พิชญทัฬห์ จันทร์พุฒ ค่ะ",
             "วันนี้มีประเด็นสำคัญเกี่ยวกับการเลือกตั้งครั้งประวัติศาสตร์ของประเทศไทย",
 
             "BG2",
             "วันนี้ประวัติศาสตร์ไทยต้องจารึกอีกครั้ง เมื่อผลการเลือกตั้งอย่างเป็นทางการปรากฏว่า คุณเต้ มงคลกิตติ์ สุขสินธารานนท์ ได้รับความไว้วางใจจากประชาชน",
-            "และก้าวขึ้นดำรงตำแหน่งนายกรัฐมนตรีคนที่ 31 ของประเทศไทยอย่างเป็นทางการ!",
+            "และก้าวขึ้นดำรงตำแหน่งนายกรัฐมนตรีคนที่ 32 ของประเทศไทยอย่างเป็นทางการ!",
             "แต่สิ่งที่ทำให้ทั่วโลกจับตามอง ไม่ใช่แค่การจัดตั้งรัฐบาลใหม่...",
 
             "SOUND2",
@@ -42,7 +47,7 @@ public class NewsReportScene {
 
             "SOUND1",
             "BG1",
-            "นายกรัฐมนตรีเต้ ประกาศว่าจะลงพื้นที่ยุคจูราสสิคด้วยตนเอง เพื่อสำรวจความเสี่ยงและความเป็นไปได้ของภารกิจ",
+            "นายกรัฐมนตรีพี่เต้ ประกาศว่าจะลงพื้นที่ยุคจูราสสิคด้วยตนเอง เพื่อสำรวจความเสี่ยงและความเป็นไปได้ของภารกิจ",
             "ภารกิจสำรวจครั้งนี้จะเป็นก้าวแรก ก่อนการส่งหน่วยรบพิเศษ 'มงคลกิตติ์ เรนเจอร์' เข้าปฏิบัติการจริง",
             "นักวิทยาศาสตร์และกองทัพกำลังเร่งประเมินความเป็นไปได้ของโครงการเหนือจินตนาการนี้",
             "บทสรุปของยุคจูราสสิคในสยามเมืองยิ้มจะเป็นอย่างไร... โปรดติดตามต่อไป"
@@ -51,6 +56,11 @@ public class NewsReportScene {
     public NewsReportScene() {
 
         StackPane root = new StackPane();
+        // ================= LOAD THAI PIXEL FONT =================
+        Font thaiPixelFont = Font.loadFont(
+                getClass().getResourceAsStream("/fonts/thaipixel.ttf"),
+                30
+        );
 
         // ================= BACKGROUND =================
         ImageView background = new ImageView(
@@ -100,11 +110,11 @@ public class NewsReportScene {
             -fx-background-radius: 8;
         """);
 
-        Label reporterLabel = new Label("สรยุทธ์");
+        Label reporterLabel = new Label("สรยุทธ");
+        reporterLabel.setFont(thaiPixelFont);
         reporterLabel.setStyle("""
-            -fx-text-fill: #00ffff;
-            -fx-font-size: 20px;
-        """);
+                -fx-text-fill: #00ffff;
+                """);
 
         StackPane messageBox = new StackPane();
         messageBox.setPrefHeight(90);
@@ -114,10 +124,10 @@ public class NewsReportScene {
         Label messageText = new Label("");
         messageText.setWrapText(true);
         messageText.setMaxWidth(1000);
+        messageText.setFont(Font.font(thaiPixelFont.getFamily(), 30));
         messageText.setStyle("""
-            -fx-text-fill: white;
-            -fx-font-size: 18px;
-        """);
+                -fx-text-fill: white;
+                """);
 
         messageBox.getChildren().add(messageText);
         dialogueContainer.getChildren().addAll(reporterLabel, messageBox);
@@ -137,7 +147,7 @@ public class NewsReportScene {
                 String line = dialogue[index++];
 
                 if (line.equals("SOUND1")) {
-                    playBGM("/news/bgm1.mp3");
+                    playBGM("/news/bgm1.mp3");       // background music
                     continue;
                 }
 
@@ -176,7 +186,7 @@ public class NewsReportScene {
                 messageText.setText(line);
 
                 reporter1Turn = !reporter1Turn;
-                reporterLabel.setText(reporter1Turn ? "สรยุทธ์" : "ไบรท์");
+                reporterLabel.setText(reporter1Turn ? "สรยุทธ" : "ไบรท์");
 
                 if (reporter1Turn) {
                     reporter1.startTalking();
@@ -206,6 +216,27 @@ public class NewsReportScene {
         });
 
         nextDialogue.run();
+        // ---------------- TEXT ----------------
+        Label infoText = new Label("Press F to Skip");
+
+        // Load pixel font
+        infoText.setFont(Font.font(thaiPixelFont.getFamily(), 18));
+        infoText.setStyle("""
+        -fx-text-fill: white;
+        """); // removed background box
+
+        StackPane.setAlignment(infoText, Pos.BOTTOM_CENTER);
+        infoText.setTranslateY(-10);
+
+        root.getChildren().add(infoText);
+
+        // ---------------- BLINK EFFECT ----------------
+        FadeTransition blink = new FadeTransition(Duration.seconds(0.8), infoText);
+        blink.setFromValue(1.0);
+        blink.setToValue(0.2);
+        blink.setCycleCount(Animation.INDEFINITE);
+        blink.setAutoReverse(true);
+        blink.play();
     }
 
     private void playBGM(String path) {
@@ -220,6 +251,7 @@ public class NewsReportScene {
         }
     }
 
+
     private void stopBGM() {
         if (bgmPlayer != null) bgmPlayer.stop();
     }
@@ -227,4 +259,5 @@ public class NewsReportScene {
     public Scene getScene() {
         return scene;
     }
+
 }

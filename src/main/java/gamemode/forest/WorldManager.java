@@ -1,6 +1,7 @@
 package gamemode.forest;
 
 import gamemode.forest.entity.Dinosaur;
+import gamemode.forest.entity.DinosaurFactory;
 import gamemode.forest.entity.WorldItem;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.logic.GameLogic;
@@ -109,28 +110,45 @@ public class WorldManager {
     }
 
     private void spawnDinosaur(int chunkX, int chunkY) {
-        if (Math.random() < 0.4) {
-            double randomNum = Math.random();
-            Dinosaur dino;
-            if (randomNum < 0.5) {
-                dino = new Dinosaur(
-                        "Noob", 20, 1, 10, 1,
-                        chunkX * CHUNK_SIZE + Math.random() * CHUNK_SIZE,
-                        chunkY * CHUNK_SIZE + Math.random() * CHUNK_SIZE
-                );
-            } else if (randomNum < 0.75) {
-                dino = new Dinosaur(
-                        "Pro Dino", 50, 5, 20, 1,
-                        chunkX * CHUNK_SIZE + Math.random() * CHUNK_SIZE,
-                        chunkY * CHUNK_SIZE + Math.random() * CHUNK_SIZE
-                );
+
+        // 40% chance that a chunk even attempts to spawn
+        if (Math.random() > 0.4) return;
+
+        double spawnX = chunkX * CHUNK_SIZE + Math.random() * CHUNK_SIZE;
+        double spawnY = chunkY * CHUNK_SIZE + Math.random() * CHUNK_SIZE;
+
+        double roll = Math.random();
+        Dinosaur dino;
+
+        // =========================
+        // RARITY + TYPE SELECTION
+        // =========================
+
+        if (roll < 0.50) {
+            // 🟢 COMMON (Herbivore / Raptor)
+
+            if (Math.random() < 0.5) {
+                dino = DinosaurFactory.createHerbivore("LongNeck", spawnX, spawnY);
             } else {
-                dino = new Dinosaur(
-                        "Big Boss", 100, 30, 50, 1,
-                        chunkX * CHUNK_SIZE + Math.random() * CHUNK_SIZE,
-                        chunkY * CHUNK_SIZE + Math.random() * CHUNK_SIZE
-                );
+                dino = DinosaurFactory.createCarnivore("Raptor", spawnX, spawnY);
             }
+
+        } else if (roll < 0.85) {
+            // 🔵 UNCOMMON
+
+            if (Math.random() < 0.5) {
+                dino = DinosaurFactory.createHerbivore("Triceratops", spawnX, spawnY);
+            } else {
+                dino = DinosaurFactory.createCarnivore("TRex", spawnX, spawnY);
+            }
+
+        } else {
+            // 🔴 RARE (Mega Boss)
+
+            dino = DinosaurFactory.createMega(spawnX, spawnY);
+        }
+
+        if (dino != null) {
             dino.setChunk(chunkX, chunkY);
             dinosaurs.add(dino);
         }
@@ -148,7 +166,7 @@ public class WorldManager {
 
                 if (isNearPlayer(worldItem)) {
 
-                    if (player.getInventory().size() >= 8) {
+                    if (player.getInventory().size() >= GameLogic.getInstance().getPlayer().getInventorylimit()) {
                         gamemode.DialogueManager.getInstance().showDialogue(
                                 "System",
                                 "Your inventory is full!",
@@ -178,10 +196,10 @@ public class WorldManager {
     }
 
     private boolean isColliding(Player p, Dinosaur d) {
-        return p.getX() < d.getX() + 64 &&
-                p.getX() + 48 > d.getX() &&
-                p.getY() < d.getY() + 64 &&
-                p.getY() + 48 > d.getY();
+        return p.getX() < d.getX() + d.getWidth() &&
+                p.getX() + p.getWidth() > d.getX() &&
+                p.getY() < d.getY() + d.getHeight() &&
+                p.getY() + p.getHeight() > d.getY();
     }
 
     public void endBattle() {
