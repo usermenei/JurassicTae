@@ -4,18 +4,27 @@ import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.render.WorldRenderer;
 import gamemode.DialogueManager;
 import gamemode.lobby.Player.Player;
+import gamemode.lobby.Scene.InventoryPane;
+import gamemode.lobby.logic.GameLogic;
+import gamemode.lobby.logic.KeyboardController;
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class CretaceousExplorationScene {
+public class
+CretaceousExplorationScene {
 
     private static final int WIDTH = 1422;
     private static final int HEIGHT = 800;
@@ -38,7 +47,9 @@ public class CretaceousExplorationScene {
     private final Runnable onExitWorld;
 
     private AnimationTimer gameLoop;
-
+    private InventoryPane inventoryPane;
+    private StackPane uiLayer;
+    private VBox inventoryPopup;
     /* =========================
        CONSTRUCTOR
        ========================= */
@@ -46,13 +57,27 @@ public class CretaceousExplorationScene {
             Consumer<Dinosaur> onEnterBattle,
             Runnable onExitWorld
     ) {
+
         this.onEnterBattle = onEnterBattle;
         this.onExitWorld = onExitWorld;
 
         StackPane root = new StackPane();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        root.getChildren().add(canvas);
+        uiLayer = new StackPane();
+
+        root.getChildren().addAll(canvas, uiLayer);
+        Button inventoryButton = new Button("Inventory");
+        inventoryButton.setLayoutX(20);
+        inventoryButton.setLayoutY(20);
+
+        inventoryButton.setOnAction(e -> toggleInventory());
+        inventoryPane = new InventoryPane();
+        inventoryPane.setVisible(false);
+        uiLayer.getChildren().addAll(inventoryButton,inventoryPane);
+        StackPane.setAlignment(inventoryButton,Pos.TOP_RIGHT);
+        StackPane.setMargin(inventoryButton, new Insets(20));
+        StackPane.setAlignment(inventoryPane, Pos.CENTER);
 
         scene = new Scene(root, WIDTH, HEIGHT);
 
@@ -101,9 +126,14 @@ public class CretaceousExplorationScene {
             }
         });
 
-        scene.setOnKeyReleased(e ->
-                keys.remove(e.getCode())
-        );
+        scene.setOnKeyReleased(e -> {
+
+            keys.remove(e.getCode());
+
+            if (e.getCode() == KeyCode.TAB) {
+                toggleInventory();
+            }
+        });
 
         // Mouse click closes dialogue
         scene.setOnMousePressed(e ->
@@ -150,6 +180,7 @@ public class CretaceousExplorationScene {
             return;
         }
 
+        player.updateBuffs();
         // Dialogue active → freeze movement
         if (DialogueManager.getInstance().isActive()) {
             DialogueManager.getInstance().update();
@@ -178,5 +209,15 @@ public class CretaceousExplorationScene {
 
     public void clearInput() {
         keys.clear();
+    }
+
+    private void toggleInventory() {
+        boolean isOpen = inventoryPane.isVisible();
+
+        if (!isOpen) {
+            inventoryPane.loadItems();
+        }
+
+        inventoryPane.setVisible(!isOpen);
     }
 }

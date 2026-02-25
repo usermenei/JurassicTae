@@ -8,7 +8,7 @@ import gamemode.lobby.Item.Potion.SpeedPotion;
 import gamemode.lobby.Item.Potion.StrengthPotion;
 import gamemode.lobby.Item.Weapon.AnestheticDart;
 import gamemode.lobby.Item.Weapon.ElectricGun;
-import gamemode.lobby.Item.Weapon.Noose;
+import gamemode.lobby.Item.Weapon.DinoBall;
 import gamemode.lobby.Item.Weapon.RifleGun;
 import gamemode.lobby.logic.GameLogic;
 
@@ -31,8 +31,8 @@ public class ShopScene extends StackPane {
         items = new ArrayList<>();
         items.add(new AnestheticDart());
         items.add(new ElectricGun());
-        items.add(new Noose());
         items.add(new RifleGun());
+        items.add(new DinoBall());
         items.add(new ExpPotion());
         items.add(new HealPotion());
         items.add(new SpeedPotion());

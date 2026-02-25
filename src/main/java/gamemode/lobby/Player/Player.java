@@ -20,12 +20,12 @@ public class Player {
     //field
     private final String name;
     private int money;
-    private int hp;
-    private int strength;
+    private int hp,maxHp;
+    private int strength,baseStrength = 5;
     private int exp;
     private int level;
     private ArrayList<Item> inventory;
-    private double speed = 2;
+    private double speed ,baseSpeed = 2;
 
     public int getInventorylimit() {
         return inventorylimit;
@@ -37,12 +37,19 @@ public class Player {
     private final double HEIGHT = 60;
     private final Image playerImage = new Image(getClass().getResource("/gamemode/lobby/person.png").toExternalForm());
 
+    private boolean expBoostActive = false;
+    private long expBoostEndTime = 0;
+
+    private boolean speedBoostActive = false;
+    private long speedBoostEndTime = 0;
+
     //constructor
     public Player(double x,double y) {
+        this.speed = baseSpeed;
+        this.strength = baseStrength;
         this.name = "Tae";
         setMoney(0);
         setHp(100);
-        setStrength(1);
         setExp(0);
         setLevel(1);
         inventory = new ArrayList<>();
@@ -52,6 +59,11 @@ public class Player {
     }
 
     //getter & setter
+    public void setMaxHp(int maxHp){
+        this.maxHp = maxHp;
+    }
+
+    public int getMaxHp(){return maxHp;}
     public String getName() {
         return name;
     }
@@ -193,10 +205,66 @@ public class Player {
     }
 
     public void buyItem(Item item){
+        if(inventory.size() >= 12)return;
         if(money < ((Buyable) item).getBuyPrice())return;
         if(item instanceof Weapon
                 && inventory.stream().anyMatch(i -> i.getName().equals(item.getName())))return;
         money -= ((Buyable) item).getBuyPrice();
         inventory.add(item);
+    }
+
+    public void usePotion(Potion potion) {
+
+        switch (potion.getName()) {
+
+            case "Exp Potion" -> {
+                expBoostActive = true;
+                expBoostEndTime = System.currentTimeMillis() + (10 * 60 * 1000); // 10 นาที
+                System.out.println("EXP Boost Activated!");
+            }
+
+            case "Heal Potion" -> {
+                int healAmount = (int)(hp * 0.10);
+                setHp(hp + healAmount);
+                System.out.println("Healed +" + healAmount);
+            }
+
+            case "Speed Potion" -> {
+                speedBoostActive = true;
+                speed = baseSpeed * 1.5;
+                speedBoostEndTime = System.currentTimeMillis() + (10 * 60 * 1000);
+                System.out.println("Speed Boost Activated!");
+            }
+
+            case "Strngth Potion" -> {
+                strength = strength * 2;
+                System.out.println("Strength Boost Activated!");
+            }
+        }
+
+        inventory.remove(potion);
+    }
+
+    public void updateBuffs() {
+
+        long now = System.currentTimeMillis();
+
+        if (expBoostActive && now > expBoostEndTime) {
+            expBoostActive = false;
+            System.out.println("EXP Boost Ended");
+        }
+
+        if (speedBoostActive && now > speedBoostEndTime) {
+            speedBoostActive = false;
+            speed = baseSpeed;
+            System.out.println("Speed Boost Ended");
+        }
+    }
+
+    public void addExp(int amount) {
+        if (expBoostActive) {
+            amount *= 2;
+        }
+        setExp(exp + amount);
     }
 }

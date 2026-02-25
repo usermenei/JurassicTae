@@ -69,6 +69,8 @@ public class SpawnCanvas extends Canvas {
     private void update() {
         if (GameController.getInstance().isGameEnded()) return;
 
+        player.updateBuffs();
+
         KeyboardController keyboard =
                 GameController.getInstance().getKeyboard();
 

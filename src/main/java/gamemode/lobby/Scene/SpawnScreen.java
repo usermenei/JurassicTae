@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -95,6 +96,13 @@ public class SpawnScreen extends StackPane {
         shopScene.setVisible(false);
         inventoryPane.setVisible(false);
 
+        setOnKeyReleased(e -> {
+
+            if (e.getCode() == KeyCode.TAB) {
+                toggleInventory();
+            }
+        });
+
     }
 
     public void showSellScene(){
@@ -145,4 +153,14 @@ public class SpawnScreen extends StackPane {
     public InventoryPane getInventoryPane(){return inventoryPane;}
     public Label getMoneyLabel(){return moneyLabel;}
     public ShopScene getShopScene(){return shopScene;}
+
+    private void toggleInventory() {
+        boolean isOpen = inventoryPane.isVisible();
+
+        if (!isOpen) {
+            inventoryPane.loadItems();
+        }
+
+        inventoryPane.setVisible(!isOpen);
+    }
 }

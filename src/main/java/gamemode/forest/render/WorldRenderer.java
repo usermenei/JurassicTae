@@ -25,7 +25,6 @@ public class WorldRenderer {
         this.gc = gc;
         this.player = player;
         this.worldManager = worldManager;
-
         background = AssetLoader.load("/gamemode/forest/background.jpg");
         dinosaurImage = AssetLoader.load("/gamemode/forest/dinosaur.png");
     }

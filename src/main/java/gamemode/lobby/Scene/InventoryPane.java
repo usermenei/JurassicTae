@@ -1,5 +1,6 @@
 package gamemode.lobby.Scene;
 
+import gamemode.lobby.Player.Player;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import gamemode.lobby.Item.Base.Item;
@@ -17,7 +18,10 @@ import javafx.scene.image.Image;
 
 public class InventoryPane extends StackPane {
     private GridPane grid;
+    private Player player;
     public InventoryPane() {
+
+        player = GameLogic.getInstance().getPlayer();
 
         this.setPrefSize(700, 530);
         this.setMaxSize(700, 530);
@@ -89,7 +93,78 @@ public class InventoryPane extends StackPane {
         this.getChildren().addAll(mainBox, exitBtn);
     }
 
+//    public void loadItems() {
+//        grid.getChildren().clear();
+//
+//        int col = 0;
+//        int row = 0;
+//
+//        for (Item item : GameLogic.getInstance().getPlayer().getInventory()) {
+//
+//
+//            VBox cell = new VBox(5);
+//            cell.setPrefSize(120, 120);
+//            cell.setAlignment(Pos.CENTER);
+//
+//            // 🎨 พื้นหลังเทาอ่อน
+//            cell.setStyle("""
+//            -fx-background-color: #3a3a3a;
+//            -fx-background-radius: 12;
+//            -fx-border-color: #555;
+//            -fx-border-radius: 12;
+//            -fx-padding: 10;
+//            """);
+//
+//            // 🖼 รูปภาพ
+//            Image img = item.getImg();
+//
+//            ImageView imageView = new ImageView(img);
+//            imageView.setFitWidth(70);
+//            imageView.setFitHeight(70);
+//            imageView.setPreserveRatio(true);
+//
+//            // 🏷 ชื่อ item
+//            Label nameLabel = new Label(item.getName());
+//            nameLabel.setStyle("""
+//                    -fx-text-fill: white;
+//                    -fx-font-size: 12px;
+//                    -fx-font-weight: bold;
+//                    """);
+//
+//            cell.getChildren().addAll(imageView, nameLabel);
+//
+//            grid.add(cell, col, row);
+//
+//            col++;
+//            if (col == 4) {
+//                col = 0;
+//                row++;
+//            }
+//
+//            cell.setOnMouseEntered(e ->
+//                    cell.setStyle("""
+//            -fx-background-color: #444;
+//            -fx-background-radius: 12;
+//            -fx-border-color: gold;
+//            -fx-border-radius: 12;
+//            -fx-padding: 10;
+//            """)
+//            );
+//
+//            cell.setOnMouseExited(e ->
+//                    cell.setStyle("""
+//        -fx-background-color: #3a3a3a;
+//        -fx-background-radius: 12;
+//        -fx-border-color: #777;
+//        -fx-border-radius: 12;
+//        -fx-padding: 10;
+//    """)
+//            );
+//        }
+//    }
+
     public void loadItems() {
+
         grid.getChildren().clear();
 
         int col = 0;
@@ -97,73 +172,110 @@ public class InventoryPane extends StackPane {
 
         for (Item item : GameLogic.getInstance().getPlayer().getInventory()) {
 
-            VBox cell = new VBox(5);
+            // =========================
+            // 🔲 CELL (StackPane)
+            // =========================
+            StackPane cell = new StackPane();
             cell.setPrefSize(120, 120);
             cell.setAlignment(Pos.CENTER);
 
-            // 🎨 พื้นหลังเทาอ่อน
             cell.setStyle("""
             -fx-background-color: #3a3a3a;
             -fx-background-radius: 12;
             -fx-border-color: #555;
             -fx-border-radius: 12;
             -fx-padding: 10;
-            """);
+        """);
 
-            // 🖼 รูปภาพ
+            // =========================
+            // 📦 CONTENT (Image + Name)
+            // =========================
+            VBox content = new VBox(5);
+            content.setAlignment(Pos.CENTER);
+
             Image img = item.getImg();
-
             ImageView imageView = new ImageView(img);
             imageView.setFitWidth(70);
             imageView.setFitHeight(70);
             imageView.setPreserveRatio(true);
 
-            // 🏷 ชื่อ item
             Label nameLabel = new Label(item.getName());
             nameLabel.setStyle("""
-                    -fx-text-fill: white;
-                    -fx-font-size: 12px;
-                    -fx-font-weight: bold;
-                    """);
+                -fx-text-fill: white;
+                -fx-font-size: 12px;
+                -fx-font-weight: bold;
+        """);
 
-//            if (item instanceof Weapon) {
-//                nameLabel.setBackground(new Background(
-//                        new BackgroundFill(
-//                                Color.RED,
-//                                new CornerRadii(5),
-//                                Insets.EMPTY
-//                        )
-//                ));
-//            } else if (item instanceof Potion) {
-//                nameLabel.setBackground(new Background(
-//                        new BackgroundFill(
-//                                Color.YELLOW,
-//                                new CornerRadii(5),
-//                                Insets.EMPTY
-//                        )
-//                ));
-//                nameLabel.setStyle("""
-//                        -fx-text-fill: black;
-//                        -fx-font-size: 12px;
-//                        -fx-font-weight: bold;
-//                        """);
-//            } else if (item instanceof TamedDinosaur) {
-//                nameLabel.setBackground(new Background(
-//                        new BackgroundFill(
-//                                Color.GREEN,
-//                                new CornerRadii(5),
-//                                Insets.EMPTY
-//                        )
-//                ));
-//                nameLabel.setStyle("""
-//                        -fx-text-fill: black;
-//                        -fx-font-size: 12px;
-//                        -fx-font-weight: bold;
-//                        """);
-//            }
+            content.getChildren().addAll(imageView, nameLabel);
 
-            cell.getChildren().addAll(imageView, nameLabel);
+            // ใส่ content ลง cell ก่อน
+            cell.getChildren().add(content);
 
+            // =========================
+            // 🧪 ถ้าเป็น Potion → สร้างปุ่ม Use
+            // =========================
+            Button useButton = null;
+
+            if (item instanceof Potion) {
+
+                useButton = new Button("Use");
+                useButton.setVisible(false);
+
+                useButton.setStyle("""
+                -fx-background-color: gold;
+                -fx-text-fill: black;
+                -fx-font-weight: bold;
+            """);
+
+                Button finalUseButton = useButton;
+
+                useButton.setOnAction(e -> {
+                    player.usePotion((Potion) item);
+
+                    loadItems(); // refresh inventory UI
+                });
+
+                cell.getChildren().add(useButton);
+            }
+
+            // =========================
+            // 🖱 Hover Effect
+            // =========================
+            Button finalUseButton1 = useButton;
+
+            cell.setOnMouseEntered(e -> {
+
+                cell.setStyle("""
+                -fx-background-color: #444;
+                -fx-background-radius: 12;
+                -fx-border-color: gold;
+                -fx-border-radius: 12;
+                -fx-padding: 10;
+            """);
+
+                if (finalUseButton1 != null) {
+                    finalUseButton1.setVisible(true);
+                }
+            });
+
+            cell.setOnMouseExited(e -> {
+
+                cell.setStyle("""
+                -fx-background-color: #3a3a3a;
+                -fx-background-radius: 12;
+                -fx-border-color: #777;
+                -fx-border-radius: 12;
+                -fx-padding: 10;
+            """);
+
+                if (finalUseButton1 != null) {
+                    finalUseButton1.setVisible(false);
+                }
+            });
+
+            // =========================
+            // 📍 Add to Grid
+            // =========================
             grid.add(cell, col, row);
 
             col++;
@@ -171,26 +283,6 @@ public class InventoryPane extends StackPane {
                 col = 0;
                 row++;
             }
-
-            cell.setOnMouseEntered(e ->
-                    cell.setStyle("""
-            -fx-background-color: #444;
-            -fx-background-radius: 12;
-            -fx-border-color: gold;
-            -fx-border-radius: 12;
-            -fx-padding: 10;
-            """)
-            );
-
-            cell.setOnMouseExited(e ->
-                    cell.setStyle("""
-        -fx-background-color: #3a3a3a;
-        -fx-background-radius: 12;
-        -fx-border-color: #777;
-        -fx-border-radius: 12;
-        -fx-padding: 10;
-    """)
-            );
         }
     }
 }
