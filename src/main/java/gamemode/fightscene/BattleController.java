@@ -1,19 +1,23 @@
 package gamemode.fightscene;
 
 import gamemode.forest.entity.Dinosaur;
+import gamemode.lobby.Player.Player;
+import gamemode.lobby.logic.GameLogic;
 
 public class BattleController {
 
     private final BattleView view;
     private final Dinosaur enemy;
     private boolean battleEnded = false;
+    private Player player;
 
     public BattleController(CommandBox commandBox, BattleView view, Dinosaur enemy) {
+        player = GameLogic.getInstance().getPlayer();
         this.view = view;
         this.enemy = enemy;
 
         commandBox.getFightButton().setOnAction(e -> {
-            int damage = 3;
+            int damage = player.getStrength();
 
             enemy.takeDamage(damage);      // ⭐ ลด HP ตัวจริง
             view.updateEnemyHp();

@@ -1,7 +1,7 @@
 package gamemode.lobby.Scene;
 
 import gamemode.lobby.Item.Base.Item;
-import gamemode.lobby.Item.TamedDino.TamedDino;
+import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.Location.*;
 import javafx.animation.AnimationTimer;
@@ -39,13 +39,6 @@ public class SpawnCanvas extends Canvas {
         zooImg = zoo.getImage();
         gymImg = gym.getImage();
         ufoImg = ufo.getImage();
-
-        //*********************************************fake Inventory
-        ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0;i<11;i++){
-            player.addItem(new TamedDino());
-        }
-        //***********************************************
 
         startGameLoop();   // ✅ ต้องเรียก
     }

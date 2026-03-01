@@ -22,6 +22,8 @@ public abstract class Dinosaur {
     protected double width;
     protected double height;
 
+    protected int sellPrice;
+
     public Image getSprite() {
         return sprite;
     }
@@ -44,7 +46,8 @@ public abstract class Dinosaur {
                     String imagePath,
                     double width,
                     double height,
-                    double speed) {
+                    double speed,
+                    int sellPrice) {
 
         this.name = name;
         this.hp = Math.max(0, hp);
@@ -60,6 +63,7 @@ public abstract class Dinosaur {
         this.speed = speed;  // ✅ store speed
 
         this.spawnTime = System.currentTimeMillis();
+        this.sellPrice = sellPrice;
 
         loadImage(imagePath);
     }
@@ -154,4 +158,5 @@ public abstract class Dinosaur {
 
     public double getWidth() { return width; }
     public double getHeight() { return height; }
+    public int getSellPrice(){return sellPrice;}
 }

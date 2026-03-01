@@ -1,5 +1,6 @@
 package gamemode.lobby.Item.Base;
 
+import gamemode.forest.entity.Dinosaur;
 import javafx.scene.image.Image;
 import gamemode.lobby.Interfaces.Sellable;
 
@@ -9,9 +10,9 @@ public class TamedDinosaur extends Item implements Sellable {
     private final int sellPrice;
 
     //constructor
-    public TamedDinosaur(String name, String imgUrl, int sellPrice) {
-        super(name, imgUrl);
-        this.sellPrice = sellPrice;
+    public TamedDinosaur(Dinosaur dinosaur) {
+        super("Tamed " + dinosaur.getName(), "/gamemode/lobby/trap.png");
+        this.sellPrice = dinosaur.getSellPrice();
     }
 
     //getter

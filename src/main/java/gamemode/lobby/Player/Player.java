@@ -21,7 +21,7 @@ public class Player {
     private final String name;
     private int money;
     private int hp,maxHp;
-    private int strength,baseStrength = 5;
+    private int strength,baseStrength = 40;
     private int exp;
     private int level;
     private ArrayList<Item> inventory;

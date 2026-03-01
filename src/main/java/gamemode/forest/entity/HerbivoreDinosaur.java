@@ -14,10 +14,10 @@ public class HerbivoreDinosaur extends Dinosaur {
                              double x, double y,
                              Rarity rarity,
                              String imagePath,double width,
-                             double height) {
+                             double height,int sellPrice) {
 
         super(name, hp, strength, expDrop,
-                requiredLevel, x, y, rarity, imagePath,width, height,2);
+                requiredLevel, x, y, rarity, imagePath,width, height,2,sellPrice);
     }
 
     @Override

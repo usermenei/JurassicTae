@@ -9,10 +9,10 @@ public class MegaDinosaur extends Dinosaur {
                         double x, double y,
                         Rarity rarity,
                         String imagePath,double width,
-                        double height) {
+                        double height,int sellPrice) {
 
         super(name, hp, strength, expDrop,
-                requiredLevel, x, y, rarity, imagePath, width,height,1.5);
+                requiredLevel, x, y, rarity, imagePath, width,height,1.5,sellPrice);
     }
 
     @Override

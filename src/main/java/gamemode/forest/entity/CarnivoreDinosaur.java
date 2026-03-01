@@ -20,13 +20,14 @@ public class CarnivoreDinosaur extends Dinosaur {
                              String imagePath,
                              double width,
                              double height,
-                             double speed) {
+                             double speed,
+                             int sellPrice) {
 
         super(name, hp, strength, expDrop,
                 requiredLevel, x, y,
                 rarity, imagePath,
                 width, height,
-                speed);
+                speed,sellPrice);
     }
 
     @Override
