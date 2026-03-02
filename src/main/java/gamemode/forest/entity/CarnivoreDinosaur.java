@@ -30,6 +30,15 @@ public class CarnivoreDinosaur extends Dinosaur {
                 speed,sellPrice);
     }
 
+    public CarnivoreDinosaur() {
+        super("Raptor",
+                120, 30, 100, 2,
+                0, 0,
+                Dinosaur.Rarity.COMMON,
+                "/images/dinosaur/raptor.gif"
+                ,300,300,3.5,75);
+    }
+
     @Override
     public void update(Player player) {
 

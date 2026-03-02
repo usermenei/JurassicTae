@@ -1,8 +1,10 @@
 package gamemode.lobby.Scene;
 
+import gamemode.forest.entity.Dinosaur;
 import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Interfaces.Sellable;
 import gamemode.lobby.Item.Base.Item;
+import gamemode.lobby.Item.Base.TamedDinosaur;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -85,6 +87,7 @@ public class ButtonSell extends Button {
         // 🪙 เมื่อกดขาย
         this.setOnAction(e -> {
             GameLogic.getInstance().getPlayer().sellItem(item);
+            if(item instanceof TamedDinosaur)GameController.getInstance().getRoot().getSellScene().addCatalog((Dinosaur) ((TamedDinosaur) item).getDinosaur());
             GameController.getInstance().reloadSellScene();
             GameController.getInstance().reloadMoney();
             GameController.getInstance().getRoot().getShopScene().loadSell();

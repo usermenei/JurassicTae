@@ -1,5 +1,6 @@
 package gamemode.lobby.Scene;
 
+import gamemode.forest.entity.CarnivoreDinosaur;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Player.Player;
@@ -26,7 +27,12 @@ public class SpawnCanvas extends Canvas {
     private boolean showEnterShop = false,showEnterSell = false,showEnterGym = false,showEnterUfo = false;
 
     public SpawnCanvas(){
+
         super(1422,800);
+
+        //********************************
+        for(int i = 0;i<10;i++) player.addItem(new TamedDinosaur(new CarnivoreDinosaur()));
+        //*******************************
 
         gc = this.getGraphicsContext2D();
 

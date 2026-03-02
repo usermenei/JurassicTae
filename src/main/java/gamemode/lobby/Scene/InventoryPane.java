@@ -204,7 +204,7 @@ public class InventoryPane extends StackPane {
                 -fx-text-fill: white;
                 -fx-font-size: 12px;
                 -fx-font-weight: bold;
-        """);
+            """);
 
             content.getChildren().addAll(imageView, nameLabel);
 
