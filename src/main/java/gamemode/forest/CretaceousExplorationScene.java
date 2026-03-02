@@ -189,10 +189,35 @@ CretaceousExplorationScene {
 
         double speed = 5;
 
-        if (keys.contains(KeyCode.W)) player.setY(player.getY() - speed);
-        if (keys.contains(KeyCode.S)) player.setY(player.getY() + speed);
-        if (keys.contains(KeyCode.A)) player.setX(player.getX() - speed);
-        if (keys.contains(KeyCode.D)) player.setX(player.getX() + speed);
+        boolean moving = false;
+
+        if (keys.contains(KeyCode.A)) {
+            player.setX(player.getX() - speed);
+            player.setMoving(true);
+            player.setFacingRight(false);   // 👈 flip left
+            moving = true;
+        }
+
+        if (keys.contains(KeyCode.D)) {
+            player.setX(player.getX() + speed);
+            player.setMoving(true);
+            player.setFacingRight(true);    // 👈 face right
+            moving = true;
+        }
+
+        if (keys.contains(KeyCode.W)) {
+            player.setY(player.getY() - speed);
+            moving = true;
+        }
+
+        if (keys.contains(KeyCode.S)) {
+            player.setY(player.getY() + speed);
+            moving = true;
+        }
+
+        if (!moving) {
+            player.setMoving(false);
+        }
 
         // Camera follows player
         cameraX = player.getX() - WIDTH / 2.0;

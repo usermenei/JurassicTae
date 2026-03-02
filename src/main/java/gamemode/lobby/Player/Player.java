@@ -18,6 +18,7 @@ import gamemode.lobby.logic.GameController;
 
 public class Player {
     //field
+
     private final String name;
     private int money;
     private int hp,maxHp;
@@ -43,6 +44,13 @@ public class Player {
     private boolean speedBoostActive = false;
     private long speedBoostEndTime = 0;
 
+    private AnimationPlayer idleAnimation;
+    private AnimationPlayer runAnimation;
+
+    private boolean isMoving = false;
+    private boolean facingRight = true;
+
+
     //constructor
     public Player(double x,double y) {
         this.speed = baseSpeed;
@@ -56,6 +64,25 @@ public class Player {
 
         this.x = x;
         this.y = y;
+        // Load idle frames
+        Image[] idleFrames = new Image[4];
+        for (int i = 0; i < 4; i++) {
+            idleFrames[i] = new Image(
+                    getClass().getResource("/character/ptaeidle" + (i + 1) + ".png").toExternalForm()
+            );
+        }
+
+        // Load run frames
+        Image[] runFrames = new Image[7];
+        for (int i = 0; i < 7; i++) {
+            runFrames[i] = new Image(
+                    getClass().getResource("/character/ptaerun" + (i + 1) + ".png").toExternalForm()
+            );
+        }
+
+        // Create animation players
+        idleAnimation = new AnimationPlayer(idleFrames, 150);
+        runAnimation = new AnimationPlayer(runFrames, 100);
     }
 
     //getter & setter
@@ -135,22 +162,27 @@ public class Player {
 
         if (GameController.getInstance().isGameEnded()) return;
 
+        isMoving = (dirLR != 0 || dirUD != 0);
+
+        // Set facing direction
+        if (dirLR < 0) {
+            facingRight = false;  // moving left (A key)
+        } else if (dirLR > 0) {
+            facingRight = true;   // moving right (D key)
+        }
+
         this.x += dirLR * speed;
         this.y += dirUD * speed;
 
-        // กันออกนอกจอ
         if (x < 0) x = 0;
         if (x > 1422 - WIDTH) x = 1422 - WIDTH;
 
         if (y < 0) y = 0;
         if (y > 800 - HEIGHT) y = 800 - HEIGHT;
 
-        SpawnScreen spawnScreen = GameController.getInstance().getRoot();
-        SpawnCanvas spawnCanvas = GameController.getInstance().getRoot().getSpawnCanvas();
-        Shop shop = spawnCanvas.getShop();
-        Zoo zoo = spawnCanvas.getZoo();
-        Ufo ufo = spawnCanvas.getUfo();
-        Gym gym = spawnCanvas.getGym();
+        if (!isMoving) {
+            runAnimation.reset();
+        }
     }
 
     public boolean isNear(Location location){
@@ -163,7 +195,17 @@ public class Player {
     }
 
     public void render(GraphicsContext gc) {
-        gc.drawImage(playerImage, x, y, WIDTH, HEIGHT);
+
+        if (isMoving) {
+            runAnimation.update();
+            runAnimation.render(gc, x, y, WIDTH, HEIGHT, facingRight);
+        } else {
+            idleAnimation.update();
+            idleAnimation.render(gc, x, y, WIDTH, HEIGHT, facingRight);
+        }
+    }
+    public void setFacingRight(boolean facingRight) {
+        this.facingRight = facingRight;
     }
 
     public boolean intersects(double otherX, double otherY,
@@ -267,4 +309,8 @@ public class Player {
         }
         setExp(exp + amount);
     }
+    public void setMoving(boolean moving) {
+        this.isMoving = moving;
+    }
+
 }
