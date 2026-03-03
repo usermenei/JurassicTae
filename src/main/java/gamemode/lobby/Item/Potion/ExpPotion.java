@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 public class ExpPotion extends Potion {
     private Image image;
     public ExpPotion(){
-        super("Exp Potion", "/gamemode/lobby/trap.png",20,10);
+        super("Exp Potion", "/item/exppotion.png",20,10);
         image = new Image(getClass().getResource(getImgUrl()).toExternalForm());
     }
 
