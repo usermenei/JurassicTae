@@ -9,6 +9,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import gamemode.lobby.logic.GameLogic;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class SpawnScreen extends StackPane {
 
@@ -39,11 +41,9 @@ public class SpawnScreen extends StackPane {
 
         //money box
         moneyLabel = new Label("Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $");
-        moneyLabel.setStyle(
-                "-fx-font-size: 16px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: black;"
-        );
+        Font font = Font.loadFont(
+                getClass().getResourceAsStream("/fonts/pixel.ttf"),16);
+        moneyLabel.setFont(font);
 
         StackPane moneyBox = new StackPane(moneyLabel);
         moneyBox.setStyle(
@@ -54,24 +54,13 @@ public class SpawnScreen extends StackPane {
                         "-fx-border-radius: 8;" +
                         "-fx-padding: 5 12 5 12;"
         );
-        moneyBox.setStyle(
-                "-fx-background-color: #FFD700;" +
-                        "-fx-border-color: black;" +
-                        "-fx-border-width: 2;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-border-radius: 8;"
-        );
         moneyBox.setMaxSize(StackPane.USE_PREF_SIZE, StackPane.USE_PREF_SIZE);
 
         //************************************
 
         // level box
         levelLabel = new Label("Level : " + GameLogic.getInstance().getPlayer().getLevel());
-        levelLabel.setStyle(
-                "-fx-font-size: 16px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: black;"
-        );
+        levelLabel.setFont(font);
 
         expBar = new ProgressBar();
         expBar.setPrefWidth(120);
