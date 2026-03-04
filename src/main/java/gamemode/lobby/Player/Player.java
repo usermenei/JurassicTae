@@ -6,9 +6,8 @@ import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.Potion;
 import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Item.Base.Weapon;
+import gamemode.lobby.Item.DinoBall;
 import gamemode.lobby.Location.*;
-import gamemode.lobby.Scene.SpawnCanvas;
-import gamemode.lobby.Scene.SpawnScreen;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -59,8 +58,8 @@ public class Player {
         setMoney(0);
         setExp(0);
         setLevel(1);
-        setMaxHp(100);
-        setHp(100);
+        setMaxHp(200);
+        setHp(200);
         inventory = new ArrayList<>();
 
         this.x = x;
@@ -250,8 +249,12 @@ public class Player {
     public void buyItem(Item item){
         if(inventory.size() >= 12)return;
         if(money < ((Buyable) item).getBuyPrice())return;
+        // Block duplicate weapons EXCEPT DinoBall
         if(item instanceof Weapon
-                && inventory.stream().anyMatch(i -> i.getName().equals(item.getName())))return;
+                && !(item instanceof DinoBall)
+                && inventory.stream().anyMatch(i -> i.getName().equals(item.getName()))) {
+            return;
+        }
         money -= ((Buyable) item).getBuyPrice();
         inventory.add(item);
     }
@@ -267,9 +270,8 @@ public class Player {
             }
 
             case "Heal Potion" -> {
-                int healAmount = (int)(hp * 0.10);
-                setHp(hp + healAmount);
-                System.out.println("Healed +" + healAmount);
+                setHp(this.getMaxHp());
+                System.out.println("Fully Healed");
             }
 
             case "Speed Potion" -> {
@@ -312,6 +314,10 @@ public class Player {
     }
     public void setMoving(boolean moving) {
         this.isMoving = moving;
+    }
+    public void removeItem(Item item) {
+        if (item == null) return;
+        inventory.remove(item);
     }
 
 }

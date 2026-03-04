@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 public abstract class Dinosaur {
 
     protected String name;
+    protected int maxHp;
     protected int hp;
     protected int strength;
     protected int expDrop;
@@ -50,7 +51,10 @@ public abstract class Dinosaur {
                     int sellPrice) {
 
         this.name = name;
-        this.hp = Math.max(0, hp);
+
+        this.maxHp = hp;     // ✅ ADD THIS LINE
+        this.hp = hp;        // keep this
+
         this.strength = Math.max(0, strength);
         this.expDrop = Math.max(0, expDrop);
         this.requiredLevel = Math.max(1, requiredLevel);
@@ -60,7 +64,7 @@ public abstract class Dinosaur {
 
         this.width = width;
         this.height = height;
-        this.speed = speed;  // ✅ store speed
+        this.speed = speed;
 
         this.spawnTime = System.currentTimeMillis();
         this.sellPrice = sellPrice;
@@ -153,10 +157,16 @@ public abstract class Dinosaur {
     }
 
     public void takeDamage(int damage) {
-        setHp(getHp()-damage);
+        this.setHp(this.getHp()-damage);
     }
 
     public double getWidth() { return width; }
     public double getHeight() { return height; }
     public int getSellPrice(){return sellPrice;}
+    public int getMaxHp() {
+        return maxHp;
+    }
+    public Rarity getRarity(){
+        return this.rarity;
+    }
 }
