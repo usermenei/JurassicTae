@@ -1,5 +1,6 @@
 package gamemode.gym.scene;
 
+import gamemode.lobby.Player.Player;
 import gamemode.lobby.logic.GameLogic;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
@@ -88,13 +89,13 @@ public class MainMenu {
 
         // ================= BUTTONS =================
         Button startBtn = createButton("START GAME", () -> {
-            int playerMoney = GameLogic.getInstance().getPlayer().getMoney();
+            Player player = GameLogic.getInstance().getPlayer();
 
-            if (playerMoney < GYM_FEE) {
+            if (player.getMoney() < GYM_FEE) {
                 showInsufficientFunds(root);
             } else {
                 GameLogic.getInstance().getPlayer()
-                        .setMoney(playerMoney - GYM_FEE);
+                        .setMoney(player.getMoney() - GYM_FEE);
                 onStart.run();
             }
         });

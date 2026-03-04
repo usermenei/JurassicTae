@@ -171,10 +171,14 @@ public class GameController {
                 score -> {
                     lastGymScore = score;
 
-                    int bonusStrength = score / 100;
+                    int bonusStrength = score / 300;
+                    int bonusExp = score / 100;
+                    int bonusMaxHp = score / 500;
 
                     Player player = GameLogic.getInstance().getPlayer();
                     player.setStrength(player.getStrength() + bonusStrength);
+                    player.addExp(bonusExp);
+                    player.setMaxHp(player.getMaxHp() + bonusMaxHp);
 
                     // ===== CUSTOM POPUP =====
                     StackPane popupRoot = new StackPane();
@@ -216,6 +220,16 @@ public class GameController {
                             getClass().getResourceAsStream("/fonts/pixel.ttf"), 35));
                     rewardText.setFill(Color.LIME);
 
+                    Text expText = new Text("EXP + " + bonusExp);
+                    expText.setFont(Font.loadFont(
+                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    expText.setFill(Color.GOLD);
+
+                    Text hpText = new Text("Max HP + " + bonusMaxHp);
+                    hpText.setFont(Font.loadFont(
+                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    hpText.setFill(Color.RED);
+
                     Button okBtn = new Button("OK");
                     okBtn.setFont(Font.loadFont(
                             getClass().getResourceAsStream("/fonts/pixel.ttf"), 28));
@@ -226,7 +240,7 @@ public class GameController {
                         startGymMiniGame();
                     });
 
-                    box.getChildren().addAll(title, scoreText, rewardText, okBtn);
+                    box.getChildren().addAll(title, scoreText, rewardText, expText, hpText, okBtn);
                     popupRoot.getChildren().add(box);
 
                     Scene popupScene = new Scene(popupRoot, 1422, 800);
