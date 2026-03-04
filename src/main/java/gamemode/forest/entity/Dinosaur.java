@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 public abstract class Dinosaur {
 
     protected String name;
-    protected int hp;
+    protected int hp,maxHp;
     protected int strength;
     protected int expDrop;
     protected int requiredLevel;
@@ -50,7 +50,8 @@ public abstract class Dinosaur {
                     int sellPrice) {
 
         this.name = name;
-        this.hp = Math.max(0, hp);
+        this.maxHp = Math.max(0, hp);
+        this.hp = maxHp;
         this.strength = Math.max(0, strength);
         this.expDrop = Math.max(0, expDrop);
         this.requiredLevel = Math.max(1, requiredLevel);
@@ -159,4 +160,5 @@ public abstract class Dinosaur {
     public double getWidth() { return width; }
     public double getHeight() { return height; }
     public int getSellPrice(){return sellPrice;}
+    public boolean isHpLow(){return (hp < (0.3*maxHp));}
 }

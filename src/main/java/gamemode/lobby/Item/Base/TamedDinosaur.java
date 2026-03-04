@@ -13,7 +13,7 @@ public class TamedDinosaur extends Item implements Sellable {
 
     //constructor
     public TamedDinosaur(Dinosaur dinosaur) {
-        super("Tamed " + dinosaur.getName(), "/gamemode/lobby/trap.png");
+        super("Tamed " + dinosaur.getName(), "/item/TamedDinosaur/Tamed"+dinosaur.getName()+".png");
         this.dinosaur = dinosaur;
         this.sellPrice = dinosaur.getSellPrice();
     }

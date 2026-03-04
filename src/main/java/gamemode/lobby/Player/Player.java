@@ -1,11 +1,13 @@
 package gamemode.lobby.Player;
 
+import gamemode.forest.entity.Dinosaur;
 import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Interfaces.Sellable;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.Potion;
 import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Item.Base.Weapon;
+import gamemode.lobby.Item.Weapon.DinoBall;
 import gamemode.lobby.Location.*;
 import gamemode.lobby.Scene.SpawnCanvas;
 import gamemode.lobby.Scene.SpawnScreen;
@@ -312,6 +314,13 @@ public class Player {
     }
     public void setMoving(boolean moving) {
         this.isMoving = moving;
+    }
+
+    public void useBall(DinoBall dinoBall, Dinosaur dinosaur){
+        inventory.remove(dinoBall);
+        if(dinosaur.isHpLow()){
+            inventory.add(new TamedDinosaur(dinosaur));
+        }
     }
 
 }
