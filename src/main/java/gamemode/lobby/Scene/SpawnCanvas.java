@@ -16,12 +16,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class SpawnCanvas extends Canvas {
+
     private GraphicsContext gc;
     private Player player = GameLogic.getInstance().getPlayer();
-    private Image shopImg, zooImg, ufoImg, gymImg;
     private boolean fWasPressed = false;
     private boolean fDialogueWasPressed = false;
-    private boolean showEnterShop = false, showEnterSell = false, showEnterGym = false, showEnterUfo = false;
+    private boolean showEnterShop = false, showEnterSell = false,
+            showEnterGym = false, showEnterUfo = false;
 
     public SpawnCanvas() {
 
@@ -110,6 +111,14 @@ public class SpawnCanvas extends Canvas {
 
                 DialogueManager.getInstance().update();
                 DialogueManager.getInstance().render(gc, getWidth(), getHeight());
+
+                // ✅ Update HUD every frame — realtime exp, level, money
+                SpawnScreen screen = GameController.getInstance().getRoot();
+                if (screen != null) {
+                    screen.updateExpBar();
+                    screen.updateLevel();
+                    screen.updateMoney();
+                }
             }
         };
 
@@ -129,17 +138,17 @@ public class SpawnCanvas extends Canvas {
         int dx = 0;
         int dy = 0;
 
-        if (keyboard.isLeftPressed()) dx = -1;
+        if (keyboard.isLeftPressed())  dx = -1;
         if (keyboard.isRightPressed()) dx = 1;
-        if (keyboard.isUpPressed()) dy = -1;
-        if (keyboard.isDownPressed()) dy = 1;
+        if (keyboard.isUpPressed())    dy = -1;
+        if (keyboard.isDownPressed())  dy = 1;
 
         player.move(dx, dy);
 
-        showEnterShop = player.intersects(80, 75, 250, 500);
-        showEnterGym = player.intersects(80, 450, 250, 500);
-        showEnterSell = player.intersects(800, 75, 250, 500);
-        showEnterUfo = player.intersects(800, 450, 250, 500);
+        showEnterShop = player.intersects(80,  75,  250, 500);
+        showEnterGym  = player.intersects(80,  450, 250, 500);
+        showEnterSell = player.intersects(800, 75,  250, 500);
+        showEnterUfo  = player.intersects(800, 450, 250, 500);
 
         // ===== F KEY — dialogue skip (fires once per press) =====
         if (keyboard.isFPressed() && !fDialogueWasPressed) {
@@ -178,32 +187,24 @@ public class SpawnCanvas extends Canvas {
     // ===================================================
 
     private void render() {
+
         player.render(gc);
 
-        if (showEnterShop) {
-            drawPressMessage("SHOP");
-        } else if (showEnterSell) {
-            drawPressMessage("ZOO");
-        } else if (showEnterUfo) {
-            drawPressMessage("UFO");
-        } else if (showEnterGym) {
-            drawPressMessage("GYM");
-        }
-        // ✅ Reset after drawPressMessage so dialogue text is never shifted
+        if      (showEnterShop) drawPressMessage("SHOP");
+        else if (showEnterSell) drawPressMessage("ZOO");
+        else if (showEnterUfo)  drawPressMessage("UFO");
+        else if (showEnterGym)  drawPressMessage("GYM");
+
+        // Reset after drawPressMessage so dialogue text is never shifted
         gc.setTextAlign(TextAlignment.LEFT);
         gc.setTextBaseline(VPos.BASELINE);
     }
 
     // ===================================================
 
-    public Player getPlayer() {
-        return player;
-    }
-
     private void drawPressMessage(String location) {
 
         String text;
-
         if (location.equals("GYM")) {
             text = "Press F to enter the GYM\nFee: 500";
         } else {
@@ -219,36 +220,23 @@ public class SpawnCanvas extends Canvas {
         gc.setTextBaseline(VPos.CENTER);
 
         double lineHeight = font.getSize() + 10;
+        double boxWidth   = 300;
+        double boxHeight  = (lineHeight * lines.length) + 25;
 
-        double boxWidth = 300;
-        double padding = 25;
-        double boxHeight = (lineHeight * lines.length) + padding;
+        int xPos, yPos;
+        int width = 500, height = 250;
 
-        int xPos, width = 500, yPos, height = 250;
         switch (location) {
-            case "SHOP":
-                xPos = 80;
-                yPos = 75;
-                break;
-            case "GYM":
-                xPos = 80;
-                yPos = 450;
-                break;
-            case "ZOO":
-                xPos = 800;
-                yPos = 75;
-                break;
-            case "UFO":
-                xPos = 800;
-                yPos = 450;
-                break;
-            default:
-                xPos = 80;
-                yPos = 75;
+            case "SHOP" -> { xPos = 80;  yPos = 75;  }
+            case "GYM"  -> { xPos = 80;  yPos = 450; }
+            case "ZOO"  -> { xPos = 800; yPos = 75;  }
+            case "UFO"  -> { xPos = 800; yPos = 450; }
+            default     -> { xPos = 80;  yPos = 75;  }
         }
 
-        double boxX = xPos + (width / 2) - (boxWidth / 2);
-        double boxY = yPos + (height / 2) - (boxHeight / 2);
+        double boxX   = xPos + (width  / 2.0) - (boxWidth  / 2.0);
+        double boxY   = yPos + (height / 2.0) - (boxHeight / 2.0);
+        double centerY = boxY + boxHeight / 2.0;
 
         gc.setFill(Color.rgb(0, 0, 0, 0.65));
         gc.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 25, 25);
@@ -258,12 +246,13 @@ public class SpawnCanvas extends Canvas {
         gc.strokeRoundRect(boxX, boxY, boxWidth, boxHeight, 25, 25);
 
         gc.setFill(Color.WHITE);
-        double centerY = boxY + boxHeight / 2;
-
         for (int i = 0; i < lines.length; i++) {
             double yOffset = (i - (lines.length - 1) / 2.0) * lineHeight;
-            gc.fillText(lines[i], boxX + boxWidth / 2, centerY + yOffset);
+            gc.fillText(lines[i], boxX + boxWidth / 2.0, centerY + yOffset);
         }
     }
-}
 
+    // ===================================================
+
+    public Player getPlayer() { return player; }
+}

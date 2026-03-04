@@ -6,6 +6,6 @@ import gamemode.lobby.Item.Base.Potion;
 
 public  class HealPotion extends Potion {
     public HealPotion(){
-        super("Heal Potion", "/item/healpotion.png",20,10);
+        super("Heal Potion", "/item/healpotion.png",50,10);
     }
 }

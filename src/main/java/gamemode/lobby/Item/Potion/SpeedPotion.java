@@ -6,6 +6,6 @@ import gamemode.lobby.Item.Base.Potion;
 
 public class SpeedPotion extends Potion {
     public SpeedPotion(){
-        super("Speed Potion", "/item/speedpotion.png",20,10);
+        super("Speed Potion", "/item/speedpotion.png",50,10);
     }
 }

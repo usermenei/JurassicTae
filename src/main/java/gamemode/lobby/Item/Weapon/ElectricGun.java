@@ -5,6 +5,6 @@ import gamemode.lobby.Item.Base.Weapon;
 
 public class ElectricGun extends Weapon {
     public ElectricGun(){
-        super("Electric Gun", "/item/ElectricGun.png",20,200);
+        super("Electric Gun", "/item/ElectricGun.png",400,290);
     }
 }

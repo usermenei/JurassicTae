@@ -6,6 +6,6 @@ import gamemode.lobby.Item.Base.Potion;
 
 public class StrengthPotion extends Potion {
     public StrengthPotion(){
-        super("Strength Potion", "/item/strengthpotion.png",20,10);
+        super("Strength Potion", "/item/strengthpotion.png",100,10);
     }
 }

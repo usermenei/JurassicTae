@@ -13,7 +13,7 @@ public class DinosaurFactory {
                         150, 10, 40, 1,
                         x, y,
                         Dinosaur.Rarity.COMMON,
-                        "/images/dinosaur/longneck.png",400,400,40
+                        "/images/dinosaur/longneck.png",400,400,50
                 );
 
             case "Triceratops":
@@ -35,11 +35,11 @@ public class DinosaurFactory {
             case "Raptor":
                 return new CarnivoreDinosaur(
                         "Raptor",
-                        120, 30, 100, 2,
+                        150, 135, 100, 2,
                         x, y,
                         Dinosaur.Rarity.COMMON,
                         "/images/dinosaur/raptor.gif"
-                        ,300,300,3.5,75
+                        ,300,300,3.5,100
                 );
 
             case "TRex":
@@ -48,7 +48,7 @@ public class DinosaurFactory {
                         400, 80, 300, 5,
                         x, y,
                         Dinosaur.Rarity.RARE,
-                        "/images/dinosaur/trex.gif",300,300,2.2,90
+                        "/images/dinosaur/trex.gif",300,300,2.2,150
                 );
         }
 
@@ -61,7 +61,7 @@ public class DinosaurFactory {
                 1500, 150, 1000, 10,
                 x, y,
                 Dinosaur.Rarity.RARE,
-                "/images/dinosaur/mega.gif",500,500,150
+                "/images/dinosaur/mega.gif",500,500,300
         );
     }
 }

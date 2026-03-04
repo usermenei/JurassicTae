@@ -5,6 +5,7 @@ import gamemode.forest.render.WorldRenderer;
 import gamemode.DialogueManager;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.Scene.InventoryPane;
+import gamemode.lobby.logic.GameController;
 import gamemode.lobby.logic.GameLogic;
 import gamemode.lobby.logic.KeyboardController;
 import javafx.animation.AnimationTimer;
@@ -211,7 +212,7 @@ public class CretaceousExplorationScene {
             return;
         }
 
-        double speed  = 5;
+        double speed  = GameController.getInstance().getPlayer().getSpeed();
         boolean moving = false;
 
         if (keys.contains(KeyCode.A)) {

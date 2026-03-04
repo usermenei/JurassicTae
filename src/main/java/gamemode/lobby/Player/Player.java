@@ -51,6 +51,10 @@ public class Player {
     private boolean facingRight = true;
     private int expToNextLevel = 100;
 
+    public double getSpeed() {
+        return speed;
+    }
+
     //constructor
     public Player(double x,double y) {
         this.speed = baseSpeed;

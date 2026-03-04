@@ -6,6 +6,6 @@ import javafx.scene.image.Image;
 
 public class ExpPotion extends Potion {
     public ExpPotion(){
-        super("Exp Potion", "/item/exppotion.png",20,10);
+        super("Exp Potion", "/item/exppotion.png",40,10);
     }
 }
