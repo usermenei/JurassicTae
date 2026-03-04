@@ -6,7 +6,6 @@ import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.Potion;
 import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Item.Base.Weapon;
-import gamemode.lobby.Location.*;
 import gamemode.lobby.Scene.SpawnCanvas;
 import gamemode.lobby.Scene.SpawnScreen;
 import gamemode.lobby.logic.GameLogic;
@@ -185,15 +184,6 @@ public class Player {
         if (!isMoving) {
             runAnimation.reset();
         }
-    }
-
-    public boolean isNear(Location location){
-        return intersects(
-                location.getxPos(),
-                location.getyPos(),
-                location.getHeight(),
-                location.getWidth()
-        );
     }
 
     public void render(GraphicsContext gc) {

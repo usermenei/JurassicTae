@@ -4,7 +4,6 @@ import gamemode.forest.entity.CarnivoreDinosaur;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Player.Player;
-import gamemode.lobby.Location.*;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -23,14 +22,9 @@ import java.util.ArrayList;
 public class SpawnCanvas extends Canvas {
     private GraphicsContext gc ;
     private Player player = GameLogic.getInstance().getPlayer();
-    private Shop shop;
-    private Zoo zoo;
-    private Ufo ufo;
-    private Gym gym;
     private Image shopImg,zooImg,ufoImg,gymImg;
     private boolean fWasPressed = false;
     private boolean showEnterShop = false,showEnterSell = false,showEnterGym = false,showEnterUfo = false;
-
     public SpawnCanvas(){
 
         super(1422,800);
@@ -40,16 +34,6 @@ public class SpawnCanvas extends Canvas {
         //*******************************
 
         gc = this.getGraphicsContext2D();
-
-        shop = new Shop();
-        zoo = new Zoo();
-        gym = new Gym();
-        ufo = new Ufo();
-
-        shopImg = shop.getImage();
-        zooImg = zoo.getImage();
-        gymImg = gym.getImage();
-        ufoImg = ufo.getImage();
 
         startGameLoop();   // ✅ ต้องเรียก
     }
@@ -88,10 +72,10 @@ public class SpawnCanvas extends Canvas {
 
         player.move(dx, dy);
 
-        showEnterShop = player.isNear(shop);
-        showEnterGym = player.isNear(gym);
-        showEnterSell = player.isNear(zoo);
-        showEnterUfo = player.isNear(ufo);
+        showEnterShop = player.intersects(80,75,250,500);
+        showEnterGym = player.intersects(80,450,250,500);
+        showEnterSell = player.intersects(800,75,250,500);
+        showEnterUfo = player.intersects(800,450,250,500);
 
         // 🔥 ENTER LOGIC (Fixed)
         if (keyboard.isFPressed() && !fWasPressed) {
@@ -122,13 +106,13 @@ public class SpawnCanvas extends Canvas {
         player.render(gc);
 
         if (showEnterShop) {
-            drawPressMessage(shop);
+            drawPressMessage("SHOP");
         }else if(showEnterSell){
-            drawPressMessage(zoo);
+            drawPressMessage("ZOO");
         }else if(showEnterUfo){
-            drawPressMessage(ufo);
+            drawPressMessage("UFO");
         }else if(showEnterGym){
-            drawPressMessage(gym);
+            drawPressMessage("GYM");
         }
     }
 
@@ -137,17 +121,15 @@ public class SpawnCanvas extends Canvas {
     public Player getPlayer(){
         return player;
     }
-    public Shop getShop(){return shop;}
-    public Zoo getZoo(){return zoo;
-    }
-    private void drawPressMessage(Location location) {
+
+    private void drawPressMessage(String location) {
 
         String text;
 
-        if (location instanceof Gym) {
-            text = "Press F to enter the Gym\nFee: 500";
+        if (location.equals("GYM")) {
+            text = "Press F to enter the GYM\nFee: 500";
         } else {
-            text = "Press F to enter the " + location.getName();
+            text = "Press F to enter the " + location;
         }
 
         String[] lines = text.split("\n");
@@ -165,8 +147,31 @@ public class SpawnCanvas extends Canvas {
         double boxWidth = 300;
         double boxHeight = (lineHeight * lines.length) + padding ;
 
-        double boxX = location.getxPos() + (location.getWidth() / 2) - (boxWidth / 2);
-        double boxY = location.getyPos() + (location.getHeight() / 2) - (boxHeight / 2);
+        int xPos,width=500,yPos,height=250;
+        switch (location){
+            case "SHOP":
+                xPos = 80;
+                yPos = 75;
+                break;
+            case "GYM":
+                xPos = 80;
+                yPos = 450;
+                break;
+            case "ZOO":
+                xPos = 800;
+                yPos = 75;
+                break;
+            case "UFO":
+                xPos = 800;
+                yPos = 450;
+                break;
+            default:
+                xPos = 80;
+                yPos = 75;
+        }
+
+        double boxX = xPos + (width / 2) - (boxWidth / 2);
+        double boxY = yPos + (height / 2) - (boxHeight / 2);
 
         // background
         gc.setFill(Color.rgb(0, 0, 0, 0.65));
@@ -193,6 +198,4 @@ public class SpawnCanvas extends Canvas {
             );
         }
     }
-    public Ufo getUfo(){return ufo;}
-    public Gym getGym(){return gym;}
 }
