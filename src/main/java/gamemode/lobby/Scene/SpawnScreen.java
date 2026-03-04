@@ -4,12 +4,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
 import gamemode.lobby.logic.GameLogic;
+import javafx.scene.layout.VBox;
 
 public class SpawnScreen extends StackPane {
 
@@ -18,6 +20,8 @@ public class SpawnScreen extends StackPane {
     private InventoryPane inventoryPane;
     private SpawnCanvas spawnCanvas;
     private Label moneyLabel;
+    private Label levelLabel;
+    private ProgressBar expBar;
 
     public SpawnScreen(){
 
@@ -58,6 +62,33 @@ public class SpawnScreen extends StackPane {
 
         //************************************
 
+        // level box
+        levelLabel = new Label("Level : " + GameLogic.getInstance().getPlayer().getLevel());
+        levelLabel.setStyle(
+                "-fx-font-size: 16px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: black;"
+        );
+
+        expBar = new ProgressBar();
+        expBar.setPrefWidth(120);
+        updateExpBar();
+
+        HBox levelBox = new HBox(5);
+        levelBox.setAlignment(Pos.CENTER);
+        levelBox.getChildren().addAll(levelLabel, expBar);
+
+        levelBox.setStyle(
+                "-fx-background-color: #87CEFA;" +
+                        "-fx-border-color: black;" +
+                        "-fx-border-width: 2;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-border-radius: 8;" +
+                        "-fx-padding: 5;"
+        );
+
+        //************************************************************
+
         spawnCanvas = new SpawnCanvas();
         sellScene = new SellScene();
         shopScene = new ShopScene();
@@ -81,7 +112,7 @@ public class SpawnScreen extends StackPane {
 
         //group
         HBox topRightBox = new HBox(10);
-        topRightBox.getChildren().addAll(moneyBox, inventoryBtn);
+        topRightBox.getChildren().addAll(levelBox,moneyBox, inventoryBtn);
         topRightBox.setAlignment(Pos.CENTER_RIGHT);
 
         topRightBox.setMaxSize(HBox.USE_PREF_SIZE, HBox.USE_PREF_SIZE);
@@ -162,5 +193,20 @@ public class SpawnScreen extends StackPane {
         }
 
         inventoryPane.setVisible(!isOpen);
+    }
+    public void updateLevel() {
+        levelLabel.setText("Level : " +
+                GameLogic.getInstance().getPlayer().getLevel());
+    }
+    public void updateExpBar() {
+        double progress =
+                (double) GameLogic.getInstance().getPlayer().getExp()
+                        / GameLogic.getInstance().getPlayer().getExpToNextLevel();
+
+        expBar.setProgress(progress);
+    }
+
+    public void updateMoney(){
+        moneyLabel.setText("Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $");
     }
 }

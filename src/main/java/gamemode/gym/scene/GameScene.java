@@ -61,6 +61,7 @@ public class GameScene {
     private void handleGameOver() {
         stopAll();
         onBackToMenu.accept(scoreManager.getScore());
+
     }
 
     private void exitGame() {

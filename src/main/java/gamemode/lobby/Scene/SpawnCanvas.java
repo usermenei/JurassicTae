@@ -6,12 +6,17 @@ import gamemode.lobby.Item.Base.TamedDinosaur;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.Location.*;
 import javafx.animation.AnimationTimer;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import gamemode.lobby.logic.*;
 import gamemode.lobby.logic.GameController;
 import gamemode.lobby.logic.KeyboardController;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
 
@@ -134,54 +139,65 @@ public class SpawnCanvas extends Canvas {
         }
     }
 
-    private void drawPressMessage(Location location) {
 
-        String text = "Press F to enter the " + location.getName();
-
-        javafx.scene.text.Font font =
-                javafx.scene.text.Font.font("Consolas", 18);
-
-        gc.setFont(font);
-
-        // วัดขนาดข้อความ
-        javafx.scene.text.Text tempText = new javafx.scene.text.Text(text);
-        tempText.setFont(font);
-
-        double textWidth = tempText.getLayoutBounds().getWidth();
-        double textHeight = tempText.getLayoutBounds().getHeight();
-
-        double padding = 20;
-
-        double boxWidth = textWidth + padding * 2;
-        double boxHeight = textHeight + padding * 2;
-
-        // 🔥 จัดกึ่งกลางทั้งจอ
-        double boxX = location.getxPos() + (location.getWidth() /2) - (boxWidth/2);
-        double boxY = location.getyPos() + (location.getHeight() /2) - (boxHeight/2);
-
-        // 🔳 พื้นหลังดำโปร่งใส
-        gc.setFill(javafx.scene.paint.Color.rgb(0, 0, 0, 0.6));
-        gc.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 15, 15);
-
-        // 🔲 ขอบขาว
-        gc.setStroke(javafx.scene.paint.Color.WHITE);
-        gc.setLineWidth(3);
-        gc.strokeRoundRect(boxX, boxY, boxWidth, boxHeight, 15, 15);
-
-        // ✍️ ข้อความ (จัดกลางจริง)
-        gc.setFill(javafx.scene.paint.Color.WHITE);
-        gc.fillText(
-                text,
-                boxX + (boxWidth - textWidth) / 2,
-                boxY + (boxHeight + textHeight / 2) / 2
-        );
-    }
 
     public Player getPlayer(){
         return player;
     }
     public Shop getShop(){return shop;}
     public Zoo getZoo(){return zoo;
+    }
+    private void drawPressMessage(Location location) {
+
+        String text;
+
+        if (location instanceof Gym) {
+            text = "Press F to enter the Gym\nFee: 500";
+        } else {
+            text = "Press F to enter the " + location.getName();
+        }
+
+        String[] lines = text.split("\n");
+
+        Font font = Font.font("Consolas", 20);
+        gc.setFont(font);
+
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setTextBaseline(VPos.CENTER);   // 🔥 ตัวแก้ปัญหาจริง
+
+        double padding = 25;
+        double lineHeight = font.getSize() + 10;
+
+        double boxWidth = 300;
+        double boxHeight = (lineHeight * lines.length) + padding ;
+
+        double boxX = location.getxPos() + (location.getWidth() / 2) - (boxWidth / 2);
+        double boxY = location.getyPos() + (location.getHeight() / 2) - (boxHeight / 2);
+
+        // background
+        gc.setFill(Color.rgb(0, 0, 0, 0.65));
+        gc.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 25, 25);
+
+        // border
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(3);
+        gc.strokeRoundRect(boxX, boxY, boxWidth, boxHeight, 25, 25);
+
+        gc.setFill(Color.WHITE);
+
+        // 🔥 คำนวณตำแหน่งกลางจริง
+        double centerY = boxY + boxHeight / 2;
+
+        for (int i = 0; i < lines.length; i++) {
+
+            double yOffset = (i - (lines.length - 1) / 2.0) * lineHeight;
+
+            gc.fillText(
+                    lines[i],
+                    boxX + boxWidth / 2,
+                    centerY + yOffset
+            );
+        }
     }
     public Ufo getUfo(){return ufo;}
     public Gym getGym(){return gym;}
