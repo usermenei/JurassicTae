@@ -5,13 +5,12 @@ import gamemode.lobby.Interfaces.Buyable;
 /**
  * Abstract base class representing a weapon item in the game.
  *
- * <p>
+ * <p><b>Description:</b></p>
  * A Weapon:
  * <ul>
  *     <li>Extends {@link Item}</li>
  *     <li>Implements {@link Buyable}</li>
  * </ul>
- * </p>
  *
  * <p>
  * This class provides core weapon attributes such as

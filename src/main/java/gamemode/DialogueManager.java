@@ -14,21 +14,23 @@ import java.util.Queue;
  * dialogue rendering, typewriter animation, and dialogue queuing
  * inside the game.
  *
- * <p>
- * Features:
+ * <p><b>Features:</b></p>
  * <ul>
  *     <li>Typewriter text animation</li>
  *     <li>Portrait rendering</li>
  *     <li>Dialogue queue system</li>
  *     <li>Click-to-skip or advance</li>
  * </ul>
+ *
+ * <p><b>Usage:</b></p>
+ * Call {@link #update()} every frame before
+ * {@link #render(GraphicsContext, double, double)}.
+ * Trigger {@link #onClick()} when the user clicks or presses the skip key.
+ *
+ * <p>
+ * This class follows the Singleton design pattern to ensure
+ * only one dialogue manager exists throughout the game.
  * </p>
- *
- * Usage:
- * Call {@link #update()} every frame before {@link #render(GraphicsContext, double, double)}.
- * Trigger {@link #onClick()} when user clicks or presses skip key.
- *
- * This class follows Singleton pattern.
  */
 public class DialogueManager {
 

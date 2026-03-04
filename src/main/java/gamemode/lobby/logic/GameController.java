@@ -27,16 +27,14 @@ import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 
 /**
- * <h1>GameController</h1>
+ * <h2>GameController</h2>
  *
  * <p>
  * Central controller responsible for managing all scene transitions
  * and high-level game state across different game modes.
  * </p>
  *
- * <p>
- * This controller manages:
- * </p>
+ * <p><b>Managed Game Modes:</b></p>
  * <ul>
  *     <li>Main Spawn Screen</li>
  *     <li>Cretaceous Exploration (Forest Mode)</li>
@@ -44,19 +42,18 @@ import javafx.geometry.Insets;
  *     <li>Gym Mini-Game</li>
  * </ul>
  *
- * <p>
- * It also handles:
- * </p>
+ * <p><b>Core Responsibilities:</b></p>
  * <ul>
  *     <li>Battle result processing</li>
- *     <li>Enemy defeat logic</li>
+ *     <li>Enemy defeat handling</li>
  *     <li>Mini-game reward calculation</li>
- *     <li>UI refresh (money, sell scene)</li>
+ *     <li>User interface refresh (money display, sell scene updates)</li>
  * </ul>
  *
  * <p>
- * Implemented using the Singleton pattern to ensure
- * only one GameController exists throughout the game lifecycle.
+ * Implemented using the <b>Singleton</b> design pattern to ensure that
+ * only one instance of {@code GameController} exists
+ * throughout the application lifecycle.
  * </p>
  *
  * @author Pongtawan

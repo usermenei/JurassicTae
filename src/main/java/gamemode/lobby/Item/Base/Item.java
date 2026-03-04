@@ -5,14 +5,12 @@ import javafx.scene.image.Image;
 /**
  * Abstract base class representing a generic item in the game.
  *
- * <p>
- * Every item has:
+ * <p><b>Overview:</b></p>
  * <ul>
  *     <li>A name</li>
  *     <li>An image resource path</li>
  *     <li>A loaded {@link Image} object for rendering</li>
  * </ul>
- * </p>
  *
  * <p>
  * Subclasses should extend this class to create specific

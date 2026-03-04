@@ -6,14 +6,13 @@ import gamemode.lobby.Interfaces.Sellable;
 /**
  * Abstract base class representing a potion item in the game.
  *
- * <p>
+ * <p><b>Description:</b></p>
  * A Potion is:
  * <ul>
  *     <li>An {@link Item}</li>
  *     <li>{@link Buyable}</li>
  *     <li>{@link Sellable}</li>
  * </ul>
- * </p>
  *
  * <p>
  * This class provides base pricing behavior for all potion types.

@@ -1,7 +1,7 @@
 package gamemode.lobby.logic;
 
 /**
- * <h1>GameState</h1>
+ * <h2>GameState</h2>
  *
  * <p>
  * Represents the different states of the lobby game mode.

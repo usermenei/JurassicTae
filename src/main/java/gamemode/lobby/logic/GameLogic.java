@@ -3,7 +3,7 @@ package gamemode.lobby.logic;
 import gamemode.lobby.Player.Player;
 
 /**
- * <h1>GameLogic</h1>
+ * <h2>GameLogic</h2>
  *
  * <p>
  * The GameLogic class is responsible for controlling the core logic
