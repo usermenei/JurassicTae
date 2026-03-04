@@ -1,10 +1,23 @@
 package gamemode.lobby.Item.Weapon;
 
-import javafx.scene.image.Image;
 import gamemode.lobby.Item.Base.Weapon;
 
+/**
+ * Represents an Anesthetic Dart weapon.
+ *
+ * <p>
+ * AnestheticDart is a low-damage weapon typically used
+ * for tranquilizing dinosaurs. It has a moderate buy price
+ * and low damage value.
+ * </p>
+ */
 public class AnestheticDart extends Weapon {
-    public AnestheticDart(){
-        super("AnestheticDart", "/item/AnestheticDart.png",50,10);
+
+    /**
+     * Constructs an AnestheticDart with predefined
+     * name, image path, buy price, and damage value.
+     */
+    public AnestheticDart() {
+        super("AnestheticDart", "/item/AnestheticDart.png", 50, 10);
     }
 }

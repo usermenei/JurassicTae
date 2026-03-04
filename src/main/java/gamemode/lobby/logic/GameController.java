@@ -26,38 +26,110 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 
+/**
+ * <h1>GameController</h1>
+ *
+ * <p>
+ * Central controller responsible for managing all scene transitions
+ * and high-level game state across different game modes.
+ * </p>
+ *
+ * <p>
+ * This controller manages:
+ * </p>
+ * <ul>
+ *     <li>Main Spawn Screen</li>
+ *     <li>Cretaceous Exploration (Forest Mode)</li>
+ *     <li>Battle Mode</li>
+ *     <li>Gym Mini-Game</li>
+ * </ul>
+ *
+ * <p>
+ * It also handles:
+ * </p>
+ * <ul>
+ *     <li>Battle result processing</li>
+ *     <li>Enemy defeat logic</li>
+ *     <li>Mini-game reward calculation</li>
+ *     <li>UI refresh (money, sell scene)</li>
+ * </ul>
+ *
+ * <p>
+ * Implemented using the Singleton pattern to ensure
+ * only one GameController exists throughout the game lifecycle.
+ * </p>
+ *
+ * @author Pongtawan
+ * @version 1.0
+ * @since 2026
+ */
 public class GameController {
 
+    /** Singleton instance */
     private static GameController instance = new GameController();
 
+    /** Primary JavaFX stage */
     private Stage stage;
+
+    /** Main spawn scene */
     private Scene mainScene;
+
+    /** Root spawn screen reference */
     private SpawnScreen root;
+
+    /** Current player reference */
     private Player player = GameLogic.getInstance().getPlayer();
 
+    /** Keyboard input controller */
     private KeyboardController keyboard;
+
+    /** Indicates whether the game has ended */
     private boolean gameEnded;
 
+    /** Stores the last gym score */
     private int lastGymScore = 0;
 
     /* =========================
        ⭐ FOREST STATE
        ========================= */
+
+    /** Forest exploration scene */
     private Scene forestScene;
+
+    /** Cretaceous exploration controller */
     private CretaceousExplorationScene explorationScene;
 
+    /**
+     * Private constructor (Singleton pattern).
+     */
     private GameController() {}
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return GameController instance
+     */
     public static GameController getInstance() {
         return instance;
     }
 
+    /**
+     * Initializes the controller with stage and main scene.
+     *
+     * @param stage primary JavaFX stage
+     * @param scene main spawn scene
+     */
     public void init(Stage stage, Scene scene) {
         this.stage = stage;
         this.mainScene = scene;
         keyboard = new KeyboardController(scene);
     }
 
+    /**
+     * Switches the stage to a new scene.
+     *
+     * @param scene target scene
+     */
     public void switchScene(Scene scene) {
         stage.setScene(scene);
     }
@@ -65,6 +137,11 @@ public class GameController {
     /* =========================
        🌲 FOREST MODE
        ========================= */
+
+    /**
+     * Starts the Cretaceous Exploration mode.
+     * Initializes the exploration scene and switches to it.
+     */
     public void startCretaceousExploration() {
 
         explorationScene = new CretaceousExplorationScene(
@@ -79,6 +156,12 @@ public class GameController {
     /* =========================
        ⚔️ BATTLE MODE
        ========================= */
+
+    /**
+     * Starts battle mode against a given enemy dinosaur.
+     *
+     * @param enemy the enemy dinosaur to fight
+     */
     private void startBattleMode(Dinosaur enemy) {
         BattleView battleView = new BattleView(enemy, this);
         Scene battleScene = new Scene(battleView, 1422, 800);
@@ -88,6 +171,12 @@ public class GameController {
     /* =========================
        🦖 ENEMY DEFEATED
        ========================= */
+
+    /**
+     * Handles logic when an enemy dinosaur is defeated.
+     *
+     * @param enemy defeated dinosaur
+     */
     public void onEnemyDefeated(Dinosaur enemy) {
 
         explorationScene.getWorldManager().removeDinosaur(enemy);
@@ -100,9 +189,10 @@ public class GameController {
         forestScene.getRoot().requestFocus();
     }
 
-    /* =========================
-       🔙 RETURN FROM BATTLE
-       ========================= */
+    /**
+     * Returns to forest world without removing enemy.
+     * Used when player escapes or battle ends without defeat.
+     */
     public void returnToWorld() {
         explorationScene.getWorldManager().endBattle();
 
@@ -116,6 +206,10 @@ public class GameController {
     /* =========================
        🏋️ GYM MODE
        ========================= */
+
+    /**
+     * Starts the Gym mini-game menu.
+     */
     public void startGymMiniGame() {
 
         MainMenu menu = new MainMenu(
@@ -129,8 +223,11 @@ public class GameController {
         stage.setScene(menu.getScene());
     }
 
+    /**
+     * Starts the actual Gym gameplay.
+     * Calculates rewards and displays result popup.
+     */
     private void startActualGymGame() {
-        // ✅ Fee is already deducted in MainMenu — do NOT deduct again here
 
         Image red  = new Image(getClass().getResource("/gamemode/gym/redtile.png").toExternalForm());
         Image blue = new Image(getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm());
@@ -145,6 +242,7 @@ public class GameController {
                 blue,
                 bg,
                 score -> {
+
                     lastGymScore = score;
 
                     int bonusStrength = score / 300;
@@ -156,7 +254,6 @@ public class GameController {
                     player.addExp(bonusExp);
                     player.setMaxHp(player.getMaxHp() + bonusMaxHp);
 
-                    // ===== RESULT POPUP =====
                     StackPane popupRoot = new StackPane();
                     popupRoot.setStyle("-fx-background-color: rgba(0,0,0,0.6);");
 
@@ -171,28 +268,31 @@ public class GameController {
                                     new CornerRadii(20), new BorderWidths(3))
                     ));
 
+                    Font fontLarge  = Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 40);
+                    Font fontMedium = Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 30);
+
                     Text title = new Text("WORKOUT COMPLETE!");
-                    title.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 40));
+                    title.setFont(fontLarge);
                     title.setFill(Color.WHITE);
 
                     Text scoreText = new Text("Score: " + score);
-                    scoreText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    scoreText.setFont(fontMedium);
                     scoreText.setFill(Color.CYAN);
 
                     Text rewardText = new Text("Strength + " + bonusStrength);
-                    rewardText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 35));
+                    rewardText.setFont(fontMedium);
                     rewardText.setFill(Color.LIME);
 
                     Text expText = new Text("EXP + " + bonusExp);
-                    expText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    expText.setFont(fontMedium);
                     expText.setFill(Color.GOLD);
 
                     Text hpText = new Text("Max HP + " + bonusMaxHp);
-                    hpText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    hpText.setFont(fontMedium);
                     hpText.setFill(Color.RED);
 
                     Button okBtn = new Button("OK");
-                    okBtn.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 28));
+                    okBtn.setFont(fontMedium);
                     okBtn.setPrefWidth(200);
                     okBtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
                     okBtn.setOnAction(e -> startGymMiniGame());
@@ -211,31 +311,74 @@ public class GameController {
     /* =========================
        🔁 MAIN / SPAWN
        ========================= */
+
+    /**
+     * Returns to main spawn screen.
+     */
     public void returnToMain() {
         stage.setScene(mainScene);
         if (root != null) root.requestFocus();
     }
 
+    /**
+     * Sets root SpawnScreen reference.
+     *
+     * @param spawnScreen spawn screen instance
+     */
     public void setRoot(SpawnScreen spawnScreen) {
         this.root = spawnScreen;
         player = root.getSpawnCanvas().getPlayer();
     }
 
-    public SpawnScreen getRoot()          { return root;      }
-    public KeyboardController getKeyboard() { return keyboard; }
-    public boolean isGameEnded()          { return gameEnded; }
-    public Player getPlayer()             { return player;    }
+    /**
+     * @return current SpawnScreen
+     */
+    public SpawnScreen getRoot() {
+        return root;
+    }
 
+    /**
+     * @return keyboard controller
+     */
+    public KeyboardController getKeyboard() {
+        return keyboard;
+    }
+
+    /**
+     * @return true if game ended
+     */
+    public boolean isGameEnded() {
+        return gameEnded;
+    }
+
+    /**
+     * @return current player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Refreshes sell scene UI.
+     */
     public void reloadSellScene() {
         root.getSellScene().refresh();
     }
 
+    /**
+     * Updates money label UI.
+     */
     public void reloadMoney() {
         root.getMoneyLabel().setText(
                 "Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $"
         );
     }
 
+    /**
+     * Handles logic when dinosaur is caught.
+     *
+     * @param enemy caught dinosaur
+     */
     public void onEnemyCaught(Dinosaur enemy) {
         returnToWorld();
     }

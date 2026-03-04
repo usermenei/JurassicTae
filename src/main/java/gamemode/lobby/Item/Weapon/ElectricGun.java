@@ -1,10 +1,22 @@
 package gamemode.lobby.Item.Weapon;
 
-import javafx.scene.image.Image;
 import gamemode.lobby.Item.Base.Weapon;
 
+/**
+ * Represents an Electric Gun weapon.
+ *
+ * <p>
+ * ElectricGun is a high-damage weapon with a high purchase cost.
+ * It is designed for powerful combat scenarios.
+ * </p>
+ */
 public class ElectricGun extends Weapon {
-    public ElectricGun(){
-        super("Electric Gun", "/item/ElectricGun.png",400,290);
+
+    /**
+     * Constructs an ElectricGun with predefined
+     * name, image path, buy price, and damage value.
+     */
+    public ElectricGun() {
+        super("Electric Gun", "/item/ElectricGun.png", 400, 290);
     }
 }
