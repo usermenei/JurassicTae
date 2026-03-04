@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 public class DinoBall extends Item implements Buyable {
     Image image;
     public DinoBall(){
-        super("DinoBall", "/gamemode/lobby/trap.png");
+        super("DinoBall", "/item/dinoball.PNG");
     }
     public Image getImage() {
         return image;

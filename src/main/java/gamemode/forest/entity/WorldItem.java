@@ -25,15 +25,13 @@ public class WorldItem {
     }
     private Item generateRandomItem() {
 
-        int r = (int)(Math.random() * 6);
+        int r = (int)(Math.random() * 4);
 
         switch (r) {
             case 0: return new HealPotion();
             case 1: return new SpeedPotion();
             case 2: return new StrengthPotion();
-            case 3: return new AnestheticDart();
-            case 4: return new ElectricGun();
-            case 5: return new DinoBall();
+            case 3: return new DinoBall();
             default: return new HealPotion();
         }
     }
