@@ -46,11 +46,12 @@ public class InventoryPane extends StackPane {
         title.setStyle("""
         -fx-background-color: #ffcc00;
         -fx-text-fill: black;
+        -fx-font-family: 'Minecraft';
         -fx-font-size: 24px;
         -fx-font-weight: bold;
         -fx-padding: 10 30 10 30;
         -fx-background-radius: 10;
-    """);
+        """);
 
         // 📦 Grid
         grid = new GridPane();
@@ -82,8 +83,10 @@ public class InventoryPane extends StackPane {
         exitBtn.setStyle("""
         -fx-background-color: red;
         -fx-text-fill: white;
+        -fx-font-family: 'Minecraft';
         -fx-font-weight: bold;
-    """);
+        -fx-font-size: 18px;
+        """);
 
         exitBtn.setOnAction(e -> this.setVisible(false));
 
@@ -183,6 +186,7 @@ public class InventoryPane extends StackPane {
             -fx-background-color: #3a3a3a;
             -fx-background-radius: 12;
             -fx-border-color: #555;
+            -fx-font-family: 'Minecraft';
             -fx-border-radius: 12;
             -fx-padding: 10;
         """);
@@ -203,6 +207,7 @@ public class InventoryPane extends StackPane {
             nameLabel.setStyle("""
                 -fx-text-fill: white;
                 -fx-font-size: 12px;
+                -fx-font-family: 'Minecraft';
                 -fx-font-weight: bold;
             """);
 
@@ -223,6 +228,7 @@ public class InventoryPane extends StackPane {
 
                 useButton.setStyle("""
                 -fx-background-color: gold;
+                -fx-font-family: 'Minecraft';
                 -fx-text-fill: black;
                 -fx-font-weight: bold;
             """);
@@ -248,6 +254,7 @@ public class InventoryPane extends StackPane {
                 cell.setStyle("""
                 -fx-background-color: #444;
                 -fx-background-radius: 12;
+                -fx-font-family: 'Minecraft';
                 -fx-border-color: gold;
                 -fx-border-radius: 12;
                 -fx-padding: 10;
@@ -265,6 +272,7 @@ public class InventoryPane extends StackPane {
                 -fx-background-radius: 12;
                 -fx-border-color: #777;
                 -fx-border-radius: 12;
+                -fx-font-family: 'Minecraft';
                 -fx-padding: 10;
             """);
 
