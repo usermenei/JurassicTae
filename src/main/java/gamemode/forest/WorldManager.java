@@ -115,8 +115,8 @@ public class WorldManager {
 
     private void spawnDinosaur(int chunkX, int chunkY) {
 
-        // 40% chance that a chunk even attempts to spawn
-        if (Math.random() > 0.4) return;
+        // 25% chance that a chunk even attempts to spawn
+        if (Math.random() > 0.25) return;
 
         double spawnX = chunkX * CHUNK_SIZE + Math.random() * CHUNK_SIZE;
         double spawnY = chunkY * CHUNK_SIZE + Math.random() * CHUNK_SIZE;

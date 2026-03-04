@@ -19,7 +19,7 @@ public class Chunk {
         double baseX = chunkX * WorldManager.CHUNK_SIZE;
         double baseY = chunkY * WorldManager.CHUNK_SIZE;
 
-        for (int i = 0; i < 3; i++) {
+        if (Math.random() < 0.25) {
             items.add(new WorldItem(
                     baseX + Math.random() * WorldManager.CHUNK_SIZE,
                     baseY + Math.random() * WorldManager.CHUNK_SIZE

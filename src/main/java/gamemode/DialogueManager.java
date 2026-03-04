@@ -6,25 +6,30 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class DialogueManager {
 
     private static DialogueManager instance;
 
+    // ===== Single dialogue state =====
     private String fullText = "";
     private String visibleText = "";
     private String speaker = "System";
-
     private Image portrait;
-
     private boolean active = false;
-
     private long lastCharTime = 0;
     private int charIndex = 0;
 
     private final long TYPE_SPEED = 25;
-    private final long DISPLAY_DURATION = 0; // 0 = no auto close
 
     private Font pixelFont;
+
+    // ===== Queue for chained dialogues =====
+    private final Queue<DialogueEntry> queue = new LinkedList<>();
+
+    private record DialogueEntry(String speaker, String text, String portraitPath) {}
 
     private DialogueManager() {
         pixelFont = Font.loadFont(
@@ -40,23 +45,47 @@ public class DialogueManager {
         return instance;
     }
 
-    // 🔥 Show dialogue with portrait
+    // ===== Show single dialogue =====
     public void showDialogue(String speakerName, String text, String portraitPath) {
+        queue.clear(); // clear any pending queue
+        loadEntry(new DialogueEntry(speakerName, text, portraitPath));
+    }
 
-        this.speaker = speakerName;
-        this.fullText = text;
+    // ===== Queue multiple dialogues =====
+    public void queueDialogue(String speakerName, String text, String portraitPath) {
+        queue.add(new DialogueEntry(speakerName, text, portraitPath));
+        if (!active) {
+            playNext();
+        }
+    }
+
+    private void playNext() {
+        if (queue.isEmpty()) {
+            active = false;
+            return;
+        }
+        loadEntry(queue.poll());
+    }
+
+    private void loadEntry(DialogueEntry entry) {
+        this.speaker = entry.speaker();
+        this.fullText = entry.text();
         this.visibleText = "";
         this.charIndex = 0;
         this.lastCharTime = System.currentTimeMillis();
         this.active = true;
 
-        if (portraitPath != null) {
-            portrait = new Image(getClass().getResource(portraitPath).toExternalForm());
+        if (entry.portraitPath() != null) {
+            portrait = new Image(
+                    getClass().getResource(entry.portraitPath()).toExternalForm()
+            );
+        } else {
+            portrait = null;
         }
     }
 
+    // ===== Update (call every frame) =====
     public void update() {
-
         if (!active) return;
 
         long now = System.currentTimeMillis();
@@ -70,15 +99,17 @@ public class DialogueManager {
         }
     }
 
+    // ===== Click to skip / advance =====
     public void onClick() {
-
         if (!active) return;
 
         if (charIndex < fullText.length()) {
+            // Skip typewriter — show full text immediately
             visibleText = fullText;
             charIndex = fullText.length();
         } else {
-            active = false;
+            // Advance to next queued dialogue or close
+            playNext();
         }
     }
 
@@ -86,50 +117,58 @@ public class DialogueManager {
         return active;
     }
 
-    public void render(GraphicsContext gc, double canvasWidth, double canvasHeight) {
+    public void close() {
+        active = false;
+        queue.clear();
+    }
 
+    // ===== Render (call every frame after update) =====
+    public void render(GraphicsContext gc, double canvasWidth, double canvasHeight) {
         if (!active) return;
 
         double boxHeight = 180;
         double boxY = canvasHeight - boxHeight - 20;
 
-        // Dark background
+        // Dark background — shifted right to clear portrait
         gc.setFill(Color.rgb(0, 0, 0, 0.85));
-        gc.fillRoundRect(220, boxY, canvasWidth - 240, boxHeight, 20, 20);
+        gc.fillRoundRect(210, boxY, canvasWidth - 230, boxHeight, 20, 20);
 
         // Border
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(3);
-        gc.strokeRoundRect(220, boxY, canvasWidth - 240, boxHeight, 20, 20);
+        gc.strokeRoundRect(210, boxY, canvasWidth - 230, boxHeight, 20, 20);
 
-        // Portrait
+        // Portrait — sits to the left of the box
         if (portrait != null) {
-            gc.drawImage(portrait, 0, boxY - 20, 200, 200);
+            gc.drawImage(portrait, 5, boxY - 10, 190, 190);
         }
 
-        // Speaker Name
+        // Speaker name
         gc.setFill(Color.CYAN);
         gc.setFont(pixelFont);
-        gc.fillText(speaker, 240, boxY + 35);
+        gc.fillText(speaker, 270, boxY + 35);
 
-        // Dialogue Text
+        // Dialogue text
         gc.setFill(Color.WHITE);
         gc.setFont(pixelFont);
+        drawWrappedText(gc, visibleText, 270, boxY + 70, canvasWidth - 290);
 
-        drawWrappedText(gc, visibleText, 240, boxY + 70, canvasWidth - 260);
+        // "Click or F to skip" hint — only when text is fully shown
+        if (charIndex >= fullText.length()) {
+            gc.setFill(Color.rgb(255, 255, 255, 0.5));
+            gc.setFont(Font.font("Monospaced", 13));
+            gc.fillText("▶ Click or F to skip", canvasWidth - 230, boxY + boxHeight - 15);
+        }
     }
 
     private void drawWrappedText(GraphicsContext gc, String text,
                                  double x, double y, double maxWidth) {
-
         String[] words = text.split(" ");
         String line = "";
         double lineHeight = 26;
 
         for (String word : words) {
-
             String testLine = line + word + " ";
-
             Text helper = new Text(testLine);
             helper.setFont(pixelFont);
             double width = helper.getLayoutBounds().getWidth();

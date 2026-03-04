@@ -61,7 +61,7 @@ public class DinosaurFactory {
                 1500, 150, 1000, 10,
                 x, y,
                 Dinosaur.Rarity.RARE,
-                "/images/dinosaur/mega.png",500,500,150
+                "/images/dinosaur/mega.gif",500,500,150
         );
     }
 }
