@@ -30,6 +30,7 @@ public class WorldManager {
        ⭐ Battle system
        ========================= */
     private boolean inBattle = false;
+    private Dinosaur currentBattleDino = null;
     private Consumer<Dinosaur> onBattleTriggered;
 
     public WorldManager(Player player) {
@@ -88,6 +89,7 @@ public class WorldManager {
             for (Dinosaur d : dinosaurs) {
                 if (isColliding(player, d)) {
                     inBattle = true;
+                    currentBattleDino = d;
                     if (onBattleTriggered != null) {
                         onBattleTriggered.accept(d);
                     }
@@ -98,15 +100,17 @@ public class WorldManager {
     }
 
     /* =========================
-       ✅ REMOVE DINOSAUR
+       ✅ REMOVE DINOSAUR (defeat / catch)
        ========================= */
     public void removeDinosaur(Dinosaur dino) {
-        // ลบไดโนออกจากโลก
         dinosaurs.remove(dino);
 
-        // ปลดล็อก chunk นี้
         WorldPoint chunkPoint = new WorldPoint(dino.getChunkX(), dino.getChunkY());
         spawnedDinoChunks.remove(chunkPoint);
+
+        if (dino == currentBattleDino) {
+            currentBattleDino = null;
+        }
     }
 
     private void spawnDinosaur(int chunkX, int chunkY) {
@@ -120,13 +124,8 @@ public class WorldManager {
         double roll = Math.random();
         Dinosaur dino;
 
-        // =========================
-        // RARITY + TYPE SELECTION
-        // =========================
-
         if (roll < 0.50) {
-            // 🟢 COMMON (Herbivore / Raptor)
-
+            // 🟢 COMMON
             if (Math.random() < 0.5) {
                 dino = DinosaurFactory.createHerbivore("LongNeck", spawnX, spawnY);
             } else {
@@ -135,7 +134,6 @@ public class WorldManager {
 
         } else if (roll < 0.85) {
             // 🔵 UNCOMMON
-
             if (Math.random() < 0.5) {
                 dino = DinosaurFactory.createHerbivore("Triceratops", spawnX, spawnY);
             } else {
@@ -143,8 +141,7 @@ public class WorldManager {
             }
 
         } else {
-            // 🔴 RARE (Mega Boss)
-
+            // 🔴 RARE
             dino = DinosaurFactory.createMega(spawnX, spawnY);
         }
 
@@ -197,11 +194,11 @@ public class WorldManager {
 
     private boolean isColliding(Player p, Dinosaur d) {
 
-        double dx = (p.getX() + p.getWidth()/2.0) -
-                (d.getX() + d.getWidth()/2.0);
+        double dx = (p.getX() + p.getWidth() / 2.0) -
+                (d.getX() + d.getWidth() / 2.0);
 
-        double dy = (p.getY() + p.getHeight()/2.0) -
-                (d.getY() + d.getHeight()/2.0);
+        double dy = (p.getY() + p.getHeight() / 2.0) -
+                (d.getY() + d.getHeight() / 2.0);
 
         double combinedHalfWidths  = (p.getWidth() + d.getWidth()) / 2.0;
         double combinedHalfHeights = (p.getHeight() + d.getHeight()) / 2.0;
@@ -210,8 +207,23 @@ public class WorldManager {
                 Math.abs(dy) < combinedHalfHeights;
     }
 
+    /* =========================
+       🔙 END BATTLE (escape)
+       — replaces damaged dino with a fresh one
+       ========================= */
     public void endBattle() {
         inBattle = false;
+
+        if (currentBattleDino != null) {
+            int cx = currentBattleDino.getChunkX();
+            int cy = currentBattleDino.getChunkY();
+
+            dinosaurs.remove(currentBattleDino);
+            spawnedDinoChunks.remove(new WorldPoint(cx, cy));
+            spawnDinosaur(cx, cy); // fresh dino, full HP
+            currentBattleDino = null;
+        }
+
         pushPlayerOut();
     }
 
@@ -238,10 +250,8 @@ public class WorldManager {
                 dx /= length;
                 dy /= length;
 
-                double pushDistance = 80;
-
-                player.setX(player.getX() + dx * pushDistance);
-                player.setY(player.getY() + dy * pushDistance);
+                player.setX(player.getX() + dx * 80);
+                player.setY(player.getY() + dy * 80);
 
                 break;
             }

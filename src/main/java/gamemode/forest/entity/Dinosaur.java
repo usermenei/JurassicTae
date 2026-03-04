@@ -68,7 +68,6 @@ public abstract class Dinosaur {
 
         this.spawnTime = System.currentTimeMillis();
         this.sellPrice = sellPrice;
-
         loadImage(imagePath);
     }
 

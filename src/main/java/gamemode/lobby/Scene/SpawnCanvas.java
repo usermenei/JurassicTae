@@ -121,10 +121,10 @@ public class SpawnCanvas extends Canvas {
     private void render() {
 
         // วาด background object ทุก frame
-        gc.drawImage(shopImg,shop.getxPos(),shop.getxPos(),shop.getWidth(),shop.getHeight());
-        gc.drawImage(zooImg,zoo.getxPos(),zoo.getyPos(),zoo.getWidth(), zoo.getHeight());
-        gc.drawImage(gymImg,gym.getxPos(),gym.getyPos(),gym.getWidth(), gym.getHeight());
-        gc.drawImage(ufoImg,ufo.getxPos(),ufo.getyPos(),ufo.getWidth(), ufo.getHeight());
+        //gc.drawImage(shopImg,shop.getxPos(),shop.getxPos(),shop.getWidth(),shop.getHeight());
+        //gc.drawImage(zooImg,zoo.getxPos(),zoo.getyPos(),zoo.getWidth(), zoo.getHeight());
+        //gc.drawImage(gymImg,gym.getxPos(),gym.getyPos(),gym.getWidth(), gym.getHeight());
+        //gc.drawImage(ufoImg,ufo.getxPos(),ufo.getyPos(),ufo.getWidth(), ufo.getHeight());
         // วาด player ทุก frame
         player.render(gc);
 

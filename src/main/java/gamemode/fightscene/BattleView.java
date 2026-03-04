@@ -38,7 +38,7 @@ public class BattleView extends BorderPane {
 
         // ===== ENEMY (top-right) =====
         ImageView enemyPic = new ImageView(
-                new Image(getClass().getResource("/forest/dinosaur.png").toExternalForm())
+                new Image(getClass().getResource("/forest/"+enemy.getName() +".PNG").toExternalForm())
         );
         enemyPic.setFitWidth(220);
         enemyPic.setPreserveRatio(true);
@@ -48,7 +48,7 @@ public class BattleView extends BorderPane {
         VBox enemyGroup = new VBox(8, enemyInfo, enemyPic);
         enemyGroup.setAlignment(Pos.CENTER);
         AnchorPane.setTopAnchor(enemyGroup, 20.0);
-        AnchorPane.setRightAnchor(enemyGroup, 60.0);
+        AnchorPane.setRightAnchor(enemyGroup, 300.0);
 
         // ===== PLAYER (bottom-left) =====
         ImageView playerPic = new ImageView(

@@ -6,12 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import gamemode.lobby.logic.GameLogic;
-import javafx.scene.layout.VBox;
 
 public class SpawnScreen extends StackPane {
 
@@ -29,10 +26,16 @@ public class SpawnScreen extends StackPane {
         setMaxSize(1422,800);
         setMinSize(1422,800);
 
-        Image ImgBck  = new Image(getClass().getResource("/gamemode/lobby/background.png").toExternalForm());
+        Image ImgBck  = new Image(getClass().getResource("/gamemode/lobby/background.jpg").toExternalForm());
         BackgroundSize size = new BackgroundSize(1440,800,false,false,false,false);
 
-        //setBackground(new Background(new BackgroundImage(ImgBck,null,null,null,size)));
+        setBackground(new Background(new BackgroundImage(
+                ImgBck,
+                javafx.scene.layout.BackgroundRepeat.NO_REPEAT,
+                javafx.scene.layout.BackgroundRepeat.NO_REPEAT,
+                javafx.scene.layout.BackgroundPosition.CENTER,
+                size
+        )));
 
         //money box
         moneyLabel = new Label("Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $");
