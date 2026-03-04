@@ -2,6 +2,7 @@ package gamemode.lobby.logic;
 
 import gamemode.lobby.Player.Player;
 import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.*;
 
 import java.util.concurrent.CountDownLatch;
@@ -33,14 +34,8 @@ class GameLogicTest {
      * Setup before each test.
      */
     @BeforeAll
-    static void initJavaFX() throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-
-        Platform.startup(() -> {
-            latch.countDown();
-        });
-
-        latch.await();
+    static void initJavaFX() {
+        new JFXPanel(); // initializes JavaFX safely
     }
 
     @BeforeEach
