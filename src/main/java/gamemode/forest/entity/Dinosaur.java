@@ -157,7 +157,7 @@ public abstract class Dinosaur {
     }
 
     public void takeDamage(int damage) {
-        this.setHp(this.getHp()-damage);
+        setHp(getHp()-damage);
     }
 
     public double getWidth() { return width; }
