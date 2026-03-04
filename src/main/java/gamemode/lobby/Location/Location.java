@@ -1,9 +1,8 @@
 package gamemode.lobby.Location;
 
-import gamemode.lobby.Interfaces.Interactable;
 import javafx.scene.image.Image;
 
-public abstract class Location implements Interactable {
+public abstract class Location {
     private String uml,name;
     private double xPos ,yPos ;
     private int height,width;

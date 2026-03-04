@@ -23,6 +23,8 @@ public class IntroScene {
     private MediaPlayer introPlayer;
     private MediaPlayer loopPlayer;
 
+    private boolean ending = false;
+
     public IntroScene() {
 
         StackPane root = new StackPane();
@@ -76,7 +78,8 @@ public class IntroScene {
 
         // ---------------- KEY LISTENER ----------------
         scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.F) {
+            if (e.getCode() == KeyCode.F && !ending) {
+                this.ending = true;
                 stopAll();
                 GameController.getInstance().switchScene(
                         new ChongsamVideoScene().getScene()
