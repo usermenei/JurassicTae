@@ -77,6 +77,13 @@ public class MainMenu {
 
         instruction.setEffect(new DropShadow(10, Color.BLACK));
 
+        // ================= FEE =================
+        Text feeText = new Text("Fee: 500");
+        feeText.setFont(Font.loadFont(
+                getClass().getResourceAsStream("/fonts/pixel.ttf"), 28));
+        feeText.setFill(Color.DARKRED);
+        feeText.setEffect(new DropShadow(10, Color.BLACK));
+
         // ================= BUTTONS =================
         Button startBtn = createButton("START GAME", onStart);
         Button exitBtn = createButton("EXIT", onExit);
@@ -85,6 +92,7 @@ public class MainMenu {
                 titleWrapper,
                 lastScore,
                 instruction,
+                feeText,
                 startBtn,
                 exitBtn
         );

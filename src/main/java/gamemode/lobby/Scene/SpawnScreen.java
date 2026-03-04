@@ -205,4 +205,8 @@ public class SpawnScreen extends StackPane {
 
         expBar.setProgress(progress);
     }
+
+    public void updateMoney(){
+        moneyLabel.setText("Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $");
+    }
 }

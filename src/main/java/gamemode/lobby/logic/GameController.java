@@ -35,7 +35,7 @@ public class GameController {
     private Stage stage;
     private Scene mainScene;
     private SpawnScreen root;
-    private Player player;
+    private Player player = GameLogic.getInstance().getPlayer();
 
     private KeyboardController keyboard;
     private boolean gameEnded;
@@ -143,7 +143,11 @@ public class GameController {
     }
 
     private void startActualGymGame() {
-
+        if(player.getMoney() < 500){
+            return;
+        }
+        player.setMoney(player.getMoney() - 500);
+        GameController.getInstance().getRoot().updateMoney();
         Image red = new Image(
                 getClass().getResource("/gamemode/gym/redtile.png").toExternalForm()
         );
