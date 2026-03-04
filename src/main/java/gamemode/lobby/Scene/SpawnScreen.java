@@ -52,7 +52,7 @@ public class SpawnScreen extends StackPane {
                         "-fx-border-width: 2;" +
                         "-fx-background-radius: 8;" +
                         "-fx-border-radius: 8;" +
-                        "-fx-padding: 5 12 5 12;"
+                        "-fx-padding: 10 25 10 25;"
         );
         moneyBox.setMaxSize(StackPane.USE_PREF_SIZE, StackPane.USE_PREF_SIZE);
 
@@ -76,7 +76,7 @@ public class SpawnScreen extends StackPane {
                         "-fx-border-width: 2;" +
                         "-fx-background-radius: 8;" +
                         "-fx-border-radius: 8;" +
-                        "-fx-padding: 5;"
+                        "-fx-padding: 10 25 10 25;"
         );
 
         //************************************************************
