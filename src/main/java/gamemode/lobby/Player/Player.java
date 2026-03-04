@@ -11,6 +11,7 @@ import gamemode.lobby.Item.Weapon.DinoBall;
 import gamemode.lobby.Location.*;
 import gamemode.lobby.Scene.SpawnCanvas;
 import gamemode.lobby.Scene.SpawnScreen;
+import gamemode.lobby.logic.GameLogic;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -24,7 +25,7 @@ public class Player {
     private final String name;
     private int money;
     private int hp,maxHp;
-    private int strength,baseStrength = 40;
+    private int strength,baseStrength = 30;
     private int exp;
     private int level;
     private ArrayList<Item> inventory;
@@ -51,7 +52,7 @@ public class Player {
 
     private boolean isMoving = false;
     private boolean facingRight = true;
-
+    private int expToNextLevel = 100;
 
     //constructor
     public Player(double x,double y) {
@@ -305,13 +306,6 @@ public class Player {
             System.out.println("Speed Boost Ended");
         }
     }
-
-    public void addExp(int amount) {
-        if (expBoostActive) {
-            amount *= 2;
-        }
-        setExp(exp + amount);
-    }
     public void setMoving(boolean moving) {
         this.isMoving = moving;
     }
@@ -322,5 +316,37 @@ public class Player {
             inventory.add(new TamedDinosaur(dinosaur));
         }
     }
+
+    public void addExp(int amount) {
+
+        if (expBoostActive) {
+            amount *= 2;
+        }
+
+        setExp(exp + amount);
+
+        while (exp >= expToNextLevel) {
+            levelUp();
+        }
+        GameController.getInstance().getRoot().updateExpBar();
+    }
+
+    private void levelUp() {
+        exp -= expToNextLevel;
+        level++;
+
+        expToNextLevel += 50;
+
+        ///upgrade stat
+        maxHp += 5;
+        strength += 2;
+
+        setHp(maxHp); // heal เต็มตอนเลเวลอัป
+
+        GameController.getInstance().getRoot().updateLevel();
+        System.out.println("LEVEL UP! Now level " + level);
+    }
+
+    public int getExpToNextLevel(){return expToNextLevel;}
 
 }

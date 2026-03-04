@@ -8,8 +8,25 @@ import gamemode.gym.scene.MainMenu;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.Scene.SpawnScreen;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.text.Font;
+
+import javafx.scene.paint.Color;
+
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 
 public class GameController {
 
@@ -149,7 +166,67 @@ public class GameController {
                 bg,
                 score -> {
                     lastGymScore = score;
-                    startGymMiniGame();
+
+                    int bonusStrength = score / 100;
+
+                    Player player = GameLogic.getInstance().getPlayer();
+                    player.setStrength(player.getStrength() + bonusStrength);
+
+                    // ===== CUSTOM POPUP =====
+                    StackPane popupRoot = new StackPane();
+                    popupRoot.setStyle("-fx-background-color: rgba(0,0,0,0.6);");
+
+                    VBox box = new VBox(20);
+                    box.setAlignment(Pos.CENTER);
+                    box.setPadding(new Insets(30));
+
+                    box.setBackground(new Background(
+                            new BackgroundFill(
+                                    Color.rgb(20, 20, 20),
+                                    new CornerRadii(20),
+                                    null
+                            )
+                    ));
+
+                    box.setBorder(new Border(
+                            new BorderStroke(
+                                    Color.LIME,
+                                    BorderStrokeStyle.SOLID,
+                                    new CornerRadii(20),
+                                    new BorderWidths(3)
+                            )
+                    ));
+
+                    Text title = new Text("WORKOUT COMPLETE!");
+                    title.setFont(Font.loadFont(
+                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 40));
+                    title.setFill(Color.WHITE);
+
+                    Text scoreText = new Text("Score: " + score);
+                    scoreText.setFont(Font.loadFont(
+                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    scoreText.setFill(Color.CYAN);
+
+                    Text rewardText = new Text("Strength + " + bonusStrength);
+                    rewardText.setFont(Font.loadFont(
+                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 35));
+                    rewardText.setFill(Color.LIME);
+
+                    Button okBtn = new Button("OK");
+                    okBtn.setFont(Font.loadFont(
+                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 28));
+                    okBtn.setPrefWidth(200);
+                    okBtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
+
+                    okBtn.setOnAction(e -> {
+                        startGymMiniGame();
+                    });
+
+                    box.getChildren().addAll(title, scoreText, rewardText, okBtn);
+                    popupRoot.getChildren().add(box);
+
+                    Scene popupScene = new Scene(popupRoot, 1422, 800);
+                    stage.setScene(popupScene);
                 }
         );
 
