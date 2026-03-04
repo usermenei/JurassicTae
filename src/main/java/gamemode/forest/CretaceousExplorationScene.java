@@ -23,11 +23,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class
-CretaceousExplorationScene {
+public class CretaceousExplorationScene {
 
-    private static final int WIDTH = 1422;
+    private static final int WIDTH  = 1422;
     private static final int HEIGHT = 800;
+
+    // ✅ Static flag — survives re-entry, resets only on full game restart
+    private static boolean hasShownForestIntro = false;
 
     private final Scene scene;
     private final Player player;
@@ -40,16 +42,13 @@ CretaceousExplorationScene {
     private double cameraX;
     private double cameraY;
 
-    /* =========================
-       ⭐ CALLBACKS (UPDATED)
-       ========================= */
     private final Consumer<Dinosaur> onEnterBattle;
     private final Runnable onExitWorld;
 
     private AnimationTimer gameLoop;
     private InventoryPane inventoryPane;
     private StackPane uiLayer;
-    private VBox inventoryPopup;
+
     /* =========================
        CONSTRUCTOR
        ========================= */
@@ -57,12 +56,11 @@ CretaceousExplorationScene {
             Consumer<Dinosaur> onEnterBattle,
             Runnable onExitWorld
     ) {
-
         this.onEnterBattle = onEnterBattle;
-        this.onExitWorld = onExitWorld;
+        this.onExitWorld   = onExitWorld;
 
-        StackPane root = new StackPane();
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        StackPane root   = new StackPane();
+        Canvas canvas    = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         uiLayer = new StackPane();
 
@@ -88,10 +86,12 @@ CretaceousExplorationScene {
         inventoryButton.setLayoutY(20);
 
         inventoryButton.setOnAction(e -> toggleInventory());
+
         inventoryPane = new InventoryPane();
         inventoryPane.setVisible(false);
-        uiLayer.getChildren().addAll(inventoryButton,inventoryPane);
-        StackPane.setAlignment(inventoryButton,Pos.TOP_RIGHT);
+
+        uiLayer.getChildren().addAll(inventoryButton, inventoryPane);
+        StackPane.setAlignment(inventoryButton, Pos.TOP_RIGHT);
         StackPane.setMargin(inventoryButton, new Insets(20));
         StackPane.setAlignment(inventoryPane, Pos.CENTER);
 
@@ -100,32 +100,55 @@ CretaceousExplorationScene {
         player = new Player(0, 0);
 
         worldManager = new WorldManager(player);
-        renderer = new WorldRenderer(gc, player, worldManager);
+        renderer     = new WorldRenderer(gc, player, worldManager);
 
-        /* =========================
-           ⭐ REGISTER BATTLE CALLBACK
-           ========================= */
         worldManager.setOnBattleTriggered(enemy -> {
-            if (gameLoop != null) {
-                gameLoop.stop();           // ⏸ freeze world
-            }
-            onEnterBattle.accept(enemy);   // 🔥 send dinosaur to lobby GC
+            if (gameLoop != null) gameLoop.stop();
+            onEnterBattle.accept(enemy);
         });
 
         setupInput();
         startGameLoop(gc);
+
+        // ===== ONE-TIME INTRO DIALOGUE =====
+        if (!hasShownForestIntro) {
+            hasShownForestIntro = true;
+
+            javafx.animation.PauseTransition intro =
+                    new javafx.animation.PauseTransition(javafx.util.Duration.seconds(0.5));
+
+            intro.setOnFinished(e -> {
+                DialogueManager.getInstance().queueDialogue(
+                        "P'Tae",
+                        "So this is the Cretaceous world... dinosaurs roam freely here.",
+                        "/character/ptae.png"
+                );
+                DialogueManager.getInstance().queueDialogue(
+                        "P'Tae",
+                        "I need to weaken a dinosaur below 10% HP before throwing a DinoBall to catch it.",
+                        "/character/ptae.png"
+                );
+                DialogueManager.getInstance().queueDialogue(
+                        "P'Tae",
+                        "Press E to pick up any items I find on the ground.",
+                        "/character/ptae.png"
+                );
+                DialogueManager.getInstance().queueDialogue(
+                        "P'Tae",
+                        "And if it gets too dangerous... ESC will bring me back to the lobby. Stay sharp!",
+                        "/character/ptae.png"
+                );
+            });
+
+            intro.play();
+        }
     }
 
     /* =========================
        GETTERS
        ========================= */
-    public Scene getScene() {
-        return scene;
-    }
-
-    public WorldManager getWorldManager() {
-        return worldManager;
-    }
+    public Scene getScene()             { return scene;       }
+    public WorldManager getWorldManager() { return worldManager; }
 
     /* =========================
        INPUT
@@ -133,17 +156,14 @@ CretaceousExplorationScene {
     private void setupInput() {
 
         scene.setOnKeyPressed(e -> {
-
             keys.add(e.getCode());
 
-            // Pick up item
             if (e.getCode() == KeyCode.E) {
                 worldManager.handlePickup();
             }
         });
 
         scene.setOnKeyReleased(e -> {
-
             keys.remove(e.getCode());
 
             if (e.getCode() == KeyCode.TAB) {
@@ -151,10 +171,7 @@ CretaceousExplorationScene {
             }
         });
 
-        // Mouse click closes dialogue
-        scene.setOnMousePressed(e ->
-                DialogueManager.getInstance().onClick()
-        );
+        scene.setOnMousePressed(e -> DialogueManager.getInstance().onClick());
     }
 
     /* =========================
@@ -165,18 +182,9 @@ CretaceousExplorationScene {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
                 update();
-
-                // 1️⃣ Render world (camera space)
                 renderer.render(cameraX, cameraY);
-
-                // 2️⃣ Render dialogue (UI space)
-                DialogueManager.getInstance().render(
-                        gc,
-                        WIDTH,
-                        HEIGHT
-                );
+                DialogueManager.getInstance().render(gc, WIDTH, HEIGHT);
             }
         };
 
@@ -188,7 +196,6 @@ CretaceousExplorationScene {
        ========================= */
     private void update() {
 
-        // Exit world
         if (keys.contains(KeyCode.ESCAPE)) {
             gameLoop.stop();
             worldManager.shutdown();
@@ -197,57 +204,52 @@ CretaceousExplorationScene {
         }
 
         player.updateBuffs();
-        // Dialogue active → freeze movement
+
+        // Freeze movement while dialogue is active
         if (DialogueManager.getInstance().isActive()) {
             DialogueManager.getInstance().update();
             return;
         }
 
-        double speed = 5;
-
+        double speed  = 5;
         boolean moving = false;
 
         if (keys.contains(KeyCode.A)) {
             player.setX(player.getX() - speed);
             player.setMoving(true);
-            player.setFacingRight(false);   // 👈 flip left
+            player.setFacingRight(false);
             moving = true;
         }
-
         if (keys.contains(KeyCode.D)) {
             player.setX(player.getX() + speed);
             player.setMoving(true);
-            player.setFacingRight(true);    // 👈 face right
+            player.setFacingRight(true);
             moving = true;
         }
-
         if (keys.contains(KeyCode.W)) {
             player.setY(player.getY() - speed);
             player.setMoving(true);
             moving = true;
         }
-
         if (keys.contains(KeyCode.S)) {
             player.setY(player.getY() + speed);
             player.setMoving(true);
             moving = true;
         }
 
-        if (!moving) {
-            player.setMoving(false);
-        }
+        if (!moving) player.setMoving(false);
 
-        // Camera follows player
-        cameraX = player.getX() - WIDTH / 2.0;
+        cameraX = player.getX() - WIDTH  / 2.0;
         cameraY = player.getY() - HEIGHT / 2.0;
 
         worldManager.update();
     }
 
+    /* =========================
+       PUBLIC METHODS
+       ========================= */
     public void resumeWorld() {
-        if (gameLoop != null) {
-            gameLoop.start();
-        }
+        if (gameLoop != null) gameLoop.start();
     }
 
     public void clearInput() {
@@ -256,11 +258,7 @@ CretaceousExplorationScene {
 
     private void toggleInventory() {
         boolean isOpen = inventoryPane.isVisible();
-
-        if (!isOpen) {
-            inventoryPane.loadItems();
-        }
-
+        if (!isOpen) inventoryPane.loadItems();
         inventoryPane.setVisible(!isOpen);
     }
 }
