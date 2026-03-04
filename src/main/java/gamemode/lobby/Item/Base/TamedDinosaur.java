@@ -7,7 +7,6 @@ import gamemode.lobby.Interfaces.Sellable;
 
 public class TamedDinosaur extends Item implements Sellable {
     //field
-    private Image image;
     private final int sellPrice;
     private Dinosaur dinosaur;
 
@@ -22,10 +21,6 @@ public class TamedDinosaur extends Item implements Sellable {
     @Override
     public int getSellPrice() {
         return sellPrice;
-    }
-
-    public Image getImage(){
-        return image;
     }
 
     public Dinosaur getDinosaur(){return dinosaur;}
