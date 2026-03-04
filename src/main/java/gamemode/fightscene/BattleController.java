@@ -100,11 +100,11 @@ public class BattleController {
 
                 commandBox.setMessage(selectedPotion.getName() + " used!");
 
-                playerTurn = false;
-
-                PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(event -> enemyTurn());
-                pause.play();
+//                playerTurn = false;
+//
+//                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+//                pause.setOnFinished(event -> enemyTurn());
+//                pause.play();
             });
         });
 
