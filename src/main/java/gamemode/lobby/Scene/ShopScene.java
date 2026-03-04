@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,9 @@ public class ShopScene extends StackPane {
 
         // 🔶 Title
         Label title = new Label("SHOP");
+        Font font = Font.loadFont(
+                getClass().getResourceAsStream("/fonts/pixel.ttf"),16);
+        title.setFont(font);
         title.setStyle("""
             -fx-background-color: #ffcc00;
             -fx-text-fill: black;
