@@ -57,9 +57,10 @@ public class Player {
         this.strength = baseStrength;
         this.name = "Tae";
         setMoney(0);
-        setHp(100);
         setExp(0);
         setLevel(1);
+        setMaxHp(100);
+        setHp(100);
         inventory = new ArrayList<>();
 
         this.x = x;
@@ -278,7 +279,7 @@ public class Player {
                 System.out.println("Speed Boost Activated!");
             }
 
-            case "Strngth Potion" -> {
+            case "Strength Potion" -> {
                 strength = strength * 2;
                 System.out.println("Strength Boost Activated!");
             }

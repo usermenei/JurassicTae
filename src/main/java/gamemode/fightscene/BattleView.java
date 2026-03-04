@@ -2,6 +2,7 @@ package gamemode.fightscene;
 
 import gamemode.forest.entity.Dinosaur;
 import gamemode.lobby.logic.GameController;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,7 +17,12 @@ public class BattleView extends BorderPane {
         this.enemy = enemy;
         this.controller = controller;
 
+        /* =========================
+           BATTLE AREA (CENTER)
+           ========================= */
+
         StackPane battleArea = new StackPane();
+        battleArea.setPrefHeight(600); // ⭐ บังคับความสูงฉาก
 
         ImageView background = new ImageView(
                 new Image(getClass().getResource("/forest/bg.jpg").toExternalForm())
@@ -27,6 +33,8 @@ public class BattleView extends BorderPane {
 
         Pane characterLayer = new Pane();
         characterLayer.setMouseTransparent(true);
+
+        /* ===== ENEMY ===== */
 
         ImageView enemyPic = new ImageView(
                 new Image(getClass().getResource("/forest/dinosaur.png").toExternalForm())
@@ -39,6 +47,8 @@ public class BattleView extends BorderPane {
         enemyInfo = new InfoBox(enemy.getName(), enemy.getHp());
         enemyInfo.setLayoutX(820);
         enemyInfo.setLayoutY(60);
+
+        /* ===== PLAYER ===== */
 
         ImageView playerPic = new ImageView(
                 new Image(getClass().getResource("/forest/player.png").toExternalForm())
@@ -59,16 +69,27 @@ public class BattleView extends BorderPane {
 
         battleArea.getChildren().addAll(background, characterLayer);
 
+        /* =========================
+           COMMAND BOX (BOTTOM)
+           ========================= */
+
         CommandBox commandBox = new CommandBox("What will P'Tae do?");
+        commandBox.setPrefHeight(200);        // ⭐ บังคับความสูง
+        commandBox.setMinHeight(200);
+        commandBox.setMaxHeight(200);
+
         new BattleController(commandBox, this, enemy);
 
         setCenter(battleArea);
         setBottom(commandBox);
+
+        BorderPane.setAlignment(commandBox, Pos.CENTER);
     }
 
     /* =========================
-       UI ONLY
+       UI UPDATE METHODS
        ========================= */
+
     public void updateEnemyHp() {
         enemyInfo.setHp(enemy.getHp());
     }
@@ -77,5 +98,7 @@ public class BattleView extends BorderPane {
         controller.onEnemyDefeated(enemy);
     }
 
-    public void onEscape() {controller.returnToWorld();}
+    public void onEscape() {
+        controller.returnToWorld();
+    }
 }

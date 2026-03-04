@@ -51,7 +51,10 @@ public class CarnivoreDinosaur extends Dinosaur {
         // ========================
         if (distance < AGGRO_RANGE) {
 
-            moveToward(player.getX(), player.getY());
+            moveToward(
+                    player.getX() + player.getWidth() / 2.0,
+                    player.getY() + player.getHeight() / 2.0
+            );
 
         } else {
 

@@ -207,11 +207,13 @@ CretaceousExplorationScene {
 
         if (keys.contains(KeyCode.W)) {
             player.setY(player.getY() - speed);
+            player.setMoving(true);
             moving = true;
         }
 
         if (keys.contains(KeyCode.S)) {
             player.setY(player.getY() + speed);
+            player.setMoving(true);
             moving = true;
         }
 

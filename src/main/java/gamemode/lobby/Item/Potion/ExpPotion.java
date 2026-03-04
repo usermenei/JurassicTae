@@ -1,6 +1,7 @@
 package gamemode.lobby.Item.Potion;
 
 import gamemode.lobby.Item.Base.Potion;
+import gamemode.lobby.Player.Player;
 import javafx.scene.image.Image;
 
 public class ExpPotion extends Potion {
@@ -13,4 +14,5 @@ public class ExpPotion extends Potion {
     public Image getImage(){
         return  image;
     }
+
 }

@@ -1,41 +1,46 @@
 package gamemode.fightscene;
 
+import gamemode.lobby.Item.Base.Potion;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
-public class CommandBox extends VBox {
+import java.util.List;
+import java.util.function.Consumer;
 
-    private final Label promptLabel;   // left
-    private final Label messageLabel;  // right
+public class CommandBox extends VBox {
 
     private final Button fightBtn;
     private final Button bagBtn;
     private final Button catchBtn;
     private final Button escapeBtn;
 
+    private final GridPane buttons;
+    private final VBox dynamicBox;
+    private final StackPane centerStack;
+
+    private final Label messageLabel;
+
     public CommandBox(String promptText) {
 
-        setMinHeight(180);
+        setPrefHeight(200);
+        setMinHeight(200);
+        setMaxHeight(200);
+
         setPadding(new Insets(20));
-        setSpacing(12);
+        setSpacing(15);
         setStyle("-fx-background-color: #2b2b2b;");
 
-        /* ===== TOP TEXT ROW ===== */
-        promptLabel = new Label(promptText);
+        /* ===== PROMPT ===== */
+
+        Label promptLabel = new Label(promptText);
         promptLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16;");
 
-        messageLabel = new Label("");
-        messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16;");
+        /* ===== BUTTON GRID ===== */
 
-        VBox leftCol = new VBox();
-        leftCol.setAlignment(Pos.CENTER_LEFT);
-        leftCol.setSpacing(10);
-
-        /* ===== BUTTONS ===== */
-        GridPane buttons = new GridPane();
+        buttons = new GridPane();
         buttons.setHgap(15);
         buttons.setVgap(15);
 
@@ -49,62 +54,95 @@ public class CommandBox extends VBox {
         buttons.add(catchBtn, 0, 1);
         buttons.add(escapeBtn, 1, 1);
 
-        leftCol.getChildren().addAll(promptLabel, buttons);
+        /* ===== DYNAMIC MENU ===== */
 
-        HBox panel = new HBox();
-        panel.setSpacing(10);
+        dynamicBox = new VBox();
+        dynamicBox.setSpacing(10);
+        dynamicBox.setAlignment(Pos.CENTER_LEFT);
+        dynamicBox.setVisible(false);
 
-        // push messageLabel to the right
-        Region spacer = new Region();
-        spacer.setPrefWidth(100);
-        HBox.setHgrow(spacer, Priority.NEVER);
+        /* ===== STACK ===== */
 
-        panel.getChildren().addAll(leftCol, spacer, messageLabel);
+        centerStack = new StackPane(buttons, dynamicBox);
+        centerStack.setAlignment(Pos.CENTER_LEFT);
 
-        getChildren().add(panel);
+        /* ===== MESSAGE ===== */
+
+        messageLabel = new Label("");
+        messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14;");
+
+        /* ===== ADD EVERYTHING ===== */
+
+        getChildren().addAll(promptLabel, centerStack, messageLabel);
     }
+
+    /* ===============================
+       POTION MENU
+       =============================== */
+
+    public void showPotionMenu(List<Potion> potions, Consumer<Potion> onSelect) {
+
+        buttons.setVisible(false);
+        dynamicBox.setVisible(true);
+        dynamicBox.getChildren().clear();
+
+        Label title = new Label("Choose Potion:");
+        title.setStyle("-fx-text-fill: white;");
+        dynamicBox.getChildren().add(title);
+
+        for (Potion potion : potions) {
+
+            Button btn = createButton(potion.getName());
+
+            btn.setOnAction(e -> {
+                clearDynamicMenu();
+                onSelect.accept(potion);
+            });
+
+            dynamicBox.getChildren().add(btn);
+        }
+
+        Button back = createButton("BACK");
+        back.setOnAction(e -> clearDynamicMenu());
+
+        dynamicBox.getChildren().add(back);
+    }
+
+    public void clearDynamicMenu() {
+        dynamicBox.setVisible(false);
+        buttons.setVisible(true);
+    }
+
+    /* ===============================
+       BUTTON STYLE
+       =============================== */
 
     private Button createButton(String text) {
         Button b = new Button(text);
         b.setPrefSize(140, 45);
 
-        String normal = """
+        b.setStyle("""
             -fx-background-color: #3a3a3a;
             -fx-text-fill: white;
             -fx-border-color: #9e9e9e;
             -fx-border-width: 2;
             -fx-background-radius: 6;
             -fx-border-radius: 6;
-        """;
-
-        String hover = """
-            -fx-background-color: #555555;
-            -fx-text-fill: white;
-            -fx-border-color: white;
-            -fx-border-width: 2;
-            -fx-background-radius: 6;
-            -fx-border-radius: 6;
-        """;
-
-        b.setStyle(normal);
-        b.setOnMouseEntered(e -> b.setStyle(hover));
-        b.setOnMouseExited(e -> b.setStyle(normal));
+        """);
 
         return b;
     }
 
-    /* ===== getters ===== */
+    /* ===============================
+       GETTERS
+       =============================== */
+
     public Button getFightButton() { return fightBtn; }
     public Button getBagButton() { return bagBtn; }
     public Button getCatchButton() { return catchBtn; }
     public Button getEscapeButton() { return escapeBtn; }
 
-    /* ===== message control ===== */
-    public void setMessage(String text) {
-        messageLabel.setText(text);
-    }
-
-    public void clearMessage() {
-        messageLabel.setText("");
+    public void setMessage(String msg) {
+        messageLabel.setText(msg);
     }
 }
