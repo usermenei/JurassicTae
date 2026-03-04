@@ -2,10 +2,8 @@ package gamemode.lobby.Item.Base;
 
 import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Interfaces.Sellable;
-import gamemode.lobby.Interfaces.Useable;
-import gamemode.lobby.Player.Player;
 
-public abstract class Potion extends Item implements Useable, Buyable, Sellable {
+public abstract class Potion extends Item implements Buyable, Sellable {
     //field
     private final int buyPrice;
     private final int sellPrice;
@@ -20,10 +18,6 @@ public abstract class Potion extends Item implements Useable, Buyable, Sellable 
     @Override
     public int getBuyPrice() {
         return buyPrice;
-    }
-
-    //method
-    public void use(Player player) {
     }
 
     @Override

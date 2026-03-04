@@ -196,15 +196,15 @@ public class WorldManager {
     }
 
     private boolean isColliding(Player p, Dinosaur d) {
-
         double dx = (p.getX() + p.getWidth()/2.0) -
                 (d.getX() + d.getWidth()/2.0);
 
         double dy = (p.getY() + p.getHeight()/2.0) -
                 (d.getY() + d.getHeight()/2.0);
 
-        double combinedHalfWidths  = (p.getWidth() + d.getWidth()) / 2.0;
-        double combinedHalfHeights = (p.getHeight() + d.getHeight()) / 2.0;
+        double shrinkFactor = 0.5;
+        double combinedHalfWidths  = (p.getWidth() * shrinkFactor + d.getWidth() * shrinkFactor) / 2.0;
+        double combinedHalfHeights = (p.getHeight() * shrinkFactor + d.getHeight() * shrinkFactor) / 2.0;
 
         return Math.abs(dx) < combinedHalfWidths &&
                 Math.abs(dy) < combinedHalfHeights;
