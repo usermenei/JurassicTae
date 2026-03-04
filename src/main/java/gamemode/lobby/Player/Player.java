@@ -56,7 +56,7 @@ public class Player {
         this.speed = baseSpeed;
         this.strength = baseStrength;
         this.name = "Tae";
-        setMoney(0);
+        setMoney(1000);
         setExp(0);
         setLevel(1);
         setMaxHp(200);

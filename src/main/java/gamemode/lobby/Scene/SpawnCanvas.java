@@ -16,12 +16,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class SpawnCanvas extends Canvas {
-    private GraphicsContext gc ;
+    private GraphicsContext gc;
     private Player player = GameLogic.getInstance().getPlayer();
-    private Image shopImg,zooImg,ufoImg,gymImg;
+    private Image shopImg, zooImg, ufoImg, gymImg;
     private boolean fWasPressed = false;
-    private boolean showEnterShop = false,showEnterSell = false,showEnterGym = false,showEnterUfo = false;
-    public SpawnCanvas(){
+    private boolean fDialogueWasPressed = false;
+    private boolean showEnterShop = false, showEnterSell = false, showEnterGym = false, showEnterUfo = false;
 
     public SpawnCanvas() {
 
@@ -31,16 +31,6 @@ public class SpawnCanvas extends Canvas {
         for (int i = 0; i < 3; i++) player.addItem(new DinoBall());
 
         gc = this.getGraphicsContext2D();
-
-        shop = new Shop();
-        zoo  = new Zoo();
-        gym  = new Gym();
-        ufo  = new Ufo();
-
-        shopImg = shop.getImage();
-        zooImg  = zoo.getImage();
-        gymImg  = gym.getImage();
-        ufoImg  = ufo.getImage();
 
         startGameLoop();
 
@@ -139,17 +129,17 @@ public class SpawnCanvas extends Canvas {
         int dx = 0;
         int dy = 0;
 
-        if (keyboard.isLeftPressed())  dx = -1;
+        if (keyboard.isLeftPressed()) dx = -1;
         if (keyboard.isRightPressed()) dx = 1;
-        if (keyboard.isUpPressed())    dy = -1;
-        if (keyboard.isDownPressed())  dy = 1;
+        if (keyboard.isUpPressed()) dy = -1;
+        if (keyboard.isDownPressed()) dy = 1;
 
         player.move(dx, dy);
 
-        showEnterShop = player.intersects(80,75,250,500);
-        showEnterGym = player.intersects(80,450,250,500);
-        showEnterSell = player.intersects(800,75,250,500);
-        showEnterUfo = player.intersects(800,450,250,500);
+        showEnterShop = player.intersects(80, 75, 250, 500);
+        showEnterGym = player.intersects(80, 450, 250, 500);
+        showEnterSell = player.intersects(800, 75, 250, 500);
+        showEnterUfo = player.intersects(800, 450, 250, 500);
 
         // ===== F KEY — dialogue skip (fires once per press) =====
         if (keyboard.isFPressed() && !fDialogueWasPressed) {
@@ -192,15 +182,13 @@ public class SpawnCanvas extends Canvas {
 
         if (showEnterShop) {
             drawPressMessage("SHOP");
-        }else if(showEnterSell){
+        } else if (showEnterSell) {
             drawPressMessage("ZOO");
-        }else if(showEnterUfo){
+        } else if (showEnterUfo) {
             drawPressMessage("UFO");
-        }else if(showEnterGym){
+        } else if (showEnterGym) {
             drawPressMessage("GYM");
         }
-    }
-
         // ✅ Reset after drawPressMessage so dialogue text is never shifted
         gc.setTextAlign(TextAlignment.LEFT);
         gc.setTextBaseline(VPos.BASELINE);
@@ -208,7 +196,7 @@ public class SpawnCanvas extends Canvas {
 
     // ===================================================
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
@@ -233,10 +221,11 @@ public class SpawnCanvas extends Canvas {
         double lineHeight = font.getSize() + 10;
 
         double boxWidth = 300;
-        double boxHeight = (lineHeight * lines.length) + padding ;
+        double padding = 25;
+        double boxHeight = (lineHeight * lines.length) + padding;
 
-        int xPos,width=500,yPos,height=250;
-        switch (location){
+        int xPos, width = 500, yPos, height = 250;
+        switch (location) {
             case "SHOP":
                 xPos = 80;
                 yPos = 75;
@@ -277,3 +266,4 @@ public class SpawnCanvas extends Canvas {
         }
     }
 }
+
