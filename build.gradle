@@ -24,8 +24,12 @@ dependencies {
     testImplementation 'org.testfx:testfx-junit5:4.0.17'
     testImplementation 'org.hamcrest:hamcrest:2.2'
 
+    // JUnit 5 — full suite including params
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'  // ← fixes @ParameterizedTest / @ValueSource
+    testRuntimeOnly    'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 }
 
 javafx {
@@ -34,7 +38,7 @@ javafx {
 }
 
 application {
-    mainClass = 'main.Main' // path to your main class
+    mainClass = 'main.Main'
 }
 
 run {
@@ -58,23 +62,16 @@ test {
 
 // Configure the JAR task to include source code
 jar {
-    // Set duplicate handling strategy
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // Include compiled classes (default behavior)
     from sourceSets.main.output
-
-    // Include source code
     from sourceSets.main.allSource
 
-    // Make it executable by setting the main class
     manifest {
         attributes(
                 'Main-Class': application.mainClass.get()
-                //'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' ')
         )
     }
 
-    // Set archive name
     archiveFileName = "${project.name}-${project.version}-with-sources.jar"
 }

@@ -182,7 +182,7 @@ public class Player {
         if (x < 0) x = 0;
         if (x > 1422 - WIDTH) x = 1422 - WIDTH;
 
-        if (y < 0) y = 0;
+        if (y < 90) y = 90;
         if (y > 800 - HEIGHT) y = 800 - HEIGHT;
 
         if (!isMoving) {
