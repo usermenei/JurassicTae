@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 
 public class CommandBox extends VBox {
 
+    private static final int ITEMS_PER_PAGE = 2;
+
     private final Button fightBtn;
     private final Button bagBtn;
     private final Button catchBtn;
@@ -23,6 +25,9 @@ public class CommandBox extends VBox {
 
     private final Label messageLabel;
 
+    private int currentPage = 0;
+    private List<Potion> currentPotions;
+
     public CommandBox(String promptText) {
 
         setPrefHeight(200);
@@ -33,12 +38,8 @@ public class CommandBox extends VBox {
         setSpacing(15);
         setStyle("-fx-background-color: #2b2b2b;");
 
-        /* ===== PROMPT ===== */
-
         Label promptLabel = new Label(promptText);
         promptLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16;");
-
-        /* ===== BUTTON GRID ===== */
 
         buttons = new GridPane();
         buttons.setHgap(15);
@@ -54,44 +55,51 @@ public class CommandBox extends VBox {
         buttons.add(catchBtn, 0, 1);
         buttons.add(escapeBtn, 1, 1);
 
-        /* ===== DYNAMIC MENU ===== */
-
         dynamicBox = new VBox();
-        dynamicBox.setSpacing(10);
+        dynamicBox.setSpacing(8);
         dynamicBox.setAlignment(Pos.CENTER_LEFT);
         dynamicBox.setVisible(false);
-
-        /* ===== STACK ===== */
 
         centerStack = new StackPane(buttons, dynamicBox);
         centerStack.setAlignment(Pos.CENTER_LEFT);
 
-        /* ===== MESSAGE ===== */
-
         messageLabel = new Label("");
-        messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14;");
-
-        /* ===== ADD EVERYTHING ===== */
+        messageLabel.setStyle("-fx-text-fill: white;");
 
         getChildren().addAll(promptLabel, centerStack, messageLabel);
     }
 
     /* ===============================
-       POTION MENU
+       PAGINATED POTION MENU
        =============================== */
 
     public void showPotionMenu(List<Potion> potions, Consumer<Potion> onSelect) {
 
+        this.currentPotions = potions;
+        this.currentPage = 0;
+
         buttons.setVisible(false);
         dynamicBox.setVisible(true);
+
+        renderPage(onSelect);
+    }
+
+    private void renderPage(Consumer<Potion> onSelect) {
+
         dynamicBox.getChildren().clear();
 
-        Label title = new Label("Choose Potion:");
+        int totalPages = (int) Math.ceil((double) currentPotions.size() / ITEMS_PER_PAGE);
+
+        Label title = new Label("Choose Potion (Page " + (currentPage + 1) + "/" + totalPages + ")");
         title.setStyle("-fx-text-fill: white;");
         dynamicBox.getChildren().add(title);
 
-        for (Potion potion : potions) {
+        int start = currentPage * ITEMS_PER_PAGE;
+        int end = Math.min(start + ITEMS_PER_PAGE, currentPotions.size());
 
+        for (int i = start; i < end; i++) {
+
+            Potion potion = currentPotions.get(i);
             Button btn = createButton(potion.getName());
 
             btn.setOnAction(e -> {
@@ -102,10 +110,32 @@ public class CommandBox extends VBox {
             dynamicBox.getChildren().add(btn);
         }
 
+        /* ===== Pagination Controls ===== */
+
+        HBox nav = new HBox(10);
+        nav.setAlignment(Pos.CENTER_LEFT);
+
+        Button prev = createButton("◀ PREV");
+        Button next = createButton("NEXT ▶");
         Button back = createButton("BACK");
+
+        prev.setDisable(currentPage == 0);
+        next.setDisable(currentPage >= totalPages - 1);
+
+        prev.setOnAction(e -> {
+            currentPage--;
+            renderPage(onSelect);
+        });
+
+        next.setOnAction(e -> {
+            currentPage++;
+            renderPage(onSelect);
+        });
+
         back.setOnAction(e -> clearDynamicMenu());
 
-        dynamicBox.getChildren().add(back);
+        nav.getChildren().addAll(prev, next, back);
+        dynamicBox.getChildren().add(nav);
     }
 
     public void clearDynamicMenu() {
@@ -119,8 +149,7 @@ public class CommandBox extends VBox {
 
     private Button createButton(String text) {
         Button b = new Button(text);
-        b.setPrefSize(140, 45);
-
+        b.setPrefSize(140, 40);
         b.setStyle("""
             -fx-background-color: #3a3a3a;
             -fx-text-fill: white;
@@ -129,7 +158,6 @@ public class CommandBox extends VBox {
             -fx-background-radius: 6;
             -fx-border-radius: 6;
         """);
-
         return b;
     }
 
