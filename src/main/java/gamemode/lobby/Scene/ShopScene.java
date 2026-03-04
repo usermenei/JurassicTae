@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,8 @@ public class ShopScene extends StackPane {
     private GridPane gridPane;
     private ArrayList<Item> items;
     private Button switchBtt;
+    private Font font = Font.loadFont(
+            getClass().getResourceAsStream("/fonts/pixel.ttf"), 18);
 
     public ShopScene() {
 
@@ -54,35 +57,40 @@ public class ShopScene extends StackPane {
 
         // 🔶 Title
         Label title = new Label("SHOP");
+
         title.setStyle("""
-            -fx-background-color: #ffcc00;
-            -fx-text-fill: black;
-            -fx-font-size: 24px;
-            -fx-font-weight: bold;
-            -fx-padding: 10 30 10 30;
-            -fx-background-radius: 10;
+        -fx-background-color: #ffcc00;
+        -fx-text-fill: black;
+        -fx-font-family: 'Minecraft';
+        -fx-font-size: 24px;
+        -fx-font-weight: bold;
+        -fx-padding: 10 30 10 30;
+        -fx-background-radius: 10;
         """);
 
         // 🔵 Buy / Sell Toggle
         switchBtt = new Button("Sell");
+        switchBtt.setFont(font);
         switchBtt.setStyle("""
-            -fx-background-color: #444;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
+        -fx-background-color: #444;
+        -fx-text-fill: white;
+        -fx-font-family: 'Minecraft';
+        -fx-font-size: 18px;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
         """);
 
-        switchBtt.setOnAction(e -> {
+        switchBtt.setOnMouseClicked(e -> {
             if (switchBtt.getText().equals("Buy")) {
                 loadShop();
                 switchBtt.setText("Sell");
+
             } else {
                 loadSell();
                 switchBtt.setText("Buy");
             }
         });
-
+        //
         HBox titleBox = new HBox(20);
         titleBox.setAlignment(Pos.CENTER);
         titleBox.getChildren().addAll(title, switchBtt);
@@ -110,10 +118,14 @@ public class ShopScene extends StackPane {
 
         // ❌ Exit Button
         Button exitBtn = new Button("X");
+        exitBtn.setFont(Font.loadFont(
+                getClass().getResourceAsStream("/fonts/pixel.ttf"), 18));
         exitBtn.setStyle("""
-            -fx-background-color: red;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
+        -fx-background-color: red;
+        -fx-text-fill: white;
+        -fx-font-family: 'Minecraft';
+        -fx-font-weight: bold;
+        -fx-font-size: 18px;
         """);
 
         exitBtn.setOnAction(e -> this.setVisible(false));

@@ -223,7 +223,8 @@ public class SpawnCanvas extends Canvas {
 
         String[] lines = text.split("\n");
 
-        Font font = Font.font("Consolas", 20);
+        Font font = Font.loadFont(
+                getClass().getResourceAsStream("/fonts/pixel.ttf"), 20);
         gc.setFont(font);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);

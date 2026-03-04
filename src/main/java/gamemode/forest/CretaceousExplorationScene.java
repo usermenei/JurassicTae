@@ -65,8 +65,26 @@ public class CretaceousExplorationScene {
         uiLayer = new StackPane();
 
         root.getChildren().addAll(canvas, uiLayer);
+        Button inventoryButton = new Button("INVENTORY");
+        inventoryButton.setStyle("""
+        -fx-background-color: #7a7a7a;
+        -fx-text-fill: white;
+        -fx-font-family: 'Minecraft';
+        -fx-font-weight: bold;
+        -fx-padding: 10 25 10 25;
+        -fx-border-color: #3c3c3c;
+        -fx-border-width: 3;
+        -fx-font-size: 18px;
+        """);
+        inventoryButton.setOnMouseClicked(e -> {
+            inventoryPane.loadItems();
+            inventoryPane.setVisible(true);
+        });
+        StackPane.setAlignment(inventoryButton,Pos.TOP_RIGHT);
+        StackPane.setMargin(inventoryButton, new Insets(20));
+        inventoryButton.setLayoutX(20);
+        inventoryButton.setLayoutY(20);
 
-        Button inventoryButton = new Button("Inventory");
         inventoryButton.setOnAction(e -> toggleInventory());
 
         inventoryPane = new InventoryPane();

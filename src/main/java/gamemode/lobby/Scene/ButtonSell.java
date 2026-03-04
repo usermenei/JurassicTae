@@ -20,12 +20,13 @@ public class ButtonSell extends Button {
 
     public ButtonSell(Item item) {
 
-        this.setPrefSize(120, 130);
+        this.setPrefSize(140, 130);
 
         // 🎨 กล่องเทาอ่อน
         this.setStyle("""
             -fx-background-color: #4a4a4a;
             -fx-background-radius: 12;
+            -fx-font-family: 'Minecraft';
             -fx-border-color: #777;
             -fx-border-radius: 12;
         """);
@@ -70,6 +71,7 @@ public class ButtonSell extends Button {
                 this.setStyle("""
                     -fx-background-color: #5a5a5a;
                     -fx-background-radius: 12;
+                    -fx-font-family: 'Minecraft';
                     -fx-border-color: gold;
                     -fx-border-radius: 12;
                 """)
@@ -79,6 +81,7 @@ public class ButtonSell extends Button {
                 this.setStyle("""
                     -fx-background-color: #4a4a4a;
                     -fx-background-radius: 12;
+                    -fx-font-family: 'Minecraft';
                     -fx-border-color: #777;
                     -fx-border-radius: 12;
                 """)

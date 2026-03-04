@@ -45,22 +45,25 @@ public class SellScene extends StackPane {
         // 🏷 Title
         Label title = new Label("KHAO KHEOW ZOO");
         title.setStyle("""
-            -fx-background-color: #ffcc00;
-            -fx-text-fill: black;
-            -fx-font-size: 24px;
-            -fx-font-weight: bold;
-            -fx-padding: 10 30 10 30;
-            -fx-background-radius: 10;
+        -fx-background-color: #ffcc00;
+        -fx-text-fill: black;
+        -fx-font-family: 'Minecraft';
+        -fx-font-size: 24px;
+        -fx-font-weight: bold;
+        -fx-padding: 10 30 10 30;
+        -fx-background-radius: 10;
         """);
 
         // 🔵 Buy / Sell Toggle
         switchBtt = new Button("Catalog");
         switchBtt.setStyle("""
-            -fx-background-color: #444;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
+        -fx-background-color: #444;
+        -fx-text-fill: white;
+        -fx-font-family: 'Minecraft';
+        -fx-font-size: 18px;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
         """);
 
         switchBtt.setOnMouseClicked(e -> {
@@ -118,9 +121,11 @@ public class SellScene extends StackPane {
         // ❌ Exit Button
         Button exitBtn = new Button("X");
         exitBtn.setStyle("""
-            -fx-background-color: red;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
+        -fx-background-color: red;
+        -fx-text-fill: white;
+        -fx-font-family: 'Minecraft';
+        -fx-font-weight: bold;
+        -fx-font-size: 18px;
         """);
 
         exitBtn.setOnAction(e -> this.setVisible(false));
