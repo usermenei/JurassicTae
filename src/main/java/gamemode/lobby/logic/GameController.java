@@ -22,9 +22,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.text.Font;
-
 import javafx.scene.paint.Color;
-
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 
@@ -69,48 +67,38 @@ public class GameController {
        ========================= */
     public void startCretaceousExploration() {
 
-        explorationScene =
-                new CretaceousExplorationScene(
-                        this::startBattleMode,   // ✅ ส่ง method reference ตรง
-                        this::returnToMain
-                );
+        explorationScene = new CretaceousExplorationScene(
+                this::startBattleMode,
+                this::returnToMain
+        );
 
         forestScene = explorationScene.getScene();
         switchScene(forestScene);
     }
 
     /* =========================
-       ⚔️ BATTLE MODE (ตัวจริง)
+       ⚔️ BATTLE MODE
        ========================= */
     private void startBattleMode(Dinosaur enemy) {
-
         BattleView battleView = new BattleView(enemy, this);
         Scene battleScene = new Scene(battleView, 1422, 800);
-
         stage.setScene(battleScene);
     }
+
     /* =========================
-       🦖 ENEMY DEFEATED (⭐ จุดสำคัญ)
+       🦖 ENEMY DEFEATED
        ========================= */
     public void onEnemyDefeated(Dinosaur enemy) {
 
-        // ⭐ ลบไดโนออกจาก world จริง
-        explorationScene
-                .getWorldManager()
-                .removeDinosaur(enemy);
-
-        explorationScene
-                .getWorldManager()
-                .endBattle();
+        explorationScene.getWorldManager().removeDinosaur(enemy);
+        explorationScene.getWorldManager().endBattle();
 
         explorationScene.clearInput();
         explorationScene.resumeWorld();
 
         stage.setScene(forestScene);
-
         forestScene.getRoot().requestFocus();
     }
-
 
     /* =========================
        🔙 RETURN FROM BATTLE
@@ -122,12 +110,11 @@ public class GameController {
         explorationScene.resumeWorld();
 
         stage.setScene(forestScene);
-
         forestScene.getRoot().requestFocus();
     }
 
     /* =========================
-       🏋️ GYM MODE (ของเดิม)
+       🏋️ GYM MODE
        ========================= */
     public void startGymMiniGame() {
 
@@ -143,22 +130,11 @@ public class GameController {
     }
 
     private void startActualGymGame() {
-        if(player.getMoney() < 500){
-            return;
-        }
-        player.setMoney(player.getMoney() - 500);
-        GameController.getInstance().getRoot().updateMoney();
-        Image red = new Image(
-                getClass().getResource("/gamemode/gym/redtile.png").toExternalForm()
-        );
+        // ✅ Fee is already deducted in MainMenu — do NOT deduct again here
 
-        Image blue = new Image(
-                getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm()
-        );
-
-        Image bg = new Image(
-                getClass().getResource("/gamemode/gym/gamebg.png").toExternalForm()
-        );
+        Image red  = new Image(getClass().getResource("/gamemode/gym/redtile.png").toExternalForm());
+        Image blue = new Image(getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm());
+        Image bg   = new Image(getClass().getResource("/gamemode/gym/gamebg.png").toExternalForm());
 
         GameScene game = new GameScene(
                 1422,
@@ -172,79 +148,59 @@ public class GameController {
                     lastGymScore = score;
 
                     int bonusStrength = score / 300;
-                    int bonusExp = score / 100;
-                    int bonusMaxHp = score / 500;
+                    int bonusExp      = score / 100;
+                    int bonusMaxHp    = score / 500;
 
                     Player player = GameLogic.getInstance().getPlayer();
                     player.setStrength(player.getStrength() + bonusStrength);
                     player.addExp(bonusExp);
                     player.setMaxHp(player.getMaxHp() + bonusMaxHp);
 
-                    // ===== CUSTOM POPUP =====
+                    // ===== RESULT POPUP =====
                     StackPane popupRoot = new StackPane();
                     popupRoot.setStyle("-fx-background-color: rgba(0,0,0,0.6);");
 
                     VBox box = new VBox(20);
                     box.setAlignment(Pos.CENTER);
                     box.setPadding(new Insets(30));
-
                     box.setBackground(new Background(
-                            new BackgroundFill(
-                                    Color.rgb(20, 20, 20),
-                                    new CornerRadii(20),
-                                    null
-                            )
+                            new BackgroundFill(Color.rgb(20, 20, 20), new CornerRadii(20), null)
                     ));
-
                     box.setBorder(new Border(
-                            new BorderStroke(
-                                    Color.LIME,
-                                    BorderStrokeStyle.SOLID,
-                                    new CornerRadii(20),
-                                    new BorderWidths(3)
-                            )
+                            new BorderStroke(Color.LIME, BorderStrokeStyle.SOLID,
+                                    new CornerRadii(20), new BorderWidths(3))
                     ));
 
                     Text title = new Text("WORKOUT COMPLETE!");
-                    title.setFont(Font.loadFont(
-                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 40));
+                    title.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 40));
                     title.setFill(Color.WHITE);
 
                     Text scoreText = new Text("Score: " + score);
-                    scoreText.setFont(Font.loadFont(
-                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    scoreText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
                     scoreText.setFill(Color.CYAN);
 
                     Text rewardText = new Text("Strength + " + bonusStrength);
-                    rewardText.setFont(Font.loadFont(
-                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 35));
+                    rewardText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 35));
                     rewardText.setFill(Color.LIME);
 
                     Text expText = new Text("EXP + " + bonusExp);
-                    expText.setFont(Font.loadFont(
-                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    expText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
                     expText.setFill(Color.GOLD);
 
                     Text hpText = new Text("Max HP + " + bonusMaxHp);
-                    hpText.setFont(Font.loadFont(
-                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
+                    hpText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 30));
                     hpText.setFill(Color.RED);
 
                     Button okBtn = new Button("OK");
-                    okBtn.setFont(Font.loadFont(
-                            getClass().getResourceAsStream("/fonts/pixel.ttf"), 28));
+                    okBtn.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), 28));
                     okBtn.setPrefWidth(200);
                     okBtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
-
-                    okBtn.setOnAction(e -> {
-                        startGymMiniGame();
-                    });
+                    okBtn.setOnAction(e -> startGymMiniGame());
 
                     box.getChildren().addAll(title, scoreText, rewardText, expText, hpText, okBtn);
                     popupRoot.getChildren().add(box);
 
-                    Scene popupScene = new Scene(popupRoot, 1422, 800);
-                    stage.setScene(popupScene);
+                    stage.setScene(new Scene(popupRoot, 1422, 800));
                 }
         );
 
@@ -253,14 +209,11 @@ public class GameController {
     }
 
     /* =========================
-       🔁 MAIN / SPAWN (ของเดิม)
+       🔁 MAIN / SPAWN
        ========================= */
     public void returnToMain() {
         stage.setScene(mainScene);
-
-        if (root != null) {
-            root.requestFocus();
-        }
+        if (root != null) root.requestFocus();
     }
 
     public void setRoot(SpawnScreen spawnScreen) {
@@ -268,21 +221,10 @@ public class GameController {
         player = root.getSpawnCanvas().getPlayer();
     }
 
-    public SpawnScreen getRoot() {
-        return root;
-    }
-
-    public KeyboardController getKeyboard() {
-        return keyboard;
-    }
-
-    public boolean isGameEnded() {
-        return gameEnded;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
+    public SpawnScreen getRoot()          { return root;      }
+    public KeyboardController getKeyboard() { return keyboard; }
+    public boolean isGameEnded()          { return gameEnded; }
+    public Player getPlayer()             { return player;    }
 
     public void reloadSellScene() {
         root.getSellScene().refresh();
@@ -290,14 +232,11 @@ public class GameController {
 
     public void reloadMoney() {
         root.getMoneyLabel().setText(
-                "Money : " +
-                        GameLogic.getInstance().getPlayer().getMoney() +
-                        " $"
+                "Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $"
         );
     }
+
     public void onEnemyCaught(Dinosaur enemy) {
-        // DO NOT give exp
-        // Remove dinosaur from world
         returnToWorld();
     }
 }
