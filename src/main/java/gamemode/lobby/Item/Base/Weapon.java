@@ -5,21 +5,21 @@ import gamemode.lobby.Interfaces.Useable;
 import gamemode.lobby.Player.Player;
 
 public abstract class Weapon extends Item implements Useable, Buyable {
-    private int dmg;
+    private int damage;
     private final int buyPrice;
 
-    public Weapon(String name, String imgUrl, int buyPrice,int dmg) {
+    public Weapon(String name, String imgUrl, int buyPrice,int damage) {
         super(name, imgUrl);
         this.buyPrice = buyPrice;
-        this.dmg = dmg;
+        this.damage = damage;
     }
 
     @Override
     public void use(Player player) {
     }
 
-    public int getDmg(){
-        return dmg;
+    public int getDamage() {
+        return damage;
     }
 
     @Override

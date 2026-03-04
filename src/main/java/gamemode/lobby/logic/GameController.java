@@ -277,4 +277,9 @@ public class GameController {
                         " $"
         );
     }
+    public void onEnemyCaught(Dinosaur enemy) {
+        // DO NOT give exp
+        // Remove dinosaur from world
+        returnToWorld();
+    }
 }
