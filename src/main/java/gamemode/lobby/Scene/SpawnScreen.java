@@ -93,7 +93,17 @@ public class SpawnScreen extends StackPane {
         StackPane.setAlignment(inventoryPane, Pos.CENTER);
 
         //Inventory
-        Button inventoryBtn = new Button("Inventory");
+        Button inventoryBtn = new Button("INVENTORY");
+        inventoryBtn.setStyle("""
+        -fx-background-color: #7a7a7a;
+        -fx-text-fill: white;
+        -fx-font-family: 'Minecraft';
+        -fx-font-weight: bold;
+        -fx-padding: 10 25 10 25;
+        -fx-border-color: #3c3c3c;
+        -fx-border-width: 3;
+        -fx-font-size: 18px;
+        """);
         inventoryBtn.setOnMouseClicked(e -> {
             inventoryPane.loadItems();
             inventoryPane.setVisible(true);
