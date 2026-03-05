@@ -13,9 +13,8 @@ public class DinosaurFactory {
 
     /**
      * Creates a herbivore dinosaur of the given type at the specified position.
-     * <p>
-     * Supported types and their stats:
-     * </p>
+     *
+     * <p>Supported types and their stats:</p>
      * <ul>
      *   <li><b>LongNeck</b> – 150 HP, 10 strength, 40 EXP, level 1, {@link Dinosaur.Rarity#COMMON}, sell price 50</li>
      *   <li><b>Triceratops</b> – 250 HP, 20 strength, 80 EXP, level 3, {@link Dinosaur.Rarity#UNCOMMON}, sell price 45</li>
@@ -34,7 +33,7 @@ public class DinosaurFactory {
                         150, 10, 40, 1,
                         x, y,
                         Dinosaur.Rarity.COMMON,
-                        "/images/dinosaur/longneck.png", 400, 400, 50
+                        "/images/dinosaur/longneck.gif", 400, 400, 50
                 );
 
             case "Triceratops":
@@ -43,7 +42,7 @@ public class DinosaurFactory {
                         250, 20, 80, 3,
                         x, y,
                         Dinosaur.Rarity.UNCOMMON,
-                        "/images/dinosaur/triceratops.png", 200, 200, 45
+                        "/images/dinosaur/triceratops.gif", 200, 200, 45
                 );
         }
 
@@ -52,9 +51,8 @@ public class DinosaurFactory {
 
     /**
      * Creates a carnivore dinosaur of the given type at the specified position.
-     * <p>
-     * Supported types and their stats:
-     * </p>
+     *
+     * <p>Supported types and their stats:</p>
      * <ul>
      *   <li><b>Raptor</b> – 150 HP, 135 strength, 100 EXP, level 2, {@link Dinosaur.Rarity#COMMON}, speed 3.5, sell price 100</li>
      *   <li><b>TRex</b> – 400 HP, 80 strength, 300 EXP, level 5, {@link Dinosaur.Rarity#RARE}, speed 2.2, sell price 150</li>

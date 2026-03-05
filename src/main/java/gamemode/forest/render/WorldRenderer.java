@@ -12,9 +12,8 @@ import gamemode.lobby.Player.Player;
 
 /**
  * Handles all rendering for the forest game world each frame.
- * <p>
- * Rendering is performed in three ordered passes:
- * </p>
+ *
+ * <p>Rendering is performed in three ordered passes:</p>
  * <ol>
  *   <li>Background tiles for all visible {@link Chunk}s.</li>
  *   <li>All visible entities (world items, dinosaurs, and the player)
@@ -22,10 +21,8 @@ import gamemode.lobby.Player.Player;
  *       top-down perspective.</li>
  *   <li>The dialogue overlay rendered on top of the world.</li>
  * </ol>
- * <p>
- * Only entities within or near the camera viewport are rendered each frame
- * to avoid unnecessary draw calls.
- * </p>
+ * <p>Only entities within or near the camera viewport are rendered each frame
+ * to avoid unnecessary draw calls.</p>
  */
 public class WorldRenderer {
 

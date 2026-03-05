@@ -6,9 +6,8 @@ import java.util.Random;
 /**
  * A carnivorous dinosaur that actively hunts the player when nearby,
  * and roams randomly when the player is out of range.
- * <p>
- * Behavior switches between two modes each {@link #update(Player)} tick:
- * </p>
+ *
+ * <p>Behavior switches between two modes each {@link #update(Player)} tick:</p>
  * <ul>
  *   <li><b>Aggro mode</b> – triggered when the player is within
  *       {@link #AGGRO_RANGE} units; the dinosaur moves directly toward

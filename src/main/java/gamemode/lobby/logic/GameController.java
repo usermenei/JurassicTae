@@ -291,7 +291,8 @@ public class GameController {
         if(player.getMoney() < 500){
             return false;
         }
-        player.setMoney(player.getMoney() - 500);
+        //player.setMoney(player.getMoney() - 500);
+        System.out.println("MM");
         if(GameController.getInstance().getRoot() != null){
             GameController.getInstance().getRoot().updateMoney();
         }

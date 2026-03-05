@@ -107,6 +107,7 @@ public class WorldManager {
 
     /**
      * Processes one game tick for the world.
+     *
      * <p>Each tick this method:</p>
      * <ol>
      *   <li>Loads any unloaded chunks within {@link #RENDER_DISTANCE} of the player,

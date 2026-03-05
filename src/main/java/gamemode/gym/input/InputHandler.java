@@ -14,6 +14,7 @@ public class InputHandler {
 
     /**
      * Registers key press handlers on the given scene.
+     *
      * <p>Key bindings:</p>
      * <ul>
      *   <li><b>D</b> — triggers the lane 0 action</li>
