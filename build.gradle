@@ -66,6 +66,7 @@ jar {
 
     from sourceSets.main.output
     from sourceSets.main.allSource
+    from sourceSets.main.resources  // ← ADD THIS LINE
 
     manifest {
         attributes(

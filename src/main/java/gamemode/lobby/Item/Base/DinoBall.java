@@ -23,7 +23,7 @@ public class DinoBall extends Item implements Buyable {
      * and default description of {@code "Catch Dinosaur"}.
      */
     public DinoBall() {
-        super("DinoBall", "/item/dinoball.PNG");
+        super("DinoBall", "/item/dinoball.png");
         setDescription("Catch Dinosaur");
     }
 
