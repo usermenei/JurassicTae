@@ -34,7 +34,7 @@ public class DinosaurFactory {
                         150, 10, 40, 1,
                         x, y,
                         Dinosaur.Rarity.COMMON,
-                        "/images/dinosaur/longneck.png", 400, 400, 50
+                        "/images/dinosaur/longneck.gif", 400, 400, 50
                 );
 
             case "Triceratops":
@@ -43,7 +43,7 @@ public class DinosaurFactory {
                         250, 20, 80, 3,
                         x, y,
                         Dinosaur.Rarity.UNCOMMON,
-                        "/images/dinosaur/triceratops.png", 200, 200, 45
+                        "/images/dinosaur/triceratops.gif", 200, 200, 45
                 );
         }
 
