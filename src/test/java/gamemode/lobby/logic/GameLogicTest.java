@@ -1,11 +1,8 @@
 package gamemode.lobby.logic;
 
 import gamemode.lobby.Player.Player;
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.*;
-
-import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.*;
 

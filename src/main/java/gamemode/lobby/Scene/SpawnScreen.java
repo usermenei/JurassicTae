@@ -9,7 +9,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import gamemode.lobby.logic.GameLogic;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 /**
  * SpawnScreen represents the main lobby screen where the player spawns.

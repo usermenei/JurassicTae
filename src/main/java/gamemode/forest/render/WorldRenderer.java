@@ -5,6 +5,7 @@ import gamemode.forest.WorldManager;
 import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.entity.WorldItem;
 import gamemode.forest.util.AssetLoader;
+import gamemode.lobby.DialogueManager;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import gamemode.lobby.Player.Player;
@@ -214,7 +215,7 @@ public class WorldRenderer {
 
         gc.restore();
 
-        gamemode.DialogueManager
+        DialogueManager
                 .getInstance()
                 .render(gc,
                         gc.getCanvas().getWidth(),

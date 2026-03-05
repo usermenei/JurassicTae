@@ -2,12 +2,10 @@ package gamemode.forest;
 
 import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.render.WorldRenderer;
-import gamemode.DialogueManager;
+import gamemode.lobby.DialogueManager;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.Scene.InventoryPane;
 import gamemode.lobby.logic.GameController;
-import gamemode.lobby.logic.GameLogic;
-import gamemode.lobby.logic.KeyboardController;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,8 +15,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 import java.util.HashSet;
 import java.util.Set;

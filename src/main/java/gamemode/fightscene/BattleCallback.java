@@ -2,17 +2,18 @@ package gamemode.fightscene;
 
 import gamemode.forest.entity.Dinosaur;
 import gamemode.lobby.Player.Player;
+import gamemode.lobby.logic.GameController;
 
 /**
  * Callback interface that decouples {@link BattleView} from the concrete
- * {@link gamemode.lobby.logic.GameController} singleton.
+ * {@link GameController} singleton.
  *
  * <p>In production, {@code GameController} implements this interface.
  * In tests, a simple anonymous class or lambda-based stub implements it
  * without needing to subclass the singleton.</p>
  *
  * @see BattleView
- * @see gamemode.lobby.logic.GameController
+ * @see GameController
  */
 public interface BattleCallback {
 

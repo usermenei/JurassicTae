@@ -3,6 +3,7 @@ package gamemode.forest;
 import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.entity.DinosaurFactory;
 import gamemode.forest.entity.WorldItem;
+import gamemode.lobby.DialogueManager;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.logic.GameLogic;
 import javafx.application.Platform;
@@ -247,7 +248,7 @@ public class WorldManager {
                 if (isNearPlayer(worldItem)) {
 
                     if (player.getInventory().size() >= GameLogic.getInstance().getPlayer().getInventorylimit()) {
-                        gamemode.DialogueManager.getInstance().showDialogue(
+                        DialogueManager.getInstance().showDialogue(
                                 "System",
                                 "Your inventory is full!",
                                 "/character/ptae.png"
@@ -258,7 +259,7 @@ public class WorldManager {
                     player.addItem(worldItem.getItem());
                     iterator.remove();
 
-                    gamemode.DialogueManager.getInstance().showDialogue(
+                    DialogueManager.getInstance().showDialogue(
                             "System",
                             "Picked up " + worldItem.getItem().getName() + "!",
                             "/character/ptae.png"

@@ -3,6 +3,7 @@ package gamemode.fightscene;
 import gamemode.forest.entity.CarnivoreDinosaur;
 import gamemode.forest.entity.Dinosaur;
 import gamemode.lobby.Player.Player;
+import gamemode.lobby.logic.GameController;
 import javafx.application.Platform;
 
 import org.junit.jupiter.api.*;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * the JavaFX toolkit must be initialised once before any test runs
  * ({@link #initJavaFX()}).</p>
  *
- * <p>The hard dependency on {@link gamemode.lobby.logic.GameController} (a singleton
+ * <p>The hard dependency on {@link GameController} (a singleton
  * with a private constructor) is removed by using the new {@link BattleCallback}
  * interface. Each test creates a lightweight {@link StubCallback} that simply records
  * which method was called — no singleton, no Mockito.</p>
@@ -61,7 +62,7 @@ class BattleViewTest {
      *
      * <p>Each boolean field starts as {@code false} and is flipped to {@code true}
      * the moment the corresponding callback method is called. Tests assert on
-     * these flags instead of depending on {@link gamemode.lobby.logic.GameController}.</p>
+     * these flags instead of depending on {@link GameController}.</p>
      */
     static class StubCallback implements BattleCallback {
         boolean defeatedCalled = false;

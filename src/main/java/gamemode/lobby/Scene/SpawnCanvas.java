@@ -1,13 +1,13 @@
 package gamemode.lobby.Scene;
 
-import gamemode.DialogueManager;
+import gamemode.lobby.DialogueManager;
 import gamemode.lobby.Item.Base.DinoBall;
 import gamemode.lobby.Player.Player;
+import gamemode.lobby.logic.GameLogic;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import gamemode.lobby.logic.*;
 import gamemode.lobby.logic.GameController;
 import gamemode.lobby.logic.KeyboardController;
 import javafx.scene.paint.Color;
