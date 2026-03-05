@@ -2,6 +2,7 @@ package gamemode.forest;
 
 import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.render.WorldRenderer;
+import gamemode.forest.util.WorldManager;
 import gamemode.lobby.DialogueManager;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.Scene.InventoryPane;
