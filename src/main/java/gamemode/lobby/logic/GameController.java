@@ -307,8 +307,6 @@ public class GameController {
                 getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm()
         );
 
-        Image red  = new Image(getClass().getResource("/gamemode/gym/redtile.png").toExternalForm());
-        Image blue = new Image(getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm());
         Image bg   = new Image(getClass().getResource("/gamemode/gym/gamebg.png").toExternalForm());
 
         GameScene game = new GameScene(
