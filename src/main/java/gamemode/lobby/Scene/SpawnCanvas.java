@@ -1,7 +1,7 @@
 package gamemode.lobby.Scene;
 
 import gamemode.DialogueManager;
-import gamemode.lobby.Item.DinoBall;
+import gamemode.lobby.Item.Base.DinoBall;
 import gamemode.lobby.Player.Player;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.VPos;

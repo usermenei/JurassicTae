@@ -39,6 +39,16 @@ class WeaponTest {
         public TestWeapon(String name, String imgUrl, int buyPrice, int damage) {
             super(name, imgUrl, buyPrice, damage);
         }
+
+        /**
+         * Returns a placeholder description for testing purposes.
+         *
+         * @return a fixed string {@code "Test Weapon"}
+         */
+        @Override
+        public String getDescription() {
+            return "Test Weapon";
+        }
     }
 
     /**

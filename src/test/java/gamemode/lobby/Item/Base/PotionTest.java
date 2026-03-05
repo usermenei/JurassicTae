@@ -38,6 +38,14 @@ class PotionTest {
         public TestPotion(String name, String imgUrl, int buyPrice, int sellPrice) {
             super(name, imgUrl, buyPrice, sellPrice);
         }
+
+        /**
+         * Returns a placeholder description for testing purposes.
+         *
+         * @return a fixed string {@code "Test Potion"}
+         */
+        @Override
+        public String getDescription() {return "Test Potion";}
     }
 
     /**

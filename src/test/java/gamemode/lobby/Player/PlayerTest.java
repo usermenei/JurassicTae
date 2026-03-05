@@ -79,6 +79,9 @@ class PlayerTest {
         public int getBuyPrice() {
             return super.getBuyPrice();
         }
+
+        @Override
+        public String getDescription() {return "Test Weapon";}
     }
 
     /**
@@ -90,6 +93,8 @@ class PlayerTest {
         public TestPotion(String name) {
             super(name, "", 0, 10);
         }
+        @Override
+        public String getDescription() {return "Test Potion";}
     }
 
     // ==========================================================

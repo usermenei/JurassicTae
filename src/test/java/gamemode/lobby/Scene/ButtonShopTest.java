@@ -59,6 +59,7 @@ class ButtonShopTest {
 
         @Override public String getName()     { return name; }
         @Override public int    getBuyPrice() { return buyPrice; }
+        @Override public String getDescription() { return "Test Item"; }
     }
 
     // ── Logic under test (exact copy of ButtonShop.setOnAction body) ──────────
