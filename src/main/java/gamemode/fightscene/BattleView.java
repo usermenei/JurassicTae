@@ -108,7 +108,7 @@ public class BattleView extends BorderPane {
         // ── Enemy sprite (top-right) ──────────────────────────────────────
 
         ImageView enemyPic = new ImageView(
-                new Image(getClass().getResource("/forest/" + enemy.getName() + ".PNG").toExternalForm())
+                new Image(getClass().getResource("/forest/" + enemy.getName() + ".png").toExternalForm())
         );
         enemyPic.setFitWidth(220);
         enemyPic.setPreserveRatio(true);
