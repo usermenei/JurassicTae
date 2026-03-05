@@ -9,19 +9,48 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import gamemode.lobby.Player.Player;
 
+/**
+ * Handles all rendering for the forest game world each frame.
+ * <p>
+ * Rendering is performed in three ordered passes:
+ * <ol>
+ *   <li>Background tiles for all visible {@link Chunk}s.</li>
+ *   <li>All visible entities (world items, dinosaurs, and the player)
+ *       depth-sorted by their bottom Y coordinate to create a convincing
+ *       top-down perspective.</li>
+ *   <li>The dialogue overlay rendered on top of the world.</li>
+ * </ol>
+ * Only entities within or near the camera viewport are rendered each frame
+ * to avoid unnecessary draw calls.
+ * </p>
+ */
 public class WorldRenderer {
 
+    /** The graphics context used to issue all draw calls. */
     private GraphicsContext gc;
+
+    /** The player entity, included in depth-sorted rendering each frame. */
     private Player player;
+
+    /** The world manager providing access to chunks and dinosaur lists. */
     private WorldManager worldManager;
 
+    /** The background tile image drawn once per visible chunk. */
     private Image background;
+
+    /** Reserved dinosaur image asset (loaded but used as a fallback). */
     private Image dinosaurImage;
 
+    /**
+     * Constructs a {@code WorldRenderer} and pre-loads required image assets.
+     *
+     * @param gc           the {@link GraphicsContext} to draw on
+     * @param player       the player entity to include in each render pass
+     * @param worldManager the world manager providing chunks and dinosaurs
+     */
     public WorldRenderer(GraphicsContext gc,
                          Player player,
                          WorldManager worldManager) {
-
         this.gc = gc;
         this.player = player;
         this.worldManager = worldManager;
@@ -29,6 +58,20 @@ public class WorldRenderer {
         dinosaurImage = AssetLoader.load("/gamemode/forest/dinosaur.png");
     }
 
+    /**
+     * Renders a complete frame of the game world at the given camera position.
+     * <p>
+     * The canvas is cleared, then the camera transform is applied before drawing.
+     * Only chunks and entities that intersect the current viewport (with a small
+     * margin for dinosaurs) are drawn. World items, dinosaurs, and the player are
+     * depth-sorted by their bottom Y edge so that entities lower on screen appear
+     * in front of those higher up. The dialogue overlay is drawn last, without the
+     * camera transform, so it always appears at a fixed screen position.
+     * </p>
+     *
+     * @param cameraX the X offset of the camera in world coordinates
+     * @param cameraY the Y offset of the camera in world coordinates
+     */
     public void render(double cameraX, double cameraY) {
 
         double canvasWidth = gc.getCanvas().getWidth();
@@ -45,7 +88,7 @@ public class WorldRenderer {
         double viewBottom = cameraY + canvasHeight;
 
         // =========================
-        // 1️⃣ DRAW BACKGROUNDS (VISIBLE CHUNKS ONLY)
+        // 1. DRAW BACKGROUNDS (VISIBLE CHUNKS ONLY)
         // =========================
         for (Chunk chunk : worldManager.getChunks()) {
 
@@ -67,8 +110,13 @@ public class WorldRenderer {
         }
 
         // =========================
-        // 2️⃣ DEPTH SORT ALL VISIBLE ENTITIES
+        // 2. DEPTH SORT ALL VISIBLE ENTITIES
         // =========================
+
+        /**
+         * A lightweight container pairing a Y depth value with a deferred draw call,
+         * used to sort all visible entities before rendering.
+         */
         class RenderObject {
             double y;
             Runnable draw;
@@ -82,7 +130,7 @@ public class WorldRenderer {
         java.util.List<RenderObject> renderList = new java.util.ArrayList<>();
 
         // =========================
-        // 2.1️⃣ WORLD ITEMS (FROM CHUNKS)
+        // 2.1. WORLD ITEMS (FROM CHUNKS)
         // =========================
         for (Chunk chunk : worldManager.getChunks()) {
 
@@ -116,19 +164,17 @@ public class WorldRenderer {
         }
 
         // =========================
-// 2.2️⃣ GLOBAL DINOSAURS
-// =========================
+        // 2.2. GLOBAL DINOSAURS
+        // =========================
         double margin = 100;
 
         for (Dinosaur d : worldManager.getDinosaurs()) {
 
             double dx = d.getX();
             double dy = d.getY();
-
             double width  = d.getWidth();
             double height = d.getHeight();
 
-            // Proper visibility check
             if (dx + width < viewLeft - margin ||
                     dx > viewRight + margin ||
                     dy + height < viewTop - margin ||
@@ -140,19 +186,10 @@ public class WorldRenderer {
             double finalY = dy;
 
             renderList.add(new RenderObject(
-                    finalY + height,  // ✅ correct depth
+                    finalY + height,
                     () -> {
-
                         if (d.getSprite() != null) {
-
-                            gc.drawImage(
-                                    d.getSprite(),
-                                    finalX,
-                                    finalY,
-                                    width,
-                                    height
-                            );
-
+                            gc.drawImage(d.getSprite(), finalX, finalY, width, height);
                         } else {
                             gc.fillRect(finalX, finalY, width, height);
                         }
@@ -161,17 +198,16 @@ public class WorldRenderer {
         }
 
         // =========================
-        // 2.3️⃣ PLAYER (DEPTH SORTED)
+        // 2.3. PLAYER (DEPTH SORTED)
         // =========================
         renderList.add(new RenderObject(
                 player.getY() + player.getHeight(),
                 () -> player.render(gc)
         ));
 
-        // Sort by Y (top to bottom)
+        // Sort by bottom Y edge (top to bottom)
         renderList.sort((a, b) -> Double.compare(a.y, b.y));
 
-        // Draw in correct order
         for (RenderObject ro : renderList) {
             ro.draw.run();
         }
