@@ -2,8 +2,6 @@ package gamemode.lobby.Scene;
 
 import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Item.Base.Item;
-import gamemode.lobby.Item.Base.Potion;
-import gamemode.lobby.Item.Base.Weapon;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.logic.GameController;
 import gamemode.lobby.logic.GameLogic;

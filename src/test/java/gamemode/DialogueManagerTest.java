@@ -1,5 +1,6 @@
 package gamemode;
 
+import gamemode.lobby.DialogueManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,5 @@
 package gamemode.lobby.Scene;
 
-import gamemode.lobby.Player.Player;
-import gamemode.lobby.logic.GameLogic;
 import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
