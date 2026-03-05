@@ -242,6 +242,23 @@ public abstract class Dinosaur {
     public void setName(String name) {
         this.name = name == null ? "Dinosaur" : name;
     }
+    /**
+     * Sets the X coordinate of this dinosaur in the game world.
+     *
+     * @param x the new X position
+     */
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    /**
+     * Sets the Y coordinate of this dinosaur in the game world.
+     *
+     * @param y the new Y position
+     */
+    public void setY(double y) {
+        this.y = y;
+    }
 
     /**
      * Returns the current hit points of this dinosaur.

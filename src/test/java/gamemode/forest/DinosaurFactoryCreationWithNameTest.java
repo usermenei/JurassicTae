@@ -1,9 +1,11 @@
-package gamemode.forest.entity;
+package gamemode.forest;
 
+import gamemode.forest.entity.Dinosaur;
+import gamemode.forest.entity.DinosaurFactory;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class DinosaurFactoryTest {
+class DinosaurFactoryCreationWithNameTest {
 
     @Test
     void testCreateLongNeck() {

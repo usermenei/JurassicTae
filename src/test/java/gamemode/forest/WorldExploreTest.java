@@ -17,7 +17,7 @@ import gamemode.forest.entity.*;
 import gamemode.lobby.Item.Potion.*;
 import gamemode.lobby.logic.*;
 
-public class testForest {
+public class WorldExploreTest {
     @BeforeAll
     static void initJFX() {
         try {
