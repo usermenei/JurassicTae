@@ -51,8 +51,8 @@ public class MegaDinosaur extends Dinosaur {
      */
     @Override
     public void update(Player player) {
-        double playerCenterX = player.getX() + player.getWidth() / 2.0;
-        double playerCenterY = player.getY() + player.getHeight() / 2.0;
+        double playerCenterX = (player.getX() + player.getWidth() / 2.0)-200;
+        double playerCenterY = (player.getY() + player.getHeight() / 2.0)-200;
         moveToward(playerCenterX, playerCenterY);
     }
 }
