@@ -1,6 +1,6 @@
 package gamemode.lobby.Item.Base;
 
-import gamemode.lobby.Interfaces.Buyable;
+import gamemode.lobby.Item.Interfaces.Buyable;
 
 /**
  * Abstract base class representing a weapon item in the game.

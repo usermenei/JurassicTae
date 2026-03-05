@@ -1,4 +1,4 @@
-package gamemode.lobby.Interfaces;
+package gamemode.lobby.Item.Interfaces;
 
 /**
  * Represents an object that can be sold by the player in the game.

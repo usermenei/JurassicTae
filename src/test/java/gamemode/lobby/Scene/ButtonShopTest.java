@@ -1,6 +1,6 @@
 package gamemode.lobby.Scene;
 
-import gamemode.lobby.Interfaces.Buyable;
+import gamemode.lobby.Item.Interfaces.Buyable;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,7 +1,6 @@
 package gamemode.lobby.Scene;
 
-import gamemode.lobby.Item.Base.TamedDinosaur;
-import gamemode.lobby.Interfaces.Sellable;
+import gamemode.lobby.Item.Interfaces.Sellable;
 import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.entity.CarnivoreDinosaur;
 

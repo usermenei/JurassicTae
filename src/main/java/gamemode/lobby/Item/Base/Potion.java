@@ -1,7 +1,7 @@
 package gamemode.lobby.Item.Base;
 
-import gamemode.lobby.Interfaces.Buyable;
-import gamemode.lobby.Interfaces.Sellable;
+import gamemode.lobby.Item.Interfaces.Buyable;
+import gamemode.lobby.Item.Interfaces.Sellable;
 
 /**
  * Abstract base class representing a potion item in the game.

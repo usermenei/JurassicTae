@@ -1,7 +1,7 @@
 package gamemode.lobby.Player;
 
-import gamemode.lobby.Interfaces.Buyable;
-import gamemode.lobby.Interfaces.Sellable;
+import gamemode.lobby.Item.Interfaces.Buyable;
+import gamemode.lobby.Item.Interfaces.Sellable;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.Potion;
 import gamemode.lobby.Item.Base.TamedDinosaur;

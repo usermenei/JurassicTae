@@ -1,6 +1,6 @@
 package gamemode.lobby.Scene;
 
-import gamemode.lobby.Interfaces.Buyable;
+import gamemode.lobby.Item.Interfaces.Buyable;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.logic.GameController;
