@@ -18,12 +18,36 @@ import javafx.util.Duration;
 
 import java.util.Objects;
 
+/**
+ * The main menu scene for the gym rhythm mini-game.
+ * <p>
+ * Displays the game title, the player's previous score, key binding instructions,
+ * the entry fee, and START / EXIT buttons. Pressing START deducts {@link #GYM_FEE}
+ * from the player's money and invokes the start callback. If the player cannot
+ * afford the fee, a temporary insufficient-funds popup is shown instead.
+ * </p>
+ */
 public class MainMenu {
 
+    /** The gold cost deducted from the player's balance when starting a gym session. */
     private static final int GYM_FEE = 500;
 
+    /** The JavaFX scene containing the full menu layout. */
     private final Scene scene;
 
+    /**
+     * Constructs the gym {@code MainMenu} scene.
+     * <p>
+     * Builds and lays out all UI elements: animated background, title, previous
+     * score display, key binding hint, fee label, and START / EXIT buttons.
+     * </p>
+     *
+     * @param width     the width of the scene in pixels
+     * @param height    the height of the scene in pixels
+     * @param prevScore the player's score from their last gym session, displayed on screen
+     * @param onStart   callback invoked when the player successfully pays the fee and starts
+     * @param onExit    callback invoked when the player presses EXIT
+     */
     public MainMenu(int width, int height, int prevScore,
                     Runnable onStart, Runnable onExit) {
 
@@ -116,11 +140,17 @@ public class MainMenu {
         scene = new Scene(root, width, height);
     }
 
-    // ================= INSUFFICIENT FUNDS POPUP =================
-
+    /**
+     * Displays a temporary insufficient-funds popup over the menu.
+     * <p>
+     * The popup shows how much additional gold the player needs and is
+     * automatically dismissed after 2 seconds via a {@link PauseTransition}.
+     * </p>
+     *
+     * @param root the root {@link StackPane} to add the popup overlay to
+     */
     private void showInsufficientFunds(StackPane root) {
 
-        // Popup box
         VBox popup = new VBox(16);
         popup.setAlignment(Pos.CENTER);
         popup.setPadding(new Insets(30, 50, 30, 50));
@@ -131,10 +161,10 @@ public class MainMenu {
                         new CornerRadii(16), null)
         ));
         popup.setStyle("""
-            -fx-border-color: #f44336;
-            -fx-border-width: 3;
-            -fx-border-radius: 16;
-        """);
+                -fx-border-color: #f44336;
+                -fx-border-width: 3;
+                -fx-border-radius: 16;
+                """);
 
         Text msg = new Text("Insufficient Funds!");
         msg.setFont(Font.loadFont(
@@ -150,7 +180,6 @@ public class MainMenu {
 
         popup.getChildren().addAll(msg, sub);
 
-        // Dim overlay
         StackPane overlay = new StackPane(popup);
         overlay.setBackground(new Background(
                 new BackgroundFill(Color.rgb(0, 0, 0, 0.55), null, null)
@@ -158,14 +187,21 @@ public class MainMenu {
 
         root.getChildren().add(overlay);
 
-        // Auto-dismiss after 2 seconds
         PauseTransition dismiss = new PauseTransition(Duration.seconds(2));
         dismiss.setOnFinished(e -> root.getChildren().remove(overlay));
         dismiss.play();
     }
 
-    // ================= BUTTON FACTORY =================
-
+    /**
+     * Creates a styled menu button with the given label and click action.
+     * <p>
+     * All buttons share the same font, dimensions, and white background style.
+     * </p>
+     *
+     * @param text   the label displayed on the button
+     * @param action the {@link Runnable} invoked when the button is clicked
+     * @return a configured {@link Button} instance
+     */
     private Button createButton(String text, Runnable action) {
         Button btn = new Button(text);
 
@@ -185,6 +221,11 @@ public class MainMenu {
         return btn;
     }
 
+    /**
+     * Returns the JavaFX {@link Scene} for this main menu.
+     *
+     * @return the scene instance
+     */
     public Scene getScene() {
         return scene;
     }
