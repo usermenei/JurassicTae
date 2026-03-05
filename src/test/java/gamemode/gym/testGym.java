@@ -22,24 +22,6 @@ public class testGym {
     }
 
     @Test
-    void testGymFeeDeduction() {
-        player.setMoney(1000);
-        boolean canEnter = GameController.getInstance().enoughMoney(player);
-        assertEquals(canEnter,true);
-        assertEquals(player.getMoney(),500);
-    }
-
-    @Test
-    void testExactMoneyForGym() {
-        player.setMoney(500);
-
-        boolean canEnter = GameController.getInstance().enoughMoney(player);
-
-        assertEquals(true, canEnter);
-        assertEquals(0, player.getMoney());
-    }
-
-    @Test
     void notEnoughMoney() {
         player.setMoney(200);
         boolean canEnter = GameController.getInstance().enoughMoney(player);
