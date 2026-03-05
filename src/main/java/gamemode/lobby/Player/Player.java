@@ -313,7 +313,9 @@ public class Player {
         while (exp >= expToNextLevel) {
             levelUp();
         }
-        GameController.getInstance().getRoot().updateExpBar();
+        if (GameController.getInstance().getRoot() != null) {
+            GameController.getInstance().getRoot().updateExpBar();
+        }
     }
 
     private void levelUp() {

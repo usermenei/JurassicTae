@@ -142,12 +142,19 @@ public class GameController {
         stage.setScene(menu.getScene());
     }
 
-    private void startActualGymGame() {
+    public boolean enoughMoney(Player player){
         if(player.getMoney() < 500){
-            return;
+            return false;
         }
         player.setMoney(player.getMoney() - 500);
-        GameController.getInstance().getRoot().updateMoney();
+        if(GameController.getInstance().getRoot() != null){
+            GameController.getInstance().getRoot().updateMoney();
+        }
+        return true;
+    }
+
+    private void startActualGymGame() {
+        if(!enoughMoney(player))return;
         Image red = new Image(
                 getClass().getResource("/gamemode/gym/redtile.png").toExternalForm()
         );
@@ -175,10 +182,7 @@ public class GameController {
                     int bonusExp = score / 100;
                     int bonusMaxHp = score / 500;
 
-                    Player player = GameLogic.getInstance().getPlayer();
-                    player.setStrength(player.getStrength() + bonusStrength);
-                    player.addExp(bonusExp);
-                    player.setMaxHp(player.getMaxHp() + bonusMaxHp);
+                    setReward(score);
 
                     // ===== CUSTOM POPUP =====
                     StackPane popupRoot = new StackPane();
@@ -250,6 +254,18 @@ public class GameController {
 
         stage.setScene(game.getScene());
         game.start();
+    }
+
+    public void setReward(int score){
+        int bonusStrength = score / 300;
+        int bonusExp = score / 100;
+        int bonusMaxHp = score / 500;
+
+        Player player = GameLogic.getInstance().getPlayer();
+
+        player.setStrength(player.getStrength() + bonusStrength);
+        player.addExp(bonusExp);
+        player.setMaxHp(player.getMaxHp() + bonusMaxHp);
     }
 
     /* =========================
