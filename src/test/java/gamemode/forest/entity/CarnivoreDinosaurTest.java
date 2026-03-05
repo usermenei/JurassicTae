@@ -11,7 +11,11 @@ public class CarnivoreDinosaurTest {
 
     @BeforeAll
     static void initJavaFX() {
-        Platform.startup(() -> {});
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException e) {
+            // JavaFX already initialized — ignore
+        }
     }
 
     /**
@@ -25,7 +29,7 @@ public class CarnivoreDinosaurTest {
         private double height = 100;
 
         public TestPlayer(double x, double y) {
-            super(0,0); // pass null because GameController is not needed for this test
+            super(0,0);
             this.x = x;
             this.y = y;
         }
@@ -49,22 +53,24 @@ public class CarnivoreDinosaurTest {
         public double getHeight() {
             return height;
         }
+
+        public void setPosition(double x, double y){
+            this.x = x;
+            this.y = y;
+        }
     }
 
     /**
-     * Test: Dinosaur moves when player is within aggro range.
+     * Test: Dinosaur moves toward player when player is in aggro range.
      */
     @Test
-    void testUpdate_PlayerOffsetMinus100_AffectsAggro() {
+    void testUpdate_PlayerWithinAggroRange() {
 
         CarnivoreDinosaur dino = new CarnivoreDinosaur();
-        Player player = new Player(0,0);
+        TestPlayer player = new TestPlayer(350,0);
 
         dino.setX(0);
         dino.setY(0);
-
-        player.setX(350);
-        player.setY(0);
 
         double beforeX = dino.getX();
 
@@ -73,14 +79,9 @@ public class CarnivoreDinosaurTest {
         double afterX = dino.getX();
 
         assertNotEquals(beforeX, afterX,
-                "Dinosaur should move because -100 offset brings player into aggro range");
+                "Dinosaur should move toward player when in aggro range");
     }
 
-    private double distance(CarnivoreDinosaur d, Player p) {
-        double dx = p.getX() - d.getX();
-        double dy = p.getY() - d.getY();
-        return Math.sqrt(dx*dx + dy*dy);
-    }
     /**
      * Test: Dinosaur roams when player is far away.
      */
@@ -88,7 +89,7 @@ public class CarnivoreDinosaurTest {
     void testUpdate_PlayerOutOfRange() {
 
         CarnivoreDinosaur dino = new CarnivoreDinosaur();
-        TestPlayer player = new TestPlayer(2000, 2000);
+        TestPlayer player = new TestPlayer(2000,2000);
 
         dino.setX(0);
         dino.setY(0);

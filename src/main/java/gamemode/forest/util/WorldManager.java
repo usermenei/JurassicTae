@@ -303,7 +303,6 @@ public class WorldManager {
         double shrinkFactor = 0.5;
         double combinedHalfWidths  = (p.getWidth()  * shrinkFactor + d.getWidth()  * shrinkFactor) / 2.0;
         double combinedHalfHeights = (p.getHeight() * shrinkFactor + d.getHeight() * shrinkFactor) / 2.0;
-
         return Math.abs(dx) < combinedHalfWidths &&
                 Math.abs(dy) < combinedHalfHeights;
     }
