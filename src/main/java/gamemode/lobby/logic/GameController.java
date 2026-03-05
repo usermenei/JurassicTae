@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import main.Main;
 
 /**
  * <h2>GameController</h2>
@@ -299,14 +300,8 @@ public class GameController {
 
     private void startActualGymGame() {
         if(!enoughMoney(player))return;
-        Image red = new Image(
-                getClass().getResource("/gamemode/gym/redtile.png").toExternalForm()
-        );
-
-        Image blue = new Image(
-                getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm()
-        );
-
+        Image red  = new Image(getClass().getResource("/gamemode/gym/redtile.png").toExternalForm());
+        Image blue = new Image(getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm());
         Image bg   = new Image(getClass().getResource("/gamemode/gym/gamebg.png").toExternalForm());
 
         GameScene game = new GameScene(
@@ -376,15 +371,17 @@ public class GameController {
     }
 
     public void setReward(int score){
-        int bonusStrength = score / 300;
-        int bonusExp = score / 100;
-        int bonusMaxHp = score / 500;
+        int bonusStrength = Math.max(0,score / 300);
+        int bonusExp = Math.max(0,score / 100);
+        int bonusMaxHp = Math.max(0,score / 500);
 
         Player player = GameLogic.getInstance().getPlayer();
 
         player.setStrength(player.getStrength() + bonusStrength);
         player.addExp(bonusExp);
         player.setMaxHp(player.getMaxHp() + bonusMaxHp);
+
+        player.setHp(player.getMaxHp());
     }
 
     /* =========================
