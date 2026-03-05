@@ -2,6 +2,8 @@ package gamemode.lobby.Scene;
 
 import gamemode.lobby.Interfaces.Buyable;
 import gamemode.lobby.Item.Base.Item;
+import gamemode.lobby.Item.Base.Potion;
+import gamemode.lobby.Item.Base.Weapon;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.logic.GameController;
 import gamemode.lobby.logic.GameLogic;
@@ -37,7 +39,10 @@ import javafx.scene.paint.Color;
  */
 public class ButtonShop extends Button {
 
-    /** Default CSS style (idle state). */
+    /**
+     * CSS style applied to the button in its idle (non-hovered) state.
+     * Renders a dark-grey card with a subtle grey border.
+     */
     private static final String STYLE_DEFAULT = """
             -fx-background-color: #4a4a4a;
             -fx-background-radius: 12;
@@ -46,7 +51,10 @@ public class ButtonShop extends Button {
             -fx-border-radius: 12;
             """;
 
-    /** Hover CSS style applied when the mouse enters the button area. */
+    /**
+     * CSS style applied to the button when the mouse hovers over it.
+     * Renders a slightly lighter card with a gold border to indicate interactivity.
+     */
     private static final String STYLE_HOVER = """
             -fx-background-color: #5a5a5a;
             -fx-background-radius: 12;
@@ -64,7 +72,7 @@ public class ButtonShop extends Button {
      *   <li>Applies the default dark-grey card style.</li>
      *   <li>Loads the item image via {@link Item#getImg()} and displays it at 70 × 70 px.</li>
      *   <li>Renders the item name on a grey background label.</li>
-     *   <li>Renders a static stat label ("Damage: 1").</li>
+     *   <li>Renders the item description from {@link Buyable#getDescription()}.</li>
      *   <li>Renders the buy price in gold-coloured text.</li>
      *   <li>Registers hover-enter / hover-exit handlers to swap CSS styles.</li>
      *   <li>Registers an {@code onAction} handler that:
@@ -105,7 +113,7 @@ public class ButtonShop extends Button {
         ));
 
         // Stat label
-        Label statLabel = new Label("Damage: 1");
+        Label statLabel = new Label(((Buyable) item).getDescription());
         statLabel.setTextFill(Color.LIGHTGRAY);
         statLabel.setStyle("-fx-font-size: 11px;");
 

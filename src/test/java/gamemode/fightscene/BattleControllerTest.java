@@ -1,9 +1,6 @@
 package gamemode.fightscene;
 
 import gamemode.forest.entity.Dinosaur;
-import gamemode.lobby.Item.Base.Item;
-import gamemode.lobby.Item.DinoBall;
-import gamemode.lobby.Item.Base.TamedDinosaur;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

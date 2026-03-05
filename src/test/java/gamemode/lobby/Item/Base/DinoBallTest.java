@@ -1,4 +1,4 @@
-package gamemode.lobby.Item;
+package gamemode.lobby.Item.Base;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

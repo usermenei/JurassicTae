@@ -2,9 +2,7 @@ package gamemode.forest.entity;
 
 import gamemode.lobby.Item.Potion.SpeedPotion;
 import gamemode.lobby.Item.Potion.StrengthPotion;
-import gamemode.lobby.Item.Weapon.AnestheticDart;
-import gamemode.lobby.Item.DinoBall;
-import gamemode.lobby.Item.Weapon.ElectricGun;
+import gamemode.lobby.Item.Base.DinoBall;
 import javafx.scene.image.Image;
 import gamemode.lobby.Item.Potion.HealPotion;
 import gamemode.lobby.Item.Base.Item;

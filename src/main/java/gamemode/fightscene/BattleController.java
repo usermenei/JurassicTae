@@ -2,7 +2,7 @@ package gamemode.fightscene;
 
 import gamemode.forest.entity.Dinosaur;
 import gamemode.lobby.Item.Base.TamedDinosaur;
-import gamemode.lobby.Item.DinoBall;
+import gamemode.lobby.Item.Base.DinoBall;
 import gamemode.lobby.Player.Player;
 import gamemode.lobby.logic.GameLogic;
 import javafx.animation.PauseTransition;
