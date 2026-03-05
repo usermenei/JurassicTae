@@ -9,28 +9,76 @@ import javafx.scene.text.Text;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * DialogueManager is a singleton class responsible for handling
+ * dialogue rendering, typewriter animation, and dialogue queuing
+ * inside the game.
+ *
+ * <p><b>Features:</b></p>
+ * <ul>
+ *     <li>Typewriter text animation</li>
+ *     <li>Portrait rendering</li>
+ *     <li>Dialogue queue system</li>
+ *     <li>Click-to-skip or advance</li>
+ * </ul>
+ *
+ * <p><b>Usage:</b></p>
+ * Call {@link #update()} every frame before
+ * {@link #render(GraphicsContext, double, double)}.
+ * Trigger {@link #onClick()} when the user clicks or presses the skip key.
+ *
+ * <p>
+ * This class follows the Singleton design pattern to ensure
+ * only one dialogue manager exists throughout the game.
+ * </p>
+ */
 public class DialogueManager {
 
     private static DialogueManager instance;
 
-    // ===== Single dialogue state =====
+    /** Full dialogue text */
     private String fullText = "";
+
+    /** Currently visible (typed) text */
     private String visibleText = "";
+
+    /** Speaker name */
     private String speaker = "System";
+
+    /** Portrait image */
     private Image portrait;
+
+    /** Whether dialogue is currently active */
     private boolean active = false;
+
+    /** Timestamp of last character typed */
     private long lastCharTime = 0;
+
+    /** Current character index for typewriter effect */
     private int charIndex = 0;
 
+    /** Milliseconds between each character appearance */
     private final long TYPE_SPEED = 25;
 
+    /** Font used for dialogue text */
     private Font pixelFont;
 
-    // ===== Queue for chained dialogues =====
+    /** Queue for chained dialogues */
     private final Queue<DialogueEntry> queue = new LinkedList<>();
 
+    /**
+     * Internal record storing dialogue entry information.
+     *
+     * @param speaker Speaker name
+     * @param text Dialogue text
+     * @param portraitPath Path to portrait image resource
+     */
     private record DialogueEntry(String speaker, String text, String portraitPath) {}
 
+    /**
+     * Private constructor for Singleton pattern.
+     * Loads pixel font resource.
+     */
     private DialogueManager() {
         pixelFont = Font.loadFont(
                 getClass().getResourceAsStream("/fonts/pixel.ttf"),
@@ -38,6 +86,11 @@ public class DialogueManager {
         );
     }
 
+    /**
+     * Returns the singleton instance of DialogueManager.
+     *
+     * @return DialogueManager instance
+     */
     public static DialogueManager getInstance() {
         if (instance == null) {
             instance = new DialogueManager();
@@ -45,13 +98,27 @@ public class DialogueManager {
         return instance;
     }
 
-    // ===== Show single dialogue =====
+    /**
+     * Shows a single dialogue immediately.
+     * Clears any previously queued dialogues.
+     *
+     * @param speakerName Speaker name
+     * @param text Dialogue text
+     * @param portraitPath Portrait image path (nullable)
+     */
     public void showDialogue(String speakerName, String text, String portraitPath) {
-        queue.clear(); // clear any pending queue
+        queue.clear();
         loadEntry(new DialogueEntry(speakerName, text, portraitPath));
     }
 
-    // ===== Queue multiple dialogues =====
+    /**
+     * Adds dialogue to queue.
+     * If no dialogue is currently active, it starts immediately.
+     *
+     * @param speakerName Speaker name
+     * @param text Dialogue text
+     * @param portraitPath Portrait image path (nullable)
+     */
     public void queueDialogue(String speakerName, String text, String portraitPath) {
         queue.add(new DialogueEntry(speakerName, text, portraitPath));
         if (!active) {
@@ -59,6 +126,9 @@ public class DialogueManager {
         }
     }
 
+    /**
+     * Plays next dialogue in queue.
+     */
     private void playNext() {
         if (queue.isEmpty()) {
             active = false;
@@ -67,6 +137,11 @@ public class DialogueManager {
         loadEntry(queue.poll());
     }
 
+    /**
+     * Loads a dialogue entry and resets typing state.
+     *
+     * @param entry Dialogue entry to load
+     */
     private void loadEntry(DialogueEntry entry) {
         this.speaker = entry.speaker();
         this.fullText = entry.text();
@@ -84,7 +159,10 @@ public class DialogueManager {
         }
     }
 
-    // ===== Update (call every frame) =====
+    /**
+     * Updates typewriter animation.
+     * Should be called every frame.
+     */
     public void update() {
         if (!active) return;
 
@@ -99,70 +177,78 @@ public class DialogueManager {
         }
     }
 
-    // ===== Click to skip / advance =====
+    /**
+     * Handles click or skip input.
+     * If text not fully shown → instantly reveal.
+     * If fully shown → advance to next dialogue.
+     */
     public void onClick() {
         if (!active) return;
 
         if (charIndex < fullText.length()) {
-            // Skip typewriter — show full text immediately
             visibleText = fullText;
             charIndex = fullText.length();
         } else {
-            // Advance to next queued dialogue or close
             playNext();
         }
     }
 
+    /**
+     * Returns whether dialogue is currently active.
+     *
+     * @return true if active
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * Closes dialogue and clears queue.
+     */
     public void close() {
         active = false;
         queue.clear();
     }
 
-    // ===== Render (call every frame after update) =====
+    /**
+     * Renders dialogue UI.
+     *
+     * @param gc GraphicsContext
+     * @param canvasWidth canvas width
+     * @param canvasHeight canvas height
+     */
     public void render(GraphicsContext gc, double canvasWidth, double canvasHeight) {
         if (!active) return;
 
         double boxHeight = 180;
         double boxY = canvasHeight - boxHeight - 20;
 
-        // Dark background — shifted right to clear portrait
         gc.setFill(Color.rgb(0, 0, 0, 0.85));
         gc.fillRoundRect(210, boxY, canvasWidth - 230, boxHeight, 20, 20);
 
-        // Border
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(3);
         gc.strokeRoundRect(210, boxY, canvasWidth - 230, boxHeight, 20, 20);
 
-        // Portrait — sits to the left of the box
         if (portrait != null) {
             gc.drawImage(portrait, 5, boxY - 10, 190, 190);
         }
 
-        // Speaker name
         gc.setFill(Color.CYAN);
         gc.setFont(pixelFont);
         gc.fillText(speaker, 270, boxY + 35);
 
-        // Dialogue text
         gc.setFill(Color.WHITE);
         gc.setFont(pixelFont);
         drawWrappedText(gc, visibleText, 270, boxY + 70, canvasWidth - 290);
-
-        // "Click or F to skip" hint — only when text is fully shown
-        if (charIndex >= fullText.length()) {
-            gc.setFill(Color.rgb(255, 255, 255, 0.5));
-            gc.setFont(Font.font("Monospaced", 13));
-            gc.fillText("▶ Click or F to skip", canvasWidth - 230, boxY + boxHeight - 15);
-        }
     }
 
+    /**
+     * Draws wrapped text inside dialogue box.
+     */
     private void drawWrappedText(GraphicsContext gc, String text,
                                  double x, double y, double maxWidth) {
+
         String[] words = text.split(" ");
         String line = "";
         double lineHeight = 26;
@@ -181,7 +267,6 @@ public class DialogueManager {
                 line = testLine;
             }
         }
-
         gc.fillText(line, x, y);
     }
 }

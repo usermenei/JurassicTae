@@ -2,7 +2,6 @@ package gamemode.lobby.Scene;
 
 import gamemode.lobby.Player.Player;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import gamemode.lobby.Item.Base.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,26 +10,56 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import gamemode.lobby.Item.Base.Potion;
-import gamemode.lobby.Item.Base.TamedDinosaur;
-import gamemode.lobby.Item.Base.Weapon;
 import gamemode.lobby.logic.GameLogic;
 import javafx.scene.image.Image;
 
+/**
+ * InventoryPane represents the graphical user interface for displaying
+ * the player's inventory in the lobby scene.
+ *
+ * <p>This component renders a scrollable grid of items owned by the player.
+ * Each item is displayed with its icon and name. If the item is a Potion,
+ * a "Use" button will appear when hovering over the item.</p>
+ *
+ * <p>Main features:</p>
+ * <ul>
+ *     <li>Displays inventory items in a 4-column grid layout</li>
+ *     <li>Supports hover effects for visual feedback</li>
+ *     <li>Allows potion usage directly from the inventory</li>
+ *     <li>Refreshes automatically after potion consumption</li>
+ * </ul>
+ *
+ * <p>This class interacts with {@link GameLogic} to retrieve the current
+ * player instance and inventory items.</p>
+ *
+ * @author
+ */
 public class InventoryPane extends StackPane {
+
+    /** Grid layout used to display inventory items */
     private GridPane grid;
+
+    /** Player instance retrieved from GameLogic */
     private Player player;
+
+    /**
+     * Constructs the InventoryPane UI.
+     *
+     * <p>The constructor initializes the main layout, including:
+     * the title label, scrollable inventory grid, and exit button.</p>
+     */
     public InventoryPane() {
 
         player = GameLogic.getInstance().getPlayer();
 
         this.setPrefSize(700, 530);
         this.setMaxSize(700, 530);
+
         this.setStyle("""
         -fx-padding: 30;
         -fx-background-radius: 20;
     """);
 
-        // 🔲 กล่องหลักเหมือน SellScene
         VBox mainBox = new VBox(20);
         mainBox.setAlignment(Pos.TOP_CENTER);
         mainBox.setPrefSize(500, 350);
@@ -41,7 +70,6 @@ public class InventoryPane extends StackPane {
         -fx-background-radius: 20;
     """);
 
-        // 🏷 Title เหมือน SellScene
         Label title = new Label("INVENTORY");
         title.setStyle("""
         -fx-background-color: #ffcc00;
@@ -53,7 +81,6 @@ public class InventoryPane extends StackPane {
         -fx-background-radius: 10;
         """);
 
-        // 📦 Grid
         grid = new GridPane();
         grid.setHgap(15);
         grid.setVgap(15);
@@ -61,7 +88,6 @@ public class InventoryPane extends StackPane {
 
         loadItems();
 
-        // 🧾 ScrollPane แบบเดียวกับ SellScene
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(grid);
         scrollPane.setFitToWidth(true);
@@ -78,8 +104,8 @@ public class InventoryPane extends StackPane {
 
         mainBox.getChildren().addAll(title, scrollPane);
 
-        // ❌ Exit Button
         Button exitBtn = new Button("X");
+
         exitBtn.setStyle("""
         -fx-background-color: red;
         -fx-text-fill: white;
@@ -96,76 +122,22 @@ public class InventoryPane extends StackPane {
         this.getChildren().addAll(mainBox, exitBtn);
     }
 
-//    public void loadItems() {
-//        grid.getChildren().clear();
-//
-//        int col = 0;
-//        int row = 0;
-//
-//        for (Item item : GameLogic.getInstance().getPlayer().getInventory()) {
-//
-//
-//            VBox cell = new VBox(5);
-//            cell.setPrefSize(120, 120);
-//            cell.setAlignment(Pos.CENTER);
-//
-//            // 🎨 พื้นหลังเทาอ่อน
-//            cell.setStyle("""
-//            -fx-background-color: #3a3a3a;
-//            -fx-background-radius: 12;
-//            -fx-border-color: #555;
-//            -fx-border-radius: 12;
-//            -fx-padding: 10;
-//            """);
-//
-//            // 🖼 รูปภาพ
-//            Image img = item.getImg();
-//
-//            ImageView imageView = new ImageView(img);
-//            imageView.setFitWidth(70);
-//            imageView.setFitHeight(70);
-//            imageView.setPreserveRatio(true);
-//
-//            // 🏷 ชื่อ item
-//            Label nameLabel = new Label(item.getName());
-//            nameLabel.setStyle("""
-//                    -fx-text-fill: white;
-//                    -fx-font-size: 12px;
-//                    -fx-font-weight: bold;
-//                    """);
-//
-//            cell.getChildren().addAll(imageView, nameLabel);
-//
-//            grid.add(cell, col, row);
-//
-//            col++;
-//            if (col == 4) {
-//                col = 0;
-//                row++;
-//            }
-//
-//            cell.setOnMouseEntered(e ->
-//                    cell.setStyle("""
-//            -fx-background-color: #444;
-//            -fx-background-radius: 12;
-//            -fx-border-color: gold;
-//            -fx-border-radius: 12;
-//            -fx-padding: 10;
-//            """)
-//            );
-//
-//            cell.setOnMouseExited(e ->
-//                    cell.setStyle("""
-//        -fx-background-color: #3a3a3a;
-//        -fx-background-radius: 12;
-//        -fx-border-color: #777;
-//        -fx-border-radius: 12;
-//        -fx-padding: 10;
-//    """)
-//            );
-//        }
-//    }
-
+    /**
+     * Loads and displays all items from the player's inventory.
+     *
+     * <p>This method dynamically creates UI cells for each item
+     * and inserts them into the grid layout.</p>
+     *
+     * <p>Each cell includes:</p>
+     * <ul>
+     *     <li>Item icon</li>
+     *     <li>Item name</li>
+     *     <li>"Use" button for potion items</li>
+     * </ul>
+     *
+     * <p>The method also applies hover effects to highlight
+     * items and reveal potion usage controls.</p>
+     */
     public void loadItems() {
 
         grid.getChildren().clear();
@@ -175,9 +147,6 @@ public class InventoryPane extends StackPane {
 
         for (Item item : GameLogic.getInstance().getPlayer().getInventory()) {
 
-            // =========================
-            // 🔲 CELL (StackPane)
-            // =========================
             StackPane cell = new StackPane();
             cell.setPrefSize(120, 120);
             cell.setAlignment(Pos.CENTER);
@@ -191,9 +160,6 @@ public class InventoryPane extends StackPane {
             -fx-padding: 10;
         """);
 
-            // =========================
-            // 📦 CONTENT (Image + Name)
-            // =========================
             VBox content = new VBox(5);
             content.setAlignment(Pos.CENTER);
 
@@ -204,6 +170,7 @@ public class InventoryPane extends StackPane {
             imageView.setPreserveRatio(true);
 
             Label nameLabel = new Label(item.getName());
+
             nameLabel.setStyle("""
                 -fx-text-fill: white;
                 -fx-font-size: 12px;
@@ -213,12 +180,8 @@ public class InventoryPane extends StackPane {
 
             content.getChildren().addAll(imageView, nameLabel);
 
-            // ใส่ content ลง cell ก่อน
             cell.getChildren().add(content);
 
-            // =========================
-            // 🧪 ถ้าเป็น Potion → สร้างปุ่ม Use
-            // =========================
             Button useButton = null;
 
             if (item instanceof Potion) {
@@ -237,16 +200,12 @@ public class InventoryPane extends StackPane {
 
                 useButton.setOnAction(e -> {
                     player.usePotion((Potion) item);
-
-                    loadItems(); // refresh inventory UI
+                    loadItems();
                 });
 
                 cell.getChildren().add(useButton);
             }
 
-            // =========================
-            // 🖱 Hover Effect
-            // =========================
             Button finalUseButton1 = useButton;
 
             cell.setOnMouseEntered(e -> {
@@ -281,9 +240,6 @@ public class InventoryPane extends StackPane {
                 }
             });
 
-            // =========================
-            // 📍 Add to Grid
-            // =========================
             grid.add(cell, col, row);
 
             col++;

@@ -11,7 +11,32 @@ import javafx.scene.image.Image;
 import gamemode.lobby.logic.GameLogic;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-
+/**
+ * SpawnScreen represents the main lobby screen where the player spawns.
+ *
+ * <p>This screen acts as the central hub of the game where the player can:</p>
+ * <ul>
+ *     <li>View player money</li>
+ *     <li>View player level and experience bar</li>
+ *     <li>Open the inventory</li>
+ *     <li>Open the shop</li>
+ *     <li>Open the sell menu</li>
+ * </ul>
+ *
+ * <p>The screen uses a {@link StackPane} layout and layers multiple UI components
+ * including {@link SpawnCanvas}, {@link SellScene}, {@link ShopScene}, and
+ * {@link InventoryPane}.</p>
+ *
+ * <p>It interacts with the {@link GameLogic} singleton to retrieve
+ * player information such as money, level, and experience.</p>
+ *
+ * <p>Keyboard shortcut:</p>
+ * <ul>
+ *     <li>TAB → Toggle inventory</li>
+ * </ul>
+ *
+ * @author
+ */
 public class SpawnScreen extends StackPane {
 
     private SellScene sellScene;
@@ -21,7 +46,23 @@ public class SpawnScreen extends StackPane {
     private Label moneyLabel;
     private Label levelLabel;
     private ProgressBar expBar;
-
+    /**
+     * Constructs the SpawnScreen UI.
+     *
+     * <p>This initializes:</p>
+     * <ul>
+     *     <li>Background image</li>
+     *     <li>Money display</li>
+     *     <li>Level display</li>
+     *     <li>Experience progress bar</li>
+     *     <li>Inventory button</li>
+     *     <li>SpawnCanvas</li>
+     *     <li>ShopScene</li>
+     *     <li>SellScene</li>
+     * </ul>
+     *
+     * <p>All scenes are layered using StackPane.</p>
+     */
     public SpawnScreen(){
 
         setPrefSize(1422,800);
@@ -137,56 +178,64 @@ public class SpawnScreen extends StackPane {
         });
 
     }
-
+    /**
+     * Displays the selling interface.
+     *
+     * <p>The SellScene will refresh its contents before appearing.</p>
+     */
     public void showSellScene(){
         sellScene.refresh();
         sellScene.setVisible(true);
         sellScene.toFront();
     }
-
-    public void hideSellScene(){
-        sellScene.setVisible(false);
-    }
-
+    /**
+     * Displays the shop interface.
+     *
+     * <p>This loads shop items and brings the shop scene to the front.</p>
+     */
     public void showShopScene(){
         shopScene.loadShop();
         shopScene.getSwitchBtt().setText("Sell");
         shopScene.setVisible(true);
         shopScene.toFront();
     }
-
-    public void hideShopScene(){
-        shopScene.setVisible(false);
-    }
-
-    public void showInventory(){
-        setInventoryPane(new InventoryPane());
-        inventoryPane.setVisible(true);
-        inventoryPane.toFront();
-    }
-
-    public void hideInventory(){
-        inventoryPane.setVisible(false);
-    }
-
-    public void setInventoryPane(InventoryPane inventoryPane){
-        GameLogic.getInstance().getPlayer().sortInventory();
-        if (this.inventoryPane != null) {
-            this.getChildren().remove(this.inventoryPane);
-        }
-        this.inventoryPane = inventoryPane;
-        getChildren().add(inventoryPane);
-        hideInventory();
-    }
-
+    /**
+     * Returns the spawn canvas.
+     *
+     * @return the SpawnCanvas instance
+     */
     public SpawnCanvas getSpawnCanvas(){
         return spawnCanvas;
     }
+    /**
+     * Returns the sell scene.
+     *
+     * @return SellScene instance
+     */
     public SellScene getSellScene(){return sellScene;}
+    /**
+     * Returns the inventory pane.
+     *
+     * @return InventoryPane instance
+     */
     public InventoryPane getInventoryPane(){return inventoryPane;}
+    /**
+     * Returns the label displaying player money.
+     *
+     * @return money label
+     */
     public Label getMoneyLabel(){return moneyLabel;}
+    /**
+     * Returns the shop scene.
+     *
+     * @return ShopScene instance
+     */
     public ShopScene getShopScene(){return shopScene;}
-
+    /**
+     * Returns the shop scene.
+     *
+     * @return ShopScene instance
+     */
     private void toggleInventory() {
         boolean isOpen = inventoryPane.isVisible();
 
@@ -196,10 +245,22 @@ public class SpawnScreen extends StackPane {
 
         inventoryPane.setVisible(!isOpen);
     }
+    /**
+     * Updates the level display label using the player's current level.
+     */
     public void updateLevel() {
         levelLabel.setText("Level : " +
                 GameLogic.getInstance().getPlayer().getLevel());
     }
+    /**
+     * Updates the experience progress bar.
+     *
+     * <p>The progress is calculated as:</p>
+     *
+     * <pre>
+     * currentExp / expToNextLevel
+     * </pre>
+     */
     public void updateExpBar() {
         double progress =
                 (double) GameLogic.getInstance().getPlayer().getExp()
@@ -207,7 +268,9 @@ public class SpawnScreen extends StackPane {
 
         expBar.setProgress(progress);
     }
-
+    /**
+     * Updates the money display label with the player's current balance.
+     */
     public void updateMoney(){
         moneyLabel.setText("Money : " + GameLogic.getInstance().getPlayer().getMoney() + " $");
     }
