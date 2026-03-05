@@ -64,23 +64,21 @@ public class NoteManager {
      */
     public int updateNotes(double speed) {
 
-        List<Note> toRemove = new ArrayList<>();
         int penalty = 0;
 
-        for (Note note : notes) {
+        var iterator = notes.iterator();
+
+        while (iterator.hasNext()) {
+
+            Note note = iterator.next();
             note.update(speed);
 
             if (note.isOutOfScreen(height)) {
-                toRemove.add(note);
+                root.getChildren().remove(note.getView());
+                iterator.remove();
                 penalty += 30;
             }
         }
-
-        for (Note note : toRemove) {
-            root.getChildren().remove(note.getView());
-        }
-
-        notes.removeAll(toRemove);
 
         return penalty;
     }
