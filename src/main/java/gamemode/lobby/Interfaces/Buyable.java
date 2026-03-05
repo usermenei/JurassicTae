@@ -18,8 +18,14 @@ public interface Buyable {
     /**
      * Returns the purchase price of this object.
      *
-     * @return the buy price in in-game currency.
-     *         This value should be non-negative.
+     * @return the buy price in in-game currency; should be non-negative
      */
     int getBuyPrice();
+
+    /**
+     * Returns a description of this object shown in the shop or trading system.
+     *
+     * @return a non-null string describing this purchasable object
+     */
+    String getDescription();
 }
