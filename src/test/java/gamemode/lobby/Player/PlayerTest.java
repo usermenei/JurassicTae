@@ -1,7 +1,7 @@
 package gamemode.lobby.Player;
 
-import gamemode.lobby.Interfaces.Buyable;
-import gamemode.lobby.Interfaces.Sellable;
+import gamemode.lobby.Item.Interfaces.Buyable;
+import gamemode.lobby.Item.Interfaces.Sellable;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.Potion;
 import gamemode.lobby.Item.Base.Weapon;
@@ -90,11 +90,15 @@ class PlayerTest {
      */
     static class TestPotion extends Potion {
 
+        /**
+         * Constructs a {@code TestPotion} with the given name, zero buy price,
+         * sell price of 10, and a fixed description of {@code "Test Potion"}.
+         *
+         * @param name the display name of the potion
+         */
         public TestPotion(String name) {
-            super(name, "", 0, 10);
+            super(name, "", 0, 10, "Test Potion");
         }
-        @Override
-        public String getDescription() {return "Test Potion";}
     }
 
     // ==========================================================

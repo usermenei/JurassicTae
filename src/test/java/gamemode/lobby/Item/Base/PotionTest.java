@@ -17,13 +17,19 @@ import static org.junit.jupiter.api.Assertions.*;
  *     <li>Validation of negative price inputs</li>
  * </ul>
  *
- * Since Potion may rely on JavaFX Image loading through Item,
- * JavaFX runtime is initialized once before tests run.
+ * <p>
+ * Since {@link Potion} relies on JavaFX image loading through {@link Item},
+ * the JavaFX runtime is initialised once before all tests via
+ * {@link testutil.JavaFXInitializer}.
+ * </p>
+ *
+ * @see Potion
+ * @see Item
  */
 class PotionTest {
 
     /**
-     * Initializes JavaFX runtime once for testing.
+     * Initializes JavaFX runtime once for all tests.
      */
     @BeforeAll
     static void initJavaFX() {
@@ -31,21 +37,24 @@ class PotionTest {
     }
 
     /**
-     * Concrete test subclass used only for testing,
-     * since Potion may be abstract or extended in production.
+     * Minimal concrete subclass of {@link Potion} used solely for testing.
+     * Delegates all construction to the superclass and passes a fixed
+     * placeholder description of {@code "Test Potion"}.
      */
     static class TestPotion extends Potion {
-        public TestPotion(String name, String imgUrl, int buyPrice, int sellPrice) {
-            super(name, imgUrl, buyPrice, sellPrice);
-        }
 
         /**
-         * Returns a placeholder description for testing purposes.
+         * Constructs a {@code TestPotion} with the given attributes and
+         * a fixed description of {@code "Test Potion"}.
          *
-         * @return a fixed string {@code "Test Potion"}
+         * @param name      the display name of the potion
+         * @param imgUrl    the resource path to the potion image
+         * @param buyPrice  the purchase price; must be &gt;= 0
+         * @param sellPrice the selling price; must be &gt;= 0
          */
-        @Override
-        public String getDescription() {return "Test Potion";}
+        public TestPotion(String name, String imgUrl, int buyPrice, int sellPrice) {
+            super(name, imgUrl, buyPrice, sellPrice, "Test Potion");
+        }
     }
 
     /**
@@ -63,7 +72,7 @@ class PotionTest {
 
     /**
      * Tests that a negative buy price
-     * throws IllegalArgumentException.
+     * throws {@link IllegalArgumentException}.
      */
     @Test
     void testNegativeBuyPriceThrowsException() {
@@ -74,7 +83,7 @@ class PotionTest {
 
     /**
      * Tests that a negative sell price
-     * throws IllegalArgumentException.
+     * throws {@link IllegalArgumentException}.
      */
     @Test
     void testNegativeSellPriceThrowsException() {

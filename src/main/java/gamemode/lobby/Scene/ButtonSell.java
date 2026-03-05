@@ -1,7 +1,7 @@
 package gamemode.lobby.Scene;
 
 import gamemode.forest.entity.Dinosaur;
-import gamemode.lobby.Interfaces.Sellable;
+import gamemode.lobby.Item.Interfaces.Sellable;
 import gamemode.lobby.Item.Base.Item;
 import gamemode.lobby.Item.Base.TamedDinosaur;
 import javafx.geometry.Insets;

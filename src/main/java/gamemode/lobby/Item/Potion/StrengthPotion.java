@@ -12,34 +12,11 @@ import gamemode.lobby.Item.Base.Potion;
  */
 public class StrengthPotion extends Potion {
 
-    /** A short description of the potion's effect, shown in the shop or inventory. */
-    private String description;
-
     /**
      * Constructs a StrengthPotion with a predefined name, image path, buy price of 100,
      * sell price of 10, and a default description of {@code "Double Strength"}.
      */
     public StrengthPotion() {
-        super("Strength Potion", "/item/strengthpotion.png", 100, 10);
-        setDescription("Double Strength");
-    }
-
-    /**
-     * Returns the description of this potion shown in the shop or inventory.
-     *
-     * @return a non-null string describing this potion's effect
-     */
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the description of this potion.
-     *
-     * @param description the new description string; should not be {@code null}
-     */
-    public void setDescription(String description) {
-        this.description = description;
+        super("Strength Potion", "/item/strengthpotion.png", 100, 10, "Double Strength");
     }
 }

@@ -1,6 +1,6 @@
 package gamemode.lobby.Item.Base;
 
-import gamemode.lobby.Interfaces.Buyable;
+import gamemode.lobby.Item.Interfaces.Buyable;
 
 /**
  * Represents a DinoBall item used for capturing dinosaurs.

@@ -1,7 +1,7 @@
 package gamemode.lobby.Item.Base;
 
 import gamemode.forest.entity.Dinosaur;
-import gamemode.lobby.Interfaces.Sellable;
+import gamemode.lobby.Item.Interfaces.Sellable;
 
 /**
  * Represents a tamed dinosaur that can be treated as a sellable item.
