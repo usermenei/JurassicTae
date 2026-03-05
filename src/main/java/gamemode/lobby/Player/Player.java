@@ -380,4 +380,5 @@ public class Player {
         }
         System.out.println("LEVEL UP! Now level " + level);
     }
+
 }
