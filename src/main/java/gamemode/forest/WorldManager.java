@@ -277,7 +277,7 @@ public class WorldManager {
      * @param item the {@link WorldItem} to check
      * @return {@code true} if the item is within 80 units of the player's position
      */
-    private boolean isNearPlayer(WorldItem item) {
+    public boolean isNearPlayer(WorldItem item) {
         double dx = player.getX() - item.getX();
         double dy = player.getY() - item.getY();
         return dx * dx + dy * dy <= 80 * 80;
@@ -292,7 +292,7 @@ public class WorldManager {
      * @param d the dinosaur entity
      * @return {@code true} if their shrunk bounding boxes overlap
      */
-    private boolean isColliding(Player p, Dinosaur d) {
+    public boolean isColliding(Player p, Dinosaur d) {
 
         double dx = (p.getX() + p.getWidth() / 2.0) -
                 (d.getX() + d.getWidth() / 2.0);
@@ -373,5 +373,8 @@ public class WorldManager {
                 break;
             }
         }
+    }
+    public Map<WorldPoint, Chunk> getLoadedChunks() {
+        return loadedChunks;
     }
 }

@@ -351,4 +351,6 @@ public abstract class Dinosaur {
      * @return the {@link Rarity} classification
      */
     public Rarity getRarity() { return rarity; }
+
+    public void setWidth(int width){this.width = width;}
 }

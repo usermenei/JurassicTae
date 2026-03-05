@@ -52,6 +52,8 @@ public class GameUI {
 
     /** Displays the remaining time in the session. */
     private final Text timerText;
+    /** Displays the fonts in the session. */
+    private static Font pixelFont;
 
     /**
      * Constructs the {@code GameUI}, laying out all visual elements and
@@ -172,7 +174,10 @@ public class GameUI {
      * @return the loaded {@link Font}, or the default font if loading fails
      */
     private Font loadFont(int size) {
-        return Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), size);
+        if (pixelFont == null) {
+            pixelFont = Font.loadFont(getClass().getResourceAsStream("/fonts/pixel.ttf"), size);
+        }
+        return Font.font(pixelFont.getFamily(), size);
     }
 
     /**

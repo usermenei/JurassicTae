@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import main.Main;
 
 /**
  * <h2>GameController</h2>
@@ -286,12 +287,19 @@ public class GameController {
         playMusic(BGM_GYM);
     }
 
-    /**
-     * Starts the actual Gym gameplay, calculates rewards, and displays a result popup.
-     * Music continues as {@value #BGM_GYM} — no track change needed here.
-     */
-    private void startActualGymGame() {
+    public boolean enoughMoney(Player player){
+        if(player.getMoney() < 500){
+            return false;
+        }
+        player.setMoney(player.getMoney() - 500);
+        if(GameController.getInstance().getRoot() != null){
+            GameController.getInstance().getRoot().updateMoney();
+        }
+        return true;
+    }
 
+    private void startActualGymGame() {
+        if(!enoughMoney(player))return;
         Image red  = new Image(getClass().getResource("/gamemode/gym/redtile.png").toExternalForm());
         Image blue = new Image(getClass().getResource("/gamemode/gym/bluetile.png").toExternalForm());
         Image bg   = new Image(getClass().getResource("/gamemode/gym/gamebg.png").toExternalForm());
@@ -307,10 +315,7 @@ public class GameController {
                     int bonusExp      = score / 100;
                     int bonusMaxHp    = score / 500;
 
-                    Player player = GameLogic.getInstance().getPlayer();
-                    player.setStrength(player.getStrength() + bonusStrength);
-                    player.addExp(bonusExp);
-                    player.setMaxHp(player.getMaxHp() + bonusMaxHp);
+                    setReward(score);
 
                     StackPane popupRoot = new StackPane();
                     popupRoot.setStyle("-fx-background-color: rgba(0,0,0,0.6);");
@@ -365,11 +370,23 @@ public class GameController {
         game.start();
     }
 
-    // ── Return to lobby ───────────────────────────────────────────────────────
+    public void setReward(int score){
+        int bonusStrength = Math.max(0,score / 300);
+        int bonusExp = Math.max(0,score / 100);
+        int bonusMaxHp = Math.max(0,score / 500);
 
-    /**
-     * Returns to the main spawn screen and restarts the lobby music.
-     */
+        Player player = GameLogic.getInstance().getPlayer();
+
+        player.setStrength(player.getStrength() + bonusStrength);
+        player.addExp(bonusExp);
+        player.setMaxHp(player.getMaxHp() + bonusMaxHp);
+
+        player.setHp(player.getMaxHp());
+    }
+
+    /* =========================
+       🔁 MAIN / SPAWN (ของเดิม)
+       ========================= */
     public void returnToMain() {
         stage.setScene(mainScene);
         if (root != null) root.requestFocus();
@@ -424,4 +441,6 @@ public class GameController {
     public void onEnemyCaught(Dinosaur enemy) {
         returnToWorld();
     }
+
+
 }

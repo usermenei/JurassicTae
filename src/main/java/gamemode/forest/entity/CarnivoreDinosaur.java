@@ -85,7 +85,7 @@ public class CarnivoreDinosaur extends Dinosaur {
                 0, 0,
                 Dinosaur.Rarity.COMMON,
                 "/images/dinosaur/raptor.gif",
-                300, 300, 3.5, 75);
+                300, 300, 2, 75);
     }
 
     /**
@@ -100,21 +100,30 @@ public class CarnivoreDinosaur extends Dinosaur {
      */
     @Override
     public void update(Player player) {
-        double dx = player.getX() - x;
-        double dy = player.getY() - y;
+
+        double playerCenterX = (player.getX() + player.getWidth() / 2.0)-100;
+        double playerCenterY = (player.getY() + player.getHeight() / 2.0)-100;
+
+        double dinoCenterX = x + width / 2.0;
+        double dinoCenterY = y + height / 2.0;
+
+        double dx = playerCenterX - dinoCenterX;
+        double dy = playerCenterY - dinoCenterY;
+
         double distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < AGGRO_RANGE) {
-            moveToward(
-                    player.getX() + player.getWidth() / 2.0,
-                    player.getY() + player.getHeight() / 2.0
-            );
+
+            // Chase player
+            moveToward(playerCenterX, playerCenterY);
+
         } else {
+
             roamTimer--;
 
             if (roamTimer <= 0) {
-                roamDirX = random.nextDouble() - 0.5;
-                roamDirY = random.nextDouble() - 0.5;
+                roamDirX = random.nextDouble() * 2 - 1;
+                roamDirY = random.nextDouble() * 2 - 1;
                 roamTimer = 60 + random.nextInt(120);
             }
 

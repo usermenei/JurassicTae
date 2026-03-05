@@ -73,7 +73,7 @@ public class DinosaurFactory {
                         150, 135, 100, 2,
                         x, y,
                         Dinosaur.Rarity.COMMON,
-                        "/images/dinosaur/raptor.gif", 300, 300, 3.5, 100
+                        "/images/dinosaur/raptor.gif", 300, 300, 2, 100
                 );
 
             case "TRex":
@@ -82,7 +82,7 @@ public class DinosaurFactory {
                         400, 80, 300, 5,
                         x, y,
                         Dinosaur.Rarity.RARE,
-                        "/images/dinosaur/trex.gif", 300, 300, 2.2, 150
+                        "/images/dinosaur/trex.gif", 300, 300, 2, 150
                 );
         }
 
