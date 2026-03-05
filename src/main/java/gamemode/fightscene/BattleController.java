@@ -73,7 +73,7 @@ public class BattleController {
      * Constructs a {@code BattleController} and registers all four action handlers
      * on the provided {@link CommandBox}.
      *
-     * <h3>Registered handlers</h3>
+     * <p>Registered handlers</p>
      * <ul>
      *   <li><b>Fight</b> — opens a weapon selection sub-menu, deals damage, and
      *       triggers the enemy turn (or victory) after a 1-second pause.</li>

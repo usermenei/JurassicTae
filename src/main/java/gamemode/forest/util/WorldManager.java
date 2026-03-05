@@ -107,8 +107,8 @@ public class WorldManager {
 
     /**
      * Processes one game tick for the world.
-     * <p>
-     * Each tick this method:
+     *
+     * <p>Each tick this method:</p>
      * <ol>
      *   <li>Loads any unloaded chunks within {@link #RENDER_DISTANCE} of the player,
      *       asynchronously via the thread pool.</li>
@@ -117,7 +117,6 @@ public class WorldManager {
      *   <li>Checks for player-dinosaur collisions and triggers a battle if one is found
      *       and no battle is already in progress.</li>
      * </ol>
-     * </p>
      */
     public void update() {
 

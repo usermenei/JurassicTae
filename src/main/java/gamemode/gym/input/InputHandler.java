@@ -14,14 +14,13 @@ public class InputHandler {
 
     /**
      * Registers key press handlers on the given scene.
-     * <p>
-     * Key bindings:
+     *
+     * <p>Key bindings:</p>
      * <ul>
      *   <li><b>D</b> — triggers the lane 0 action</li>
      *   <li><b>F</b> — triggers the lane 1 action</li>
      *   <li><b>ESC</b> — triggers the escape action</li>
      * </ul>
-     * </p>
      *
      * @param scene        the {@link Scene} to attach the key handler to
      * @param lane0        the action to run when D is pressed

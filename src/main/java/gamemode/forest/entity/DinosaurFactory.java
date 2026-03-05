@@ -13,13 +13,12 @@ public class DinosaurFactory {
 
     /**
      * Creates a herbivore dinosaur of the given type at the specified position.
-     * <p>
-     * Supported types and their stats:
+     *
+     * <p>Supported types and their stats:</p>
      * <ul>
      *   <li><b>LongNeck</b> – 150 HP, 10 strength, 40 EXP, level 1, {@link Dinosaur.Rarity#COMMON}, sell price 50</li>
      *   <li><b>Triceratops</b> – 250 HP, 20 strength, 80 EXP, level 3, {@link Dinosaur.Rarity#UNCOMMON}, sell price 45</li>
      * </ul>
-     * </p>
      *
      * @param type the dinosaur type identifier (e.g. {@code "LongNeck"}, {@code "Triceratops"})
      * @param x    the initial X position in the game world
@@ -52,13 +51,12 @@ public class DinosaurFactory {
 
     /**
      * Creates a carnivore dinosaur of the given type at the specified position.
-     * <p>
-     * Supported types and their stats:
+     *
+     * <p>Supported types and their stats:</p>
      * <ul>
      *   <li><b>Raptor</b> – 150 HP, 135 strength, 100 EXP, level 2, {@link Dinosaur.Rarity#COMMON}, speed 3.5, sell price 100</li>
      *   <li><b>TRex</b> – 400 HP, 80 strength, 300 EXP, level 5, {@link Dinosaur.Rarity#RARE}, speed 2.2, sell price 150</li>
      * </ul>
-     * </p>
      *
      * @param type the dinosaur type identifier (e.g. {@code "Raptor"}, {@code "TRex"})
      * @param x    the initial X position in the game world

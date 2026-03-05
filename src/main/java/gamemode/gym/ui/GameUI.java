@@ -14,15 +14,14 @@ import javafx.util.Duration;
 
 /**
  * Builds and manages all visual elements for the gym rhythm mini-game.
- * <p>
- * The UI is composed of two stacked layers:
+ *
+ * <p>The UI is composed of two stacked layers:</p>
  * <ul>
  *   <li><b>Game layer</b> — the background, lane backdrop, and falling notes
  *       (notes are added and removed here by {@link gamemode.gym.note.NoteManager}).</li>
  *   <li><b>Overlay layer</b> — the judgment line, score, timer, combo, multiplier,
  *       and back button, drawn on top of the game layer every frame.</li>
  * </ul>
- * </p>
  *
  * <p>Combo and multiplier text are horizontally centered over the lane center
  * and update dynamically as their layout bounds change.</p>

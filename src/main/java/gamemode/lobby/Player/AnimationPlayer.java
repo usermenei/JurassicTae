@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
- * <h1>AnimationPlayer</h1>
+ * <h2>AnimationPlayer</h2>
  *
  * <p>
  * Handles frame-based sprite animation for player rendering.
