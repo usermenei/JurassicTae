@@ -299,7 +299,7 @@ public class Player {
                 System.out.println("EXP Boost Activated!");
             }
             case "Heal Potion" -> {
-                int healAmount = (int) (hp * 0.10);
+                int healAmount = (maxHp-hp);
                 setHp(hp + healAmount);
                 System.out.println("Healed +" + healAmount);
             }

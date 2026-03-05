@@ -21,21 +21,55 @@ import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
+/**
+ * ShopScene represents the shop interface in the lobby where players
+ * can purchase and sell items.
+ *
+ * <p>The scene supports two modes:</p>
+ * <ul>
+ *     <li><b>Buy Mode</b> – Displays items available for purchase.</li>
+ *     <li><b>Sell Mode</b> – Displays items from the player's inventory
+ *     that can be sold.</li>
+ * </ul>
+ *
+ * <p>The interface uses a grid layout to organize items into
+ * four columns. Each item is represented by either a
+ * {@link ButtonShop} or {@link ButtonSell} component.</p>
+ *
+ * <p>The scene also provides a toggle button allowing the user
+ * to switch between Buy and Sell modes.</p>
+ */
 public class ShopScene extends StackPane {
 
+    /** Grid used to display shop items */
     private GridPane gridPane;
+
+    /** List of items available in the shop */
     private ArrayList<Item> items;
+
+    /** Button used to toggle between Buy and Sell modes */
     private Button switchBtt;
+
+    /** Pixel-style font used for UI elements */
     private Font font = Font.loadFont(
             getClass().getResourceAsStream("/fonts/pixel.ttf"), 18);
 
+    /**
+     * Constructs the shop scene UI.
+     *
+     * <p>This constructor initializes the layout, loads shop items,
+     * and sets up the toggle button for switching between buy
+     * and sell modes.</p>
+     */
     public ShopScene() {
 
         items = new ArrayList<>();
+
         items.add(new AnestheticDart());
         items.add(new ElectricGun());
         items.add(new RifleGun());
         items.add(new DinoBall());
+
         items.add(new ExpPotion());
         items.add(new HealPotion());
         items.add(new SpeedPotion());
@@ -55,7 +89,6 @@ public class ShopScene extends StackPane {
             -fx-background-radius: 20;
         """);
 
-        // 🔶 Title
         Label title = new Label("SHOP");
 
         title.setStyle("""
@@ -68,9 +101,9 @@ public class ShopScene extends StackPane {
         -fx-background-radius: 10;
         """);
 
-        // 🔵 Buy / Sell Toggle
         switchBtt = new Button("Sell");
         switchBtt.setFont(font);
+
         switchBtt.setStyle("""
         -fx-background-color: #444;
         -fx-text-fill: white;
@@ -84,18 +117,16 @@ public class ShopScene extends StackPane {
             if (switchBtt.getText().equals("Buy")) {
                 loadShop();
                 switchBtt.setText("Sell");
-
             } else {
                 loadSell();
                 switchBtt.setText("Buy");
             }
         });
-        //
+
         HBox titleBox = new HBox(20);
         titleBox.setAlignment(Pos.CENTER);
         titleBox.getChildren().addAll(title, switchBtt);
 
-        // 🔲 Grid
         gridPane = new GridPane();
         gridPane.setHgap(15);
         gridPane.setVgap(15);
@@ -104,7 +135,6 @@ public class ShopScene extends StackPane {
         gridPane.setMaxWidth(Double.MAX_VALUE);
         gridPane.prefWidthProperty().bind(shopBox.widthProperty());
 
-        // 🔥 4 Columns Fixed Layout
         for (int i = 0; i < 4; i++) {
             ColumnConstraints col = new ColumnConstraints();
             col.setPercentWidth(25);
@@ -116,10 +146,11 @@ public class ShopScene extends StackPane {
 
         shopBox.getChildren().addAll(titleBox, gridPane);
 
-        // ❌ Exit Button
         Button exitBtn = new Button("X");
+
         exitBtn.setFont(Font.loadFont(
                 getClass().getResourceAsStream("/fonts/pixel.ttf"), 18));
+
         exitBtn.setStyle("""
         -fx-background-color: red;
         -fx-text-fill: white;
@@ -137,7 +168,14 @@ public class ShopScene extends StackPane {
         this.getChildren().addAll(shopBox, exitBtn);
     }
 
+    /**
+     * Loads all items available for purchase into the grid layout.
+     *
+     * <p>This method clears the grid and inserts {@link ButtonShop}
+     * elements representing items available in the shop.</p>
+     */
     public void loadShop() {
+
         gridPane.getChildren().clear();
 
         int col = 0;
@@ -160,7 +198,13 @@ public class ShopScene extends StackPane {
         }
     }
 
+    /**
+     * Loads sellable items from the player's inventory.
+     *
+     * <p>Only potion items are currently allowed to be sold.</p>
+     */
     public void loadSell() {
+
         gridPane.getChildren().clear();
 
         int col = 0;
@@ -185,6 +229,11 @@ public class ShopScene extends StackPane {
         }
     }
 
+    /**
+     * Returns the button used to toggle between buy and sell modes.
+     *
+     * @return the toggle button
+     */
     public Button getSwitchBtt(){
         return switchBtt;
     }
