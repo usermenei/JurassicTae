@@ -4,8 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
- * <h1>AnimationPlayer</h1>
- *
  * <p>
  * Handles frame-based sprite animation for player rendering.
  * This class manages switching between animation frames

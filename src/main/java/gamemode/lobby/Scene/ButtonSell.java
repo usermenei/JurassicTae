@@ -76,7 +76,7 @@ public class ButtonSell extends Button {
     /**
      * Constructs a {@code ButtonSell} for the specified {@code item}.
      *
-     * <p>The constructor performs the following steps:
+     * <p>The constructor performs the following steps:</p>
      * <ol>
      *   <li>Sets the preferred button size to 140 × 130 pixels.</li>
      *   <li>Applies the default dark-grey card style.</li>
@@ -95,7 +95,6 @@ public class ButtonSell extends Button {
      *     </ul>
      *   </li>
      * </ol>
-     * </p>
      *
      * @param item the {@link Item} to sell; must also implement {@link Sellable}
      * @throws ClassCastException   if {@code item} does not implement {@link Sellable}
