@@ -1,4 +1,4 @@
-package gamemode.forest;
+package gamemode.forest.util;
 
 import gamemode.forest.entity.WorldItem;
 

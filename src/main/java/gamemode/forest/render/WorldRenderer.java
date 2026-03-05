@@ -1,7 +1,7 @@
 package gamemode.forest.render;
 
-import gamemode.forest.Chunk;
-import gamemode.forest.WorldManager;
+import gamemode.forest.util.Chunk;
+import gamemode.forest.util.WorldManager;
 import gamemode.forest.entity.Dinosaur;
 import gamemode.forest.entity.WorldItem;
 import gamemode.forest.util.AssetLoader;
