@@ -27,8 +27,6 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
-import main.Main;
-
 /**
  * <h2>GameController</h2>
  *
